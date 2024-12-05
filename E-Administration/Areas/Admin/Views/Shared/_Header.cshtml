@@ -1,0 +1,65 @@
+﻿<header id="dashboard-header" class="py-2 bg-dark">
+    <div class="container">
+        <div class="d-flex justify-content-between px-md-3 px-1">
+            <div class="item my-auto">
+                <a href="../index.html" class="text-white"><i class="fas fa-long-arrow-alt-left mr-2"></i> Back to Site</a>
+            </div>
+            <div class="item">
+                <div class="d-flex">
+                    <div class="item mr-1">
+                        <div class="dropdown">
+                            <div class="btn bg-blue text-white" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span><i class="fas fa-bell"></i></span>
+                            </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item ml-1">
+                        <div class="dropdown">
+                            <div class="btn bg-blue text-white" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="dropdown">
+                    <div class="btn text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="px-4">Hello! <img src="../assests/img/profile-pic.jpg" width="30px" class="ml-2 rounded-pill"></span>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item disabled" href="#">M. Shoaib <div class="user-role">Student</div></a>
+                        <a class="dropdown-item" href="profile.html"><i class="fas fa-cog"></i>Edit Profile</a>
+                        <a class="dropdown-item" href="/Account/Logout">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="dropdown">
+                    <div class="btn text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="px-4">Hello! <img src="../assests/img/profile-pic.jpg" width="30px" class="ml-2 rounded-pill"></span>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item disabled" href="#">M. Shoaib <div class="user-role">Student</div></a>
+                        <a class="dropdown-item" href="profile.html"><i class="fas fa-cog"></i>Edit Profile</a>
+                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

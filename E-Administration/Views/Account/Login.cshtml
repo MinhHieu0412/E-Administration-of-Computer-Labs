@@ -1,0 +1,48 @@
+﻿@model E_Administration.Dto.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<main id="login-main-content">
+
+    <!--  About Section-->
+    <section id="about-section" class="py-4">
+        <div class="container">
+            <div class="title">Welcome</div>
+            <p class="text-white"><span class="bg-orange">&nbsp; to e-Administration of Computer Labs &nbsp;</span></p>
+        </div>
+    </section>
+    <!--  !About Section-->
+    <!-- Form Section -->
+    <section id="form-section" class="pt-3 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 mx-auto">
+                    <h2 class="pb-4">Account Login</h2>
+                    <form asp-action="Login">
+                        <div class="form-group">
+                            <label asp-for="Email">Email *</label>
+                            <input asp-for="Email" type="text" class="form-control" id="inputUsername">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" for="inputPassword">Password *</label>
+                            <input asp-for="Password" type="password" class="form-control" id="inputPassword">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-center py-3">
+                            <button type="submit" class="btn bg-orange rounded-pill w-100">Login &nbsp; <i class="fas fa-lock"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- !Form Section -->
+</main>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
