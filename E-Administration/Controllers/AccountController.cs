@@ -53,7 +53,7 @@ namespace E_Administration.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Home", new { area = "User" });
                         }
                     }
                    

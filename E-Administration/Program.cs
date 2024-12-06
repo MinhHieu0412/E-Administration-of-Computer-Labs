@@ -32,12 +32,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+// Route cho các controller trong Area
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
+
+// Route mặc định cho các controller bên ngoài Area
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
+// Đặt trang mặc định là Home trong Area User
+app.MapControllerRoute(
+    name: "user_default",
+    pattern: "",
+    defaults: new { area = "User", controller = "Home", action = "Index" });
+
 
 app.Run();
