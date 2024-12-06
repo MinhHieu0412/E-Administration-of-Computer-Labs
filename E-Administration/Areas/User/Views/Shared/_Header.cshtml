@@ -1,0 +1,47 @@
+﻿<header class="" id="header">
+    <div class="alert alert-warning bg-orange alert-dismissible fade show notification" role="alert">
+        <strong>Important!</strong> You should check in on some of those fields below.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="header-menu bg-dark px-5">
+        <nav class="navbar navbar-expand-lg text-white ">
+            <a class="navbar-brand" href="index.html"><img src="assests/img/logo-light.png" alt="" width="35"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-Nav" aria-controls="navbar-Nav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-Nav">
+                <ul class="navbar-nav m-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learning.html">E Learning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <a class="user-nav-show" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="">Hello! Shoaib</span>
+                        <img src="assests/img/profile-pic.jpg" class="rounded-pill">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#"><i class="fas fa-cog"></i>Edit Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
