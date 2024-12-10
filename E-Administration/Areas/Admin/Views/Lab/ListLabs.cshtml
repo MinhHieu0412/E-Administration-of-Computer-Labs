@@ -1,0 +1,265 @@
+﻿@model E_Administration.Dto.LabViewModel
+
+
+@{
+    ViewData["Title"] = "ListLabs";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ListLabs</h1>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+
+
+<main id="main-dashboard-content" class="p-3">
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="page-title d-flex justify-content-between py-2">
+                <nav class="my-auto" aria-label="breadcrumb">
+                    <ol class="breadcrumb p-0 my-auto" style="background: none;">
+                        <li class="breadcrumb-item"><a href="dashboard.html" class="orange">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Lab </li>
+                    </ol>
+                </nav>
+                <button class="btn bg-orange text-white" data-toggle="modal" data-target="#staticBackdrop">
+                    <i class="fas fa-file-medical mr-1"></i> Add New Lab
+                </button>
+            </div>
+            <div class="content-section py-3">
+                <!-- Table Content Section -->
+                <div class="table-responsive">
+                    <table class="w-100 table-bordered table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().ID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().DepartmentID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().Location)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().Capacity)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Labs.First().IsOperational)
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lab in Model.Labs)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.ID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.DepartmentID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.Location)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.Capacity)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => lab.IsOperational)
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- !Table Content Section -->
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- !Pagination -->
+            </div>
+        </div>
+    </div>
+    <!-- Modal Section -->
+    <div class="modal fade " id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Lab</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form Section -->
+                    <section id="form-section" class="py-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form id="labForm" method="post">
+                                        <div id="validation-summary" class="text-danger"></div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label asp-for="Lab.Name">Lab Name</label>
+                                                <input asp-for="Lab.Name" type="text" class="form-control" id="Lab_Name">
+                                                <span class="text-danger field-validation" id="error_Name"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <select asp-for="Lab.DepartmentID" class="form-control" id="Lab_DepartmentID">
+                                                    <option value="">-- Select Department --</option>
+                                                    @foreach (var department in Model.Departments)
+                                                    {
+                                                        <option value="@department.ID">@department.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>  
+                                        <div class="form-group">
+                                            <label asp-for="Lab.Description">Description</label>
+                                            <input asp-for="Lab.Description" type="text" class="form-control" id="Lab_Desc">
+                                            <span class="text-danger field-validation" id="error_Description"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Lab.Location">Location</label>
+                                            <input asp-for="Lab.Location" type="text" class="form-control" id="Lab_Location">
+                                            <span class="text-danger field-validation" id="error_Location"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Lab.Capacity">Capacity</label>
+                                            <input asp-for="Lab.Capacity" type="number" id="Lab_Capacity" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Lab.IsOperational">IsOperational</label>
+                                            <select asp-for="Lab.IsOperational" id="Lab_IsOperational">
+                                                <option value="true">Yes</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="text-right">
+                                            <button type="button" class="btn px-4" id="submitLabForm">
+                                                Add Now <i class="ml-1 fas fa-paper-plane"></i>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- !Form Section -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- !Modal Section -->
+</main>
+
+<script>
+    $(document).ready(function () {
+        $('#submitLabForm').on('click', function () {
+            // Thu thập dữ liệu từ form
+            
+            var labData = {
+                Name: $('#Lab_Name').val(),
+                DepartmentID: $('#Lab_DepartmentID').val(),  // Corrected field name
+                Description: $('#Lab_Desc').val(),
+                Location: $('#Lab_Location').val(),
+                Capacity: $('#Lab_Capacity').val(),
+                IsOperational: $('#Lab_IsOperational').val() === "true",
+            };
+
+            
+
+            // Xóa lỗi cũ
+            $('.field-validation').text('');
+            $('#validation-summary').text('');
+            var errors = {};
+
+            if (!labData.Name) {
+                errors.Name = "Lab Name is required.";
+            }
+
+            if (!labData.Description) {
+                errors.Description = "Description is required.";
+            }
+
+            if (!labData.Location) {
+                errors.Location = "Location is required.";
+            }
+
+            if (!labData.Capacity || labData.Capacity <= 0) {
+                errors.Capacity = "Capacity is required and must be greater than 0.";
+            }
+
+            // Nếu có lỗi, hiển thị thông báo lỗi và không gửi AJAX request
+            if (Object.keys(errors).length > 0) {
+                for (var key in errors) {
+                    $('#error_' + key).text(errors[key]);
+                }
+                $('#validation-summary').text('Please fix the errors above.');
+                return; // Dừng việc gửi yêu cầu AJAX
+            }
+
+            // Gửi AJAX request
+            $.ajax({
+                url: '/Admin/Lab/CreateAjax', // URL tới action
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(labData),
+                success: function (response) {
+                    if (response.success) {
+                        // Thành công, đóng modal và làm gì đó (ví dụ: reload bảng)
+                        $('#staticBackdrop').modal('hide');
+                        location.reload(); // Tải lại trang hoặc chỉ cập nhật bảng
+                    } else {
+                        // Hiển thị lỗi
+                        var errors = response.errors;
+                        for (var key in errors) {
+                            $('#error_' + key.replace('.', '_')).text(errors[key][0]);
+                        }
+                        $('#validation-summary').text('Please fix the errors above.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+</script>
+
