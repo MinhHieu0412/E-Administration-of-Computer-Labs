@@ -1,0 +1,169 @@
+﻿@model IEnumerable<E_Administration.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<main id="main-dashboard-content" class="p-3">
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="page-title d-flex justify-content-between py-2">
+                <nav class="my-auto" aria-label="breadcrumb">
+                    <ol class="breadcrumb p-0 my-auto" style="background: none;">
+                        <li class="breadcrumb-item"><a href="dashboard.html" class="orange">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Accounts </li>
+                    </ol>
+                </nav>
+                <button class="btn bg-orange text-white" data-toggle="modal" data-target="#staticBackdrop">
+                    <i class="fas fa-file-medical mr-1"></i> Add User
+                </button>
+            </div>
+            <div class="content-section py-3">
+                <div class="row">
+                    <div class="tablink col-md-2 col-5 mr-1 rounded-top border" onclick="openPage('Home', this, '#ea6227')" id="defaultOpen">Administrators</div>
+                    <div class="col-md-2 col-5 mx-1 rounded-top border"><a asp-controller="Lecturer" asp-action="Index">Lecturer</a></div>
+                    <div class="tablink col-md-2 col-5 mx-1 rounded-top border" onclick="openPage('Staff', this, '#ea6227')">Staffs</div>
+                    <div class="tablink col-md-2 col-5 mx-1 rounded-top border" onclick="openPage('About', this, '#ea6227')">Students</div>
+
+                    <div id="Home" class="tabcontent col-12">
+                        <!-- Table Content Section -->
+                        <div class="table-responsive">
+                            <table class="w-100 table-bordered table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ID)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.UserName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Email)
+                                        </th>
+
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Image)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Role)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Status)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ID)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Image)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Role)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Status)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- !Table Content Section -->
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- !Pagination -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Section -->
+    <div class="modal fade " id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Staff Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form Section -->
+                    <section id="form-section" class="py-3">
+                        <div class="container">
+                            <form>
+                                <div class="form-group">
+                                    <label for="inputName">Username *</label>
+                                    <input type="text" class="form-control" id="inputName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail">Email *</label>
+                                    <input type="email" class="form-control" id="inputEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Password *</label>
+                                    <input type="text" class="form-control" id="inputName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputRole">Role *</label>
+                                    <select name="" id="inputRole" class="form-control">
+                                        <option>Select Role . . .</option>
+                                        <option value="Administrator">Administrator</option>
+                                        <option value="HOD">HOD</option>
+                                        <option value="Technical Staff">Technical Staff</option>
+                                        <option value="Instructor">Instructor</option>
+                                        <option value="Student">Student</option>
+                                    </select>
+                                </div>
+                                <div class="text-right pt-4">
+                                    <button type="submit" class="btn px-4">Create Now &nbsp; <i class="fas fa-paper-plane"></i></button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <!-- !Form Section -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- !Modal Section -->
+</main>

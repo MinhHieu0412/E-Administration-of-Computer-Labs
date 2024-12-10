@@ -89,26 +89,36 @@ $(document).ready(function(){
 
 });
 
+
+
 function openPage(pageName, elmnt, color) {
-  // Hide all elements with class="tabcontent" by default */
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
+    // Remove the background color of all tablinks/buttons
+    var tablinks = document.getElementsByClassName("tablink");
+    for (var i = 0; i < tablinks.length; i++) {
+        tablinks[i].style.backgroundColor = ""; // Reset background color
+        tablinks[i].style.color = ""; // Reset text color if needed
+    }
 
-  // Remove the background color of all tablinks/buttons
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].style.backgroundColor = "";
-  }
+    // Add the specific color to the button used to open the tab content
+    if (elmnt) {
+        elmnt.style.backgroundColor = color;
+        elmnt.style.color = "white"; // Optional: make text color white for contrast
+    }
 
-  // Show the specific tab content
-  document.getElementById(pageName).style.display = "block";
+    // Redirect to the corresponding page (if necessary)
+    const pageUrls = {
+        Administrators: "/Admin/Administrators",
+        Lecturer: "/Admin/Lecturer",
+        Staff: "/Admin/Staff",
+        Students: "/Admin/Accounts/Students",
+    };
 
-  // Add the specific color to the button used to open the tab content
-  elmnt.style.backgroundColor = color;
+    if (pageUrls[pageName]) {
+        window.location.href = pageUrls[pageName];
+    } else {
+        console.error("Invalid page name: " + pageName);
+    }
 }
 
-// Get the element with id="defaultOpen" and click on it
+// Example usage
 document.getElementById("defaultOpen").click();

@@ -1,5 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<E_Administration.Models.Lab>
+
 @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
+<div class="page-title d-flex justify-content-between py-2">
+    <nav class="my-auto" aria-label="breadcrumb">
+        <ol class="breadcrumb p-0 my-auto" style="background: none;">
+            <li class="breadcrumb-item"><a href="dashboard.html" class="orange">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Labs </li>
+        </ol>
+    </nav>
+    <a class="btn bg-orange text-white" asp-controller="Lab" asp-action="ListLabs">
+        <i class="fas fa-file-medical mr-1"></i> Manage Labs
+    </a>
+</div>
+<div class="lab-all">
+
+
+    <div class="grid">
+        @foreach (var item in Model)
+        {
+            <a asp-controller="Lab" asp-action="Details" asp-route-id="@item.ID"> <div class="box">Room     @Html.DisplayFor(modelItem => item.ID)</div></a>
+        }
+        
+        
+    </div>
+
+</div>
