@@ -11,6 +11,5 @@ namespace E_Administration.Models
         public string? Password { get; set; }
         public string? Image { get; set; }
         public string? Role { get; set; }
-
     }
 }

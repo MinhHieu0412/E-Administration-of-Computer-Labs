@@ -10,5 +10,6 @@ namespace E_Administration.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<ELearning> ELearnings { get; set; }   
     }
 }

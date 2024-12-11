@@ -1,0 +1,49 @@
+﻿@model E_Administration.Models.ELearning
+
+@{
+    ViewData["Title"] = "Create eLearning";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-success text-white text-center">
+            <h3>Create New eLearning Resource</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="UploadedBy" class="form-label">Uploaded By</label>
+                    <input asp-for="UploadedBy" class="form-control" placeholder="Enter uploader's name" />
+                    <span asp-validation-for="UploadedBy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter title of the eLearning" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Provide a brief description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload PDF File</label>
+                    <input type="file" name="file" class="form-control" />
+                    <span asp-validation-for="FilePath" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload Image</label>
+                    <input type="file" name="image" class="form-control" />
+                    <span asp-validation-for="Link" class="text-danger"></span>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-success btn-lg px-4 py-2">Save & Create</button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg px-4 py-2 ml-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
