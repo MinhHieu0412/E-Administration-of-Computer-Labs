@@ -32,7 +32,7 @@ namespace E_Administration.Controllers
                 if (acc != null)
                 {
 
-                    if(acc.Password == acc.Password)
+                    if(BCrypt.Net.BCrypt.Verify(model.Password, acc.Password))
                     {
                         // Tạo thông tin xác thực
                         var claims = new List<Claim>
@@ -56,7 +56,16 @@ namespace E_Administration.Controllers
                             return RedirectToAction("Index", "Home", new { area = "User" });
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError("Password", "Invalid password.");
+                    }
                    
+                }
+                else
+                {
+                    // Email not found
+                    ModelState.AddModelError("Email", "Email not found.");
                 }
             }
             return View();
