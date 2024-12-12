@@ -47,7 +47,7 @@ namespace E_Administration.Controllers
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                         // Chuyển hướng sau khi đăng nhập
-                        if (acc.Role == "admin")
+                        if (acc.Role == "Admin")
                         {
                             return RedirectToAction("Index", "Admin", new { area = "Admin" });
                         }
