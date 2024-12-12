@@ -10,6 +10,9 @@ namespace E_Administration.Data
         }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<AboutUs> AboutUs { get; set; }
         public DbSet<Lab> Labs { get; set; }
         public DbSet<Equipments> Equipments { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -18,7 +21,6 @@ namespace E_Administration.Data
         public DbSet<LabRequests> LabRequests { get; set; }
         public DbSet<Elearnings> ELearning { get; set; }
         public DbSet<RepairAssignments> RepairAssignments { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,4 +98,5 @@ namespace E_Administration.Data
                 .OnDelete(DeleteBehavior.Cascade);
         }
 }
+
 }
