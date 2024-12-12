@@ -1,0 +1,33 @@
+﻿@model E_Administration.Models.AboutUs
+
+@{
+    ViewData["Title"] = "Edit About Us";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 style="text-align: center; font-size: 2.5em; color: orange; font-weight: bold;">Edit About Us</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data" style="margin: 20px;">
+    <div style="margin-bottom: 15px;">
+        <label for="Description" style="font-size: 1.2em; color: #FF5733; font-weight: bold;">Description</label>
+        <textarea id="Description" name="Description" rows="5" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">@Model.Description</textarea>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="Mission" style="font-size: 1.2em; color: #FF5733; font-weight: bold;">Mission</label>
+        <textarea id="Mission" name="Mission" rows="5" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">@Model.Mission</textarea>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="ImageFile" style="font-size: 1.2em; color: #FF5733; font-weight: bold;">Upload Image</label>
+        <input type="file" id="ImageFile" name="ImageFile" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div style="margin-top: 10px;">
+                <img src="@Model.ImageUrl" alt="Current Image" style="max-width: 200px; height: auto; border-radius: 10px;" />
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background-color: orange; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Save</button>
+</form>
