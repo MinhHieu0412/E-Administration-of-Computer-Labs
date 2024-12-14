@@ -1,4 +1,5 @@
 ﻿using E_Administration.Data;
+using E_Administration.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login"; // Đường dẫn nếu chưa đăng nhập
         options.LogoutPath = "/Account/Logout"; // Đường dẫn đăng xuất
+    });
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
     });
 
 // Add services to the container.

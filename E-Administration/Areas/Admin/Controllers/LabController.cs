@@ -48,8 +48,6 @@ namespace E_Administration.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAjax([FromBody] Lab lab)
         {
-            // Kiểm tra các trường bắt buộc xem có trống không
-            
 
             // Tìm Department dựa trên DepartmentID được gửi từ form
             var department = await ctx.Departments.FindAsync(lab.DepartmentID);
@@ -67,6 +65,68 @@ namespace E_Administration.Areas.Admin.Controllers
 
             return Json(new { success = true });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsAjax(int id)
+        {
+            var lab = await ctx.Labs.SingleOrDefaultAsync(x => x.ID == id);
+
+            if (lab == null)
+            {
+                return Json(new { success = false, error = "Lab not found." });
+            }
+
+            return Json(new
+            {
+                success = true,
+                id = lab.ID,
+                name = lab.Name,
+                departmentID = lab.DepartmentID,
+                description = lab.Description,
+                location = lab.Location,
+                capacity = lab.Capacity,
+                isOperational = lab.IsOperational
+            });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditAjax([FromBody] Lab lab)
+        {
+            var existingLab = await ctx.Labs.FindAsync(lab.ID);
+            if (existingLab == null)
+            {
+                return Json(new { success = false, error = "Lab not found." });
+            }
+
+            // Update fields
+            existingLab.Name = lab.Name;
+            existingLab.DepartmentID = lab.DepartmentID;
+            existingLab.Description = lab.Description;
+            existingLab.Location = lab.Location;
+            existingLab.Capacity = lab.Capacity;
+            existingLab.IsOperational = lab.IsOperational;
+
+            await ctx.SaveChangesAsync();
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatusAjax([FromBody] ChangeStatusDto dto)
+        {
+            var lab = await ctx.Labs.FindAsync(dto.Id);
+            if (lab == null)
+            {
+                return Json(new { success = false, error = "Lab not found." });
+            }
+
+            lab.IsOperational = dto.IsOperational;
+            await ctx.SaveChangesAsync();
+
+            return Json(new { success = true });
+        }
+
 
 
 

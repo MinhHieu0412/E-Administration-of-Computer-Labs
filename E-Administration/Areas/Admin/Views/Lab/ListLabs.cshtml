@@ -6,13 +6,6 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ListLabs</h1>
-
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
-
-
 <main id="main-dashboard-content" class="p-3">
     <div class="container">
         <div class="dashboard-container">
@@ -42,9 +35,7 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Labs.First().DepartmentID)
                                 </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Labs.First().Description)
-                                </th>
+                               
                                 <th>
                                     @Html.DisplayNameFor(model => model.Labs.First().Location)
                                 </th>
@@ -70,23 +61,25 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => lab.DepartmentID)
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => lab.Description)
-                                    </td>
+                                   
                                     <td>
                                         @Html.DisplayFor(modelItem => lab.Location)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => lab.Capacity)
                                     </td>
+                                    
                                     <td>
-                                        @Html.DisplayFor(modelItem => lab.IsOperational)
+                                        <div class="toggle-button">
+                                            <input type="checkbox" id="toggle-@lab.ID" class="toggle-status" data-id="@lab.ID" @(lab.IsOperational == true ? "checked" : "") />
+                                            <label for="toggle-@lab.ID" class="toggle-label"></label>
+                                        </div>
                                     </td>
-
                                     <td>
-                                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                        <button class="btn btn-warning btn-sm edit-lab" data-id="@lab.ID">
+                                            Edit
+                                        </button>
+                                       
                                     </td>
                                 </tr>
                             }
@@ -116,7 +109,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal Section -->
+    <!-- Modal Create Section -->
     <div class="modal fade " id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -133,50 +126,53 @@
                             <div class="row">
                                 <div class="col-12">
                                     <form id="labForm" method="post">
-                                        <div id="validation-summary" class="text-danger"></div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label asp-for="Lab.Name">Lab Name</label>
-                                                <input asp-for="Lab.Name" type="text" class="form-control" id="Lab_Name">
-                                                <span class="text-danger field-validation" id="error_Name"></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <select asp-for="Lab.DepartmentID" class="form-control" id="Lab_DepartmentID">
-                                                    <option value="">-- Select Department --</option>
-                                                    @foreach (var department in Model.Departments)
-                                                    {
-                                                        <option value="@department.ID">@department.Name</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>  
+                                        <div id="validation-summary" class="text-danger mb-3"></div>
                                         <div class="form-group">
-                                            <label asp-for="Lab.Description">Description</label>
-                                            <input asp-for="Lab.Description" type="text" class="form-control" id="Lab_Desc">
+                                            <label for="Lab_Name">Lab Name</label>
+                                            <input type="text" class="form-control" id="Lab_Name">
+                                            <span class="text-danger field-validation" id="error_Name"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Lab_DepartmentID">Department</label>
+                                            <select class="form-control" id="Lab_DepartmentID">
+                                                <option value="">-- Select Department --</option>
+                                                @foreach (var department in Model.Departments)
+                                                {
+                                                    <option value="@department.ID">@department.Name</option>
+                                                }
+                                            </select>
+                                            <span class="text-danger field-validation" id="error_DepartmentID"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Lab_Desc">Description</label>
+                                            <input type="text" class="form-control" id="Lab_Desc">
                                             <span class="text-danger field-validation" id="error_Description"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="Lab.Location">Location</label>
-                                            <input asp-for="Lab.Location" type="text" class="form-control" id="Lab_Location">
+                                            <label for="Lab_Location">Location</label>
+                                            <input type="text" class="form-control" id="Lab_Location">
                                             <span class="text-danger field-validation" id="error_Location"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="Lab.Capacity">Capacity</label>
-                                            <input asp-for="Lab.Capacity" type="number" id="Lab_Capacity" class="form-control">
+                                            <label for="Lab_Capacity">Capacity</label>
+                                            <input type="number" class="form-control" id="Lab_Capacity">
+                                            <span class="text-danger field-validation" id="error_Capacity"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="Lab.IsOperational">IsOperational</label>
-                                            <select asp-for="Lab.IsOperational" id="Lab_IsOperational">
+                                            <label for="Lab_IsOperational">Is Operational</label>
+                                            <select class="form-control" id="Lab_IsOperational">
+                                                <option value="">-- Select --</option>
                                                 <option value="true">Yes</option>
                                                 <option value="false">No</option>
                                             </select>
+                                            <span class="text-danger field-validation" id="error_IsOperational"></span>
                                         </div>
                                         <div class="text-right">
-                                            <button type="button" class="btn px-4" id="submitLabForm">
-                                                Add Now <i class="ml-1 fas fa-paper-plane"></i>
+                                            <button type="button" class="btn btn-primary" id="submitLabForm">Add Now</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
                                     </form>
+
                                 </div>
                             </div>
                         </div>
@@ -186,73 +182,157 @@
             </div>
         </div>
     </div>
-    <!-- !Modal Section -->
+    <!-- !Modal Edit Section -->
+    <div class="modal fade" id="editLabModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editLabModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editLabModalLabel">Edit Lab</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editLabForm" method="post">
+                        <input type="hidden" id="Edit_Lab_ID">
+                        <div class="form-group">
+                            <label for="Edit_Lab_Name">Lab Name</label>
+                            <input type="text" class="form-control" id="Edit_Lab_Name">
+                            <span class="text-danger error-message" id="error-Edit_Lab_Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Edit_Lab_DepartmentID">Department</label>
+                            <select class="form-control" id="Edit_Lab_DepartmentID">
+                                <option value="">-- Select Department --</option>
+                                @foreach (var department in Model.Departments)
+                                {
+                                    <option value="@department.ID">@department.Name</option>
+                                }
+                            </select>
+                            <span class="text-danger error-message" id="error-Edit_Lab_DepartmentID"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Edit_Lab_Desc">Description</label>
+                            <input type="text" class="form-control" id="Edit_Lab_Desc">
+                            <span class="text-danger error-message" id="error-Edit_Lab_Desc"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Edit_Lab_Location">Location</label>
+                            <input type="text" class="form-control" id="Edit_Lab_Location">
+                            <span class="text-danger error-message" id="error-Edit_Lab_Location"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Edit_Lab_Capacity">Capacity</label>
+                            <input type="number" class="form-control" id="Edit_Lab_Capacity">
+                            <span class="text-danger error-message" id="error-Edit_Lab_Capacity"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Edit_Lab_IsOperational">Is Operational</label>
+                            <select class="form-control" id="Edit_Lab_IsOperational">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                            <span class="text-danger error-message" id="error-Edit_Lab_IsOperational"></span>
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" id="submitEditLabForm">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script>
+    //Create function
     $(document).ready(function () {
         $('#submitLabForm').on('click', function () {
-            // Thu thập dữ liệu từ form
-            
-            var labData = {
-                Name: $('#Lab_Name').val(),
-                DepartmentID: $('#Lab_DepartmentID').val(),  // Corrected field name
-                Description: $('#Lab_Desc').val(),
-                Location: $('#Lab_Location').val(),
-                Capacity: $('#Lab_Capacity').val(),
-                IsOperational: $('#Lab_IsOperational').val() === "true",
-            };
-
-            
-
-            // Xóa lỗi cũ
+            // Clear previous error messages
             $('.field-validation').text('');
             $('#validation-summary').text('');
-            var errors = {};
 
-            if (!labData.Name) {
-                errors.Name = "Lab Name is required.";
+            var isValid = true;
+
+            // Get field values
+            var labName = $('#Lab_Name').val().trim();
+            var departmentID = $('#Lab_DepartmentID').val().trim();
+            var description = $('#Lab_Desc').val().trim();
+            var location = $('#Lab_Location').val().trim();
+            var capacity = $('#Lab_Capacity').val().trim();
+            var isOperational = $('#Lab_IsOperational').val();
+
+            // Validation
+            if (labName === '') {
+                isValid = false;
+                $('#error_Name').text('Lab name is required.');
             }
 
-            if (!labData.Description) {
-                errors.Description = "Description is required.";
+            if (departmentID === '') {
+                isValid = false;
+                $('#error_DepartmentID').text('Department is required.');
+            } else if (!/^\d+$/.test(departmentID)) {
+                isValid = false;
+                $('#error_DepartmentID').text('Department must be a valid number.');
             }
 
-            if (!labData.Location) {
-                errors.Location = "Location is required.";
+            if (description === '') {
+                isValid = false;
+                $('#error_Description').text('Description is required.');
             }
 
-            if (!labData.Capacity || labData.Capacity <= 0) {
-                errors.Capacity = "Capacity is required and must be greater than 0.";
+            if (location === '') {
+                isValid = false;
+                $('#error_Location').text('Location is required.');
             }
 
-            // Nếu có lỗi, hiển thị thông báo lỗi và không gửi AJAX request
-            if (Object.keys(errors).length > 0) {
-                for (var key in errors) {
-                    $('#error_' + key).text(errors[key]);
-                }
+            if (capacity === '') {
+                isValid = false;
+                $('#error_Capacity').text('Capacity is required.');
+            } else if (!/^\d+$/.test(capacity)) {
+                isValid = false;
+                $('#error_Capacity').text('Capacity must be a valid number.');
+            }
+
+            if (isOperational === null || isOperational === '') {
+                isValid = false;
+                $('#error_IsOperational').text('Operational status is required.');
+            }
+
+            // If validation fails, stop further processing
+            if (!isValid) {
                 $('#validation-summary').text('Please fix the errors above.');
-                return; // Dừng việc gửi yêu cầu AJAX
+                return;
             }
 
-            // Gửi AJAX request
+            // Prepare data for AJAX
+            var labData = {
+                Name: labName,
+                DepartmentID: parseInt(departmentID, 10),
+                Description: description,
+                Location: location,
+                Capacity: parseInt(capacity, 10),
+                IsOperational: isOperational === "true"
+            };
+
+            // Send AJAX request
             $.ajax({
-                url: '/Admin/Lab/CreateAjax', // URL tới action
+                url: '/Admin/Lab/CreateAjax',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(labData),
                 success: function (response) {
                     if (response.success) {
-                        // Thành công, đóng modal và làm gì đó (ví dụ: reload bảng)
+                        // Success: Close modal and reload table
                         $('#staticBackdrop').modal('hide');
-                        location.reload(); // Tải lại trang hoặc chỉ cập nhật bảng
+                        $('#staticBackdrop').on('hidden.bs.modal', function () {
+                            window.location.reload();
+                        });
                     } else {
-                        // Hiển thị lỗi
-                        var errors = response.errors;
-                        for (var key in errors) {
-                            $('#error_' + key.replace('.', '_')).text(errors[key][0]);
-                        }
-                        $('#validation-summary').text('Please fix the errors above.');
+                        // Show server-side errors (if any)
+                        $('#validation-summary').text(response.error || 'An unexpected error occurred.');
                     }
                 },
                 error: function () {
@@ -261,5 +341,118 @@
             });
         });
     });
+
+
+    //Edit function
+    $(document).ready(function () {
+        $('.edit-lab').on('click', function () {
+            var labId = $(this).data('id');
+
+            // Fetch Lab details via AJAX
+            $.get('/Admin/Lab/DetailsAjax/' + labId, function (lab) {
+                $('#Edit_Lab_ID').val(lab.id);
+                $('#Edit_Lab_Name').val(lab.name);
+                $('#Edit_Lab_DepartmentID').val(lab.departmentID);
+                $('#Edit_Lab_Desc').val(lab.description);
+                $('#Edit_Lab_Location').val(lab.location);
+                $('#Edit_Lab_Capacity').val(lab.capacity);
+                $('#Edit_Lab_IsOperational').val(lab.isOperational.toString());
+
+                $('#editLabModal').modal('show');
+            });
+        });
+
+        $('#submitEditLabForm').on('click', function () {
+            // Perform validation
+            var isValid = true;
+            var errorMessage = '';
+
+            var labName = $('#Edit_Lab_Name').val().trim();
+            var departmentID = $('#Edit_Lab_DepartmentID').val().trim();
+            var capacity = $('#Edit_Lab_Capacity').val().trim();
+
+            if (labName === '') {
+                isValid = false;
+                errorMessage += 'Lab name is required.\n';
+            }
+
+            if (departmentID === '') {
+                isValid = false;
+                errorMessage += 'Department ID is required.\n';
+            } else if (!/^\d+$/.test(departmentID)) { // Check if numeric
+                isValid = false;
+                errorMessage += 'Department ID must be a number.\n';
+            }
+
+            if (capacity === '') {
+                isValid = false;
+                errorMessage += 'Capacity is required.\n';
+            } else if (!/^\d+$/.test(capacity)) { // Check if numeric
+                isValid = false;
+                errorMessage += 'Capacity must be a number.\n';
+            }
+
+            if (!isValid) {
+                return; // Stop further execution if validation fails
+            }
+
+            var labData = {
+                ID: $('#Edit_Lab_ID').val(),
+                Name: labName,
+                DepartmentID: departmentID,
+                Description: $('#Edit_Lab_Desc').val().trim(),
+                Location: $('#Edit_Lab_Location').val().trim(),
+                Capacity: parseInt(capacity, 10),
+                IsOperational: $('#Edit_Lab_IsOperational').val() === "true",
+            };
+
+            // Send AJAX request
+            $.ajax({
+                url: '/Admin/Lab/EditAjax',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(labData),
+                success: function (response) {
+                    if (response.success) {
+                        $('#editLabModal').modal('hide');
+                        location.reload(); // Refresh table
+                    } else {
+                        alert('Failed to update lab. Please check the input values.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while saving changes.');
+                }
+            });
+        });
+    });
+
+    //change-status
+    $(document).ready(function () {
+        $('.toggle-status').on('change', function () {
+            var labId = $(this).data('id');
+            var isOperational = $(this).is(':checked');
+
+            $.ajax({
+                url: '/Admin/Lab/ChangeStatusAjax',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: labId, isOperational: isOperational }),
+                success: function (response) {
+                    if (response.success) {
+                        alert('Status updated successfully!');
+                    } else {
+                        alert(response.error || 'Failed to update status.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while updating the status.');
+                }
+            });
+        });
+    });
+
+
+
 </script>
 

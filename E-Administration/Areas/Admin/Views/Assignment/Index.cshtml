@@ -1,0 +1,260 @@
+﻿@model IEnumerable<E_Administration.Models.Assignments>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<main id="main-dashboard-content" class="p-3">
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="page-title d-flex justify-content-between py-2">
+                <nav class="my-auto" aria-label="breadcrumb">
+                    <ol class="breadcrumb p-0 my-auto" style="background: none;">
+                        <li class="breadcrumb-item"><a href="dashboard.html" class="orange">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Course </li>
+                    </ol>
+                </nav>
+                <button class="btn bg-orange text-white" data-toggle="modal" data-target="#staticBackdrop">
+                    <i class="fas fa-file-medical mr-1"></i> Add New
+                </button>
+            </div>
+            <div class="content-section py-3">
+                <!-- Table Content Section -->
+                <div class="table-responsive">
+                    <table class="w-100 table-bordered table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UserID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LabID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Date)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TimeStart)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TimeEnd)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Notes)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.User.UserName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Lab.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TimeStart)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TimeEnd)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Notes)
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- !Table Content Section -->
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- !Pagination -->
+            </div>
+        </div>
+    </div>
+    <!-- Modal Section -->
+    <div class="modal fade " id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Courses</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form Section -->
+                    <section id="form-section" class="py-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form id="assignmentForm">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputUser">User ID *</label>
+                                                <input type="number" class="form-control" id="inputUser">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="inputLab">Lab ID *</label>
+                                                <input type="number" class="form-control" id="inputLab">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputDate">Date *</label>
+                                                <input type="date" class="form-control" id="inputDate">
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="inputTimeStart">Start Time *</label>
+                                                <input type="time" class="form-control" id="inputTimeStart">
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="inputTimeEnd">End Time *</label>
+                                                <input type="time" class="form-control" id="inputTimeEnd">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputNotes">Notes</label>
+                                            <textarea class="form-control" id="inputNotes" rows="3"></textarea>
+                                        </div>
+                                        <div class="text-right">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- !Form Section -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- !Modal Section -->
+</main>
+<script>
+    $(document).ready(function () {
+        $("#assignmentForm").submit(function (e) {
+            e.preventDefault();
+
+            // Xóa các thông báo lỗi trước đó
+            $(".text-danger").remove();
+
+            let hasError = false;
+
+            // Lấy giá trị từ form
+            const formData = {
+                UserID: parseInt($("#inputUser").val()),
+                LabID: parseInt($("#inputLab").val()),
+                Date: $("#inputDate").val(),
+                TimeStart: $("#inputTimeStart").val(),
+                TimeEnd: $("#inputTimeEnd").val(),
+                Notes: $("#inputNotes").val()
+            };
+
+            // Kiểm tra từng trường
+            if (!formData.UserID || formData.UserID <= 0) {
+                $("#inputUser").after('<span class="text-danger error-message">User ID is required and must be a positive number.</span>');
+                hasError = true;
+            }
+
+            if (!formData.LabID || formData.LabID <= 0) {
+                $("#inputLab").after('<span class="text-danger error-message">Lab ID is required and must be a positive number.</span>');
+                hasError = true;
+            }
+
+            if (!formData.Date) {
+                $("#inputDate").after('<span class="text-danger error-message">Date is required.</span>');
+                hasError = true;
+            }
+
+            if (!formData.TimeStart) {
+                $("#inputTimeStart").after('<span class="text-danger error-message">Start Time is required.</span>');
+                hasError = true;
+            }
+
+            if (!formData.TimeEnd) {
+                $("#inputTimeEnd").after('<span class="text-danger error-message">End Time is required.</span>');
+                hasError = true;
+            }
+
+            if (formData.TimeStart && formData.TimeEnd && formData.TimeStart >= formData.TimeEnd) {
+                $("#inputTimeEnd").after('<span class="text-danger">End Time must be later than Start Time.</span>');
+                hasError = true;
+            }
+
+            // Nếu có lỗi, không gửi form
+            if (hasError) {
+                return;
+            }
+
+            // Gửi form qua AJAX nếu không có lỗi
+            $.ajax({
+                url: '/Admin/Assignment/CreateAssignment',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert("An unexpected error occurred.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while creating the assignment.");
+                }
+            });
+        });
+    });
+
+
+
+
+</script>
+
