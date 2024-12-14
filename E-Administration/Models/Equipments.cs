@@ -21,9 +21,9 @@ namespace E_Administration.Models
         [StringLength(50)]
         public string Status { get; set; } = "Operational";
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
+        public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdatedAt { get; set; } // Automatically updated on changes
+        public DateTime? UpdatedAt { get; set; } // Automatically updated on changes
     }
 }

@@ -8,6 +8,7 @@
     <link rel="icon" href="assests/img/favicon.ico">
     
     <!-- External CSS -->
+
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/owl.carousel.min.css">
     <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
@@ -226,6 +227,64 @@
         .text-danger.field-validation {
             font-size: 0.70rem; /* Giảm kích thước chữ */
         }
+
+        /* Toggle Button Styles */
+        .toggle-button {
+            display: inline-block;
+            position: relative;
+            width: 50px;
+            height: 25px;
+        }
+
+            .toggle-button input {
+                display: none; /* Hide the default checkbox */
+            }
+
+        .toggle-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .toggle-label::after {
+                content: "";
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 19px;
+                height: 19px;
+                background-color: white;
+                border-radius: 50%;
+                transition: transform 0.3s ease;
+            }
+
+        /* Toggle Active State */
+        input:checked + .toggle-label {
+            background-color: #4caf50;
+        }
+
+            input:checked + .toggle-label::after {
+                transform: translateX(25px);
+            }
+
+        .small-text {
+            font-size: 1.5em;
+        }
+
+        .error-message {
+            font-size: 0.875rem; /* Cỡ chữ nhỏ hơn (14px) */
+            color: #dc3545; /* Màu đỏ nhấn mạnh */
+            display: block; /* Hiển thị dưới dạng khối để căn chỉnh đúng */
+            margin-bottom: 5px; /* Tạo khoảng cách với input */
+        }
+
+
 
     </style>
 
