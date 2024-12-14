@@ -23,10 +23,10 @@ namespace E_Administration.Models
         public string Link { get; set; } // Optional link for online resources
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
+        public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdatedAt { get; set; } // Automatically updated on changes
+        public DateTime? UpdatedAt { get; set; } // Automatically updated on changes
 
         // Navigation properties
         [ForeignKey("UploadedBy")]
