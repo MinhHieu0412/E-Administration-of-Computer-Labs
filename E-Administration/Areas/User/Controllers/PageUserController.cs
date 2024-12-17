@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using E_Administration.Data;
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,22 @@ namespace E_Administration.Areas.User.Controllers
 
             // Truyền ViewModel vào View
             return View(viewModel);
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace E_Administration.Controllers
+{
+<<<<<<<< HEAD:E-Administration/Controllers/HomeController.cs
+    public class HomeController : Controller
+========
+    [Area("User")]
+    public class PageUserController : Controller
+>>>>>>>> duyanh:E-Administration/Areas/User/Controllers/PageUserController.cs
+    {
+        public IActionResult Index()
+        {
+            return View();
+>>>>>>> duyanh
         }
     }
 }

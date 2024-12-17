@@ -3,7 +3,10 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> duyanh
 <main id="main-content">
 
     <!-- Banner Section -->
@@ -85,11 +88,16 @@
     </section>
     <!-- !Lab Section -->
     <!-- Course Section -->
+<<<<<<< HEAD
+=======
+    @Model HomeViewModel
+>>>>>>> duyanh
     <section id="course-section" class="py-5 bg-orange text-white">
         <div class="container">
             <h4> E - Learning</h4>
 
             <!-- Owl Carousel Slider -->
+<<<<<<< HEAD
             <div class="owl-carousel owl-theme">
                 <div class="item px-3">
                     <img src="~/img/learning/ms-word.jpg" alt="lab1">
@@ -110,6 +118,50 @@
             </div>
             <!-- !Owl Carousel Slider -->
 
+=======
+           @*  <div class="owl-carousel owl-theme">
+                @foreach (var elearning in Model.Elearnings)
+                {
+                    <div class="item px-3">
+                        <!-- Hiển thị hình ảnh từ Link -->
+                        @if (!string.IsNullOrEmpty(elearning.Link))
+                        {
+                            <img src="@elearning.Link" alt="@elearning.Title" style="max-width: 100%; height: auto;">
+                        }
+                        else
+                        {
+                            <img src="~/img/default-placeholder.png" alt="Default Image" style="max-width: 100%; height: auto;">
+                        }
+
+                        <div class="text-paragraph py-2 text-center">
+                            <!-- Hiển thị tiêu đề -->
+                            <h5>@elearning.Title</h5>
+
+                            <!-- Hiển thị mô tả -->
+                            <p>@elearning.Description</p>
+
+                            <!-- Nút tải PDF -->
+                            @if (!string.IsNullOrEmpty(elearning.FilePath))
+                            {
+                                <a href="@elearning.FilePath" download class="btn btn-primary">
+                                    Download PDF &nbsp; <i class="fas fa-download"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <p class="text-danger">PDF file not available</p>
+                            }
+
+                            <!-- Nút Xem thêm (nếu cần điều hướng chi tiết) -->
+                            <a href="@Url.Action("Edit", "ELearning", new { id = elearning.ID, area = "User" })" class="btn btn-secondary">
+                                Learn More &nbsp; <i class="fas fa-info-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div> *@
+            <!-- !Owl Carousel Slider -->
+>>>>>>> duyanh
         </div>
     </section>
     <!-- !Course Section -->
@@ -149,4 +201,7 @@
     <!-- !Instructor Section -->
 
 </main>
+<<<<<<< HEAD
 
+=======
+>>>>>>> duyanh
