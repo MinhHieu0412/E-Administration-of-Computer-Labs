@@ -23,5 +23,8 @@ namespace E_Administration.Models
         public ICollection<Assignments> Assignments { get; set; }
         public ICollection<IssueReports> IssueReports { get; set; }
         public ICollection<LabRequests> LabRequests { get; set; }
+        // Không ánh xạ vào database, dùng để nhận file upload
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
     }
 }

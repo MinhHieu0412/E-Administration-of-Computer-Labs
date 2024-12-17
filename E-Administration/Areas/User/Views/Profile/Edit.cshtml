@@ -1,0 +1,123 @@
+﻿@model E_Administration.Models.User
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Edit Profile</h3>
+        </div>
+        <div class="card-body">
+
+            <!-- Hiển thị lỗi chung -->
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" novalidate>
+                <div class="text-center mb-4">
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Model.Image" alt="Profile Image" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/default-profile.png" alt="Default Image" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
+                    }
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="ImageFile" class="form-label">Profile Image</label>
+                    <input type="file" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png" />
+                    <span class="text-danger" asp-validation-for="ImageFile"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="UserName" class="form-label">User Name</label>
+                    <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
+                    <span class="text-danger" asp-validation-for="UserName"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter a new password" />
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Details" asp-route-id="@Model.ID" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('editProfileForm').addEventListener('submit', function (e) {
+        let isValid = true;
+
+        // Clear previous errors
+        document.getElementById('userNameError').innerText = '';
+        document.getElementById('emailError').innerText = '';
+        document.getElementById('passwordError').innerText = '';
+        document.getElementById('imageError').innerText = '';
+
+        // Validate UserName
+        const userName = document.getElementById('UserName').value.trim();
+        if (userName === '') {
+            document.getElementById('userNameError').innerText = 'User name is required.';
+            isValid = false;
+        }
+
+        // Validate Email
+        const email = document.getElementById('Email').value.trim();
+        const emailRegex = @Html.Raw(" /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ ");
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = 'Please enter a valid email.';
+            isValid = false;
+        }
+
+        // Validate Password
+        const password = document.getElementById('Password').value.trim();
+        if (password.length < 6) {
+            document.getElementById('passwordError').innerText = 'Password must be at least 6 characters.';
+            isValid = false;
+        }
+
+        // Validate Image File (Optional)
+        const imageFile = document.getElementById('ImageFile').files[0];
+        if (imageFile) {
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+            if (!allowedExtensions.exec(imageFile.name)) {
+                document.getElementById('imageError').innerText = 'Only .jpg, .jpeg, .png files are allowed.';
+                isValid = false;
+            } else if (imageFile.size > 2 * 1024 * 1024) { // Check file size (2MB limit)
+                document.getElementById('imageError').innerText = 'File size must be less than 2MB.';
+                isValid = false;
+            }
+        }
+
+        // If validation fails, prevent form submission
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+</script>

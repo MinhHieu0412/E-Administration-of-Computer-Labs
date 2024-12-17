@@ -1,0 +1,103 @@
+﻿@model E_Administration.Models.User
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Edit User</h2>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Edit", "Users", FormMethod.Post, new { @id = "editUserForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.ID)
+
+                <div class="row">
+                    <!-- UserName -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", placeholder = "Enter username" })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.Email, new { @class = "form-label" })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter email address" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Password -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.Password, new { @class = "form-label" })
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter password" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Role -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.Role, new { @class = "form-label" })
+                        @Html.TextBoxFor(model => model.Role, new { @class = "form-control", placeholder = "Enter role" })
+                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Department -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.DepartmentID, "Department", new { @class = "form-label" })
+                        @Html.DropDownList(
+                                 "DepartmentID",
+                                 (SelectList)ViewBag.Departments,
+                                 "Select Department",
+                                 new { @class = "form-control" }
+                                 )
+                        @Html.ValidationMessageFor(model => model.DepartmentID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Submit and Cancel Buttons -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-5">Save</button>
+                    <a href="@Url.Action("Index", "Users")" class="btn btn-secondary btn-lg px-5">Cancel</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('editUserForm');
+
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                const errors = [];
+                const emailRegex = @Html.Raw(" /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ ");
+                const email = document.getElementById('Email').value.trim();
+                const username = document.getElementById('UserName').value.trim();
+
+                // Kiểm tra email
+                if (!emailRegex.test(email)) {
+                    errors.push("Invalid email address.");
+                }
+
+                // Kiểm tra tên người dùng
+                if (username === "") {
+                    errors.push("Username is required.");
+                }
+
+                // Hiển thị lỗi nếu có
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    alert(errors.join("\n"));
+                }
+            });
+        }
+    });
+</script>
