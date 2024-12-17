@@ -52,10 +52,10 @@ app.MapControllerRoute(
 
 
 // Đặt trang mặc định là Home trong Area User
-app.MapControllerRoute(
+/*app.MapControllerRoute(
     name: "user_default",
     pattern: "",
-    defaults: new { area = "User", controller = "Home", action = "Index" });
+    defaults: new { area = "User", controller = "Home", action = "Index" });*/
 
 
 app.Run();
