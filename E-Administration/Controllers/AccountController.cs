@@ -51,9 +51,9 @@ namespace E_Administration.Controllers
                         {
                             return RedirectToAction("Index", "Admin", new { area = "Admin" });
                         }
-                        else
+                        else if(acc.Role == "Technician")
                         {
-                            return RedirectToAction("Index", "Home", new { area = "User" });
+                            return RedirectToAction("Index", "PageUser", new { area = "User" });
                         }
                     }
                     else

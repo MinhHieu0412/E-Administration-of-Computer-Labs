@@ -18,5 +18,6 @@ namespace E_Administration.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; } // Automatically updated on changes
+        public string Status { get; set; }
     }
 }

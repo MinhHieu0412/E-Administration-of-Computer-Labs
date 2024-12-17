@@ -66,6 +66,10 @@ namespace E_Administration.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<TimeSpan>("TimeEnd")
                         .HasColumnType("time");
 
