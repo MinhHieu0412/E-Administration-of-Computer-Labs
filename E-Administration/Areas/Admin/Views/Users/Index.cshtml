@@ -1,0 +1,41 @@
+﻿@model IEnumerable<E_Administration.Models.User>
+@{
+    ViewBag.Title = "User List";
+}
+
+<h2>User List</h2>
+<a href="@Url.Action("Create")" class="btn btn-primary mb-3">Create New User</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>UserName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.ID</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>@(user.Department != null ? user.Department.Name : "N/A")</td>
+
+                <td>@(user.Status == true ? "Active" : "Inactive")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Users", new { id = user.ID })" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@Url.Action("ToggleStatus", "Users", new { id = user.ID })" class="btn btn-secondary btn-sm">
+                        @(user.Status == true ? "Deactivate" : "Activate")
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
