@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Administration.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
+    [Migration("20241218142207_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -194,7 +195,6 @@ namespace E_Administration.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EquipmentDetails")
@@ -221,7 +221,6 @@ namespace E_Administration.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");

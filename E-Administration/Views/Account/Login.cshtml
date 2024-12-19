@@ -20,7 +20,8 @@
             <div class="row">
                 <div class="col-md-5 mx-auto">
                     <h2 class="pb-4">Account Login</h2>
-                    <form asp-action="Login">
+                    <form method="post" asp-action="Login" asp-controller="Account">
+
                       
                         <div class="form-group">
                             <label asp-for="Email">Email *</label>

@@ -31,8 +31,13 @@ namespace E_Administration.Controllers
                 var acc = await ctx.Users.SingleOrDefaultAsync(x => x.Email == model.Email);
                 if (acc != null)
                 {
+                    //string hashedPassword = BCrypt.Net.BCrypt.HashPassword("$12$OuYictQNaUloxwWwozyyauBn8iVw9IKMnskt0AXfQeBUiTIbzCdCm");
 
-                    if(BCrypt.Net.BCrypt.Verify(model.Password, acc.Password))
+                    if (!BCrypt.Net.BCrypt.Verify(model.Password, acc.Password))
+                    {
+                        ModelState.AddModelError("Password", "Invalid password.");
+                    }
+                    else
                     {
                         // Tạo thông tin xác thực
                         var claims = new List<Claim>
@@ -51,16 +56,12 @@ namespace E_Administration.Controllers
                         {
                             return RedirectToAction("Index", "Admin", new { area = "Admin" });
                         }
-                        else if(acc.Role == "Technician")
+                        else if (acc.Role == "Technician")
                         {
                             return RedirectToAction("Index", "PageUser", new { area = "User" });
                         }
                     }
-                    else
-                    {
-                        ModelState.AddModelError("Password", "Invalid password.");
-                    }
-                   
+
                 }
                 else
                 {
