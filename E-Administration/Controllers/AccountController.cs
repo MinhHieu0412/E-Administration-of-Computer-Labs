@@ -38,7 +38,8 @@ namespace E_Administration.Controllers
                         var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, acc.Email),
-                        new Claim(ClaimTypes.Role, acc.Role)
+                        new Claim(ClaimTypes.Role, acc.Role),
+                        new Claim("UserID", acc.ID.ToString())
                     };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -51,7 +52,7 @@ namespace E_Administration.Controllers
                         {
                             return RedirectToAction("Index", "Admin", new { area = "Admin" });
                         }
-                        else if(acc.Role == "Technician")
+                        else
                         {
                             return RedirectToAction("Index", "PageUser", new { area = "User" });
                         }

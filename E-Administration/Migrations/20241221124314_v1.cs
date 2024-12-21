@@ -57,6 +57,23 @@ namespace E_Administration.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LeaveRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveRequests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Labs",
                 columns: table => new
                 {
@@ -131,6 +148,36 @@ namespace E_Administration.Migrations
                         column: x => x.LabID,
                         principalTable: "Labs",
                         principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MakeUpRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LeaveRequestId = table.Column<int>(type: "int", nullable: false),
+                    LabId = table.Column<int>(type: "int", nullable: false),
+                    MakeUpDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MakeUpTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    Feedback = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MakeUpRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MakeUpRequests_Labs_LabId",
+                        column: x => x.LabId,
+                        principalTable: "Labs",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MakeUpRequests_LeaveRequests_LeaveRequestId",
+                        column: x => x.LeaveRequestId,
+                        principalTable: "LeaveRequests",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -334,6 +381,16 @@ namespace E_Administration.Migrations
                 column: "DepartmentID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MakeUpRequests_LabId",
+                table: "MakeUpRequests",
+                column: "LabId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MakeUpRequests_LeaveRequestId",
+                table: "MakeUpRequests",
+                column: "LeaveRequestId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RepairAssignments_IssueReportID",
                 table: "RepairAssignments",
                 column: "IssueReportID",
@@ -372,7 +429,13 @@ namespace E_Administration.Migrations
                 name: "LabRequests");
 
             migrationBuilder.DropTable(
+                name: "MakeUpRequests");
+
+            migrationBuilder.DropTable(
                 name: "RepairAssignments");
+
+            migrationBuilder.DropTable(
+                name: "LeaveRequests");
 
             migrationBuilder.DropTable(
                 name: "IssueReports");
