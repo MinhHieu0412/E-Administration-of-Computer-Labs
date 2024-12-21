@@ -1,0 +1,15 @@
+﻿@model E_Administration.Models.AboutUs
+
+@{
+    ViewData["Title"] = "About Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 style="text-align: center; font-size: 2.5em; color: orange; font-weight: bold;">About Us</h1>
+
+<div style="text-align: center; margin: 20px;">
+    <img src="@Model.ImageUrl" alt="About Us Image" style="max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;" />
+    <p style="font-size: 1.2em; line-height: 1.6;">@Model.Description</p>
+    <h2 style="font-size: 2em; color: #FF5733; font-weight: bold;">Our Mission</h2>
+    <p style="font-size: 1.2em; line-height: 1.6;">@Model.Mission</p>
+</div>
