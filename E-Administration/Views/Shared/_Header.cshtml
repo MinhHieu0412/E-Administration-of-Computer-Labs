@@ -15,20 +15,21 @@
             <div class="collapse navbar-collapse" id="navbar-Nav">
                 <ul class="navbar-nav m-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" asp-action="index" asp-controller="Home" >Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" asp-controller="AboutUs" asp-action="AboutUs">AboutUs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="learning.html">E Learning</a>
+                        <a class="nav-link" asp-controller="ELearning" asp-action="ViewElearning">E Learning</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" asp-controller="Contact" asp-action="Contact">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
                     </li>
+                    
                 </ul>
                
             </div>

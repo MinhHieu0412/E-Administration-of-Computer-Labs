@@ -7,6 +7,14 @@
 
 <div class="container mt-5">
     <div class="card shadow-sm">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
         <div class="card-header bg-primary text-white">
             <h3 class="mb-0">Profile Details</h3>
         </div>

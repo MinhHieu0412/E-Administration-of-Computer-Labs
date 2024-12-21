@@ -1,0 +1,70 @@
+﻿@model E_Administration.Models.Elearnings
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white text-center">
+            <h3>Edit eLearning</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+                <input type="hidden" asp-for="ID" />
+
+                <!-- Uploaded By (Read-Only Name) -->
+                <div class="form-group">
+                    <label>Uploaded By</label>
+                    <input type="text" value="@(Model.User?.UserName ?? "Unknown")" class="form-control" readonly />
+
+                </div>
+
+                <!-- Title -->
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Current PDF -->
+                <div class="form-group">
+                    <label>Current PDF</label>
+                    <p><a href="@Model.FilePath" target="_blank">View Current PDF</a></p>
+                </div>
+
+                <!-- Upload PDF -->
+                <div class="form-group">
+                    <label for="file">Upload New PDF (optional)</label>
+                    <input type="file" name="file" class="form-control" />
+                    <span asp-validation-for="FilePath" class="text-danger"></span>
+                </div>
+
+                <!-- Current Image -->
+                <div class="form-group">
+                    <label>Current Image</label>
+                    <img src="@Model.Link" alt="Current Image" class="img-thumbnail" style="width: 150px; height: auto;" />
+                </div>
+
+                <!-- Upload Image -->
+                <div class="form-group">
+                    <label for="image">Upload New Image (optional)</label>
+                    <input type="file" name="image" class="form-control" />
+                    <span asp-validation-for="Link" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

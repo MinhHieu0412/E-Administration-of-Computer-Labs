@@ -11,54 +11,49 @@
             <h3 class="mb-0">Edit Profile</h3>
         </div>
         <div class="card-body">
-
-            <!-- Hiển thị lỗi chung -->
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                        {
-                            <li>@error.ErrorMessage</li>
-                        }
-                    </ul>
-                </div>
-            }
-
-            <form asp-action="Edit" method="post" enctype="multipart/form-data" novalidate>
+            <form id="editProfileForm" asp-action="Edit" method="post" enctype="multipart/form-data" novalidate>
                 <div class="text-center mb-4">
-                    @if (!string.IsNullOrEmpty(Model.Image))
-                    {
-                        <img src="@Model.Image" alt="Profile Image" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
-                    }
-                    else
-                    {
-                        <img src="~/images/default-profile.png" alt="Default Image" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
-                    }
+                    <img id="profileImagePreview"
+                         src="@(!string.IsNullOrEmpty(Model.Image) ? Model.Image : "~/images/default-profile.png")"
+                         alt="Profile Image"
+                         class="rounded-circle"
+                         style="width: 150px; height: 150px; object-fit: cover;" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="ImageFile" class="form-label">Profile Image</label>
-                    <input type="file" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png" />
-                    <span class="text-danger" asp-validation-for="ImageFile"></span>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png" />
+                    <span id="imageError" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="UserName" class="form-label">User Name</label>
-                    <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
-                    <span class="text-danger" asp-validation-for="UserName"></span>
+                    <input asp-for="UserName" id="UserName" class="form-control" placeholder="Enter your username" />
+                    <span id="userNameError" class="text-danger" asp-validation-for="UserName"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="Email" class="form-label">Email</label>
-                    <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" />
-                    <span class="text-danger" asp-validation-for="Email"></span>
+                    <input asp-for="Email" id="Email" type="email" class="form-control" placeholder="Enter your email" />
+                    <span id="emailError" class="text-danger" asp-validation-for="Email"></span>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label asp-for="Password" class="form-label">Password</label>
-                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter a new password" />
-                    <span class="text-danger" asp-validation-for="Password"></span>
+                    <label asp-for="Password" class="form-label">Current Password</label>
+                    <input asp-for="Password" id="Password" type="password" class="form-control" placeholder="Enter your current password" />
+                    <span id="passwordError" class="text-danger" asp-validation-for="Password"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="NewPassword" class="form-label">New Password</label>
+                    <input asp-for="NewPassword" id="NewPassword" type="password" class="form-control" placeholder="Enter a new password" />
+                    <span id="newPasswordError" class="text-danger" asp-validation-for="NewPassword"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm New Password</label>
+                    <input asp-for="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" placeholder="Confirm your new password" />
+                    <span id="confirmPasswordError" class="text-danger" asp-validation-for="ConfirmPassword"></span>
                 </div>
 
                 <div class="d-flex justify-content-between">
@@ -71,16 +66,53 @@
 </div>
 
 <script>
+    document.getElementById('ImageFile').addEventListener('change', function () {
+        const imageFile = this.files[0];
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        const profileImagePreview = document.getElementById('profileImagePreview');
+        const imageError = document.getElementById('imageError');
+
+        // Clear previous error message
+        imageError.innerText = '';
+
+        if (imageFile) {
+            if (!allowedExtensions.exec(imageFile.name)) {
+                imageError.innerText = 'Only .jpg, .jpeg, and .png files are allowed.';
+                this.value = ''; // Clear the file if it's not valid
+                return;
+            } else if (imageFile.size > 2 * 1024 * 1024) { // 2MB file size limit
+                imageError.innerText = 'File size must be less than 2MB.';
+                this.value = ''; // Clear the file if it's too large
+                return;
+            } else {
+                // Update image preview
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profileImagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(imageFile);
+            }
+        }
+    });
+
     document.getElementById('editProfileForm').addEventListener('submit', function (e) {
         let isValid = true;
 
-        // Clear previous errors
-        document.getElementById('userNameError').innerText = '';
-        document.getElementById('emailError').innerText = '';
-        document.getElementById('passwordError').innerText = '';
-        document.getElementById('imageError').innerText = '';
+        // Clear previous error messages
+        const errorMessages = {
+            userName: 'userNameError',
+            email: 'emailError',
+            password: 'passwordError',
+            newPassword: 'newPasswordError',
+            confirmPassword: 'confirmPasswordError',
+            image: 'imageError'
+        };
 
-        // Validate UserName
+        for (const key in errorMessages) {
+            document.getElementById(errorMessages[key]).innerText = '';
+        }
+
+        // Validate Username
         const userName = document.getElementById('UserName').value.trim();
         if (userName === '') {
             document.getElementById('userNameError').innerText = 'User name is required.';
@@ -90,32 +122,36 @@
         // Validate Email
         const email = document.getElementById('Email').value.trim();
         const emailRegex = @Html.Raw(" /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ ");
-        if (!emailRegex.test(email)) {
-            document.getElementById('emailError').innerText = 'Please enter a valid email.';
+        if (email === '') {
+            document.getElementById('emailError').innerText = 'Email is required.';
+            isValid = false;
+        } else if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = 'Please enter a valid email address.';
             isValid = false;
         }
 
-        // Validate Password
+        // Validate Current Password
         const password = document.getElementById('Password').value.trim();
-        if (password.length < 6) {
-            document.getElementById('passwordError').innerText = 'Password must be at least 6 characters.';
+        if (password === '') {
+            document.getElementById('passwordError').innerText = 'Current password is required.';
             isValid = false;
         }
 
-        // Validate Image File (Optional)
-        const imageFile = document.getElementById('ImageFile').files[0];
-        if (imageFile) {
-            const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-            if (!allowedExtensions.exec(imageFile.name)) {
-                document.getElementById('imageError').innerText = 'Only .jpg, .jpeg, .png files are allowed.';
-                isValid = false;
-            } else if (imageFile.size > 2 * 1024 * 1024) { // Check file size (2MB limit)
-                document.getElementById('imageError').innerText = 'File size must be less than 2MB.';
-                isValid = false;
-            }
+        // Validate New Password
+        const newPassword = document.getElementById('NewPassword').value.trim();
+        if (newPassword.length > 0 && newPassword.length < 6) {
+            document.getElementById('newPasswordError').innerText = 'New password must be at least 6 characters.';
+            isValid = false;
         }
 
-        // If validation fails, prevent form submission
+        // Validate Confirm Password
+        const confirmPassword = document.getElementById('ConfirmPassword').value.trim();
+        if (newPassword && newPassword !== confirmPassword) {
+            document.getElementById('confirmPasswordError').innerText = 'New password and Confirm password do not match.';
+            isValid = false;
+        }
+
+        // Prevent form submission if validation fails
         if (!isValid) {
             e.preventDefault();
         }

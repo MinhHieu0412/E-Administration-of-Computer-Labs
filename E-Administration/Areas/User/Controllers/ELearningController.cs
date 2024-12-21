@@ -18,8 +18,21 @@ namespace E_Administration.Areas.User.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await ctx.ELearning.ToListAsync());
+            // Retrieve the logged-in user's ID from claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized(); // Handle missing or invalid claims
+            }
+
+            // Query Elearnings for the logged-in user
+            var userElearnings = await ctx.ELearning
+                                          .Where(e => e.UploadedBy == userId) // No need for conversion here
+                                          .ToListAsync();
+
+            return View(userElearnings);
         }
+
 
         public IActionResult Create()
         {
@@ -32,14 +45,31 @@ namespace E_Administration.Areas.User.Controllers
         {
             ViewBag.DebugElearning = eLearning;
 
-            // Kiểm tra xem các tệp tin có hợp lệ không
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                ModelState.AddModelError(string.Empty, "User ID not found. Please ensure you are logged in.");
+                return View(eLearning);
+            }
+
+            int userId;
+            try
+            {
+                userId = int.Parse(userIdClaim);
+            }
+            catch (FormatException)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid User ID format.");
+                return View(eLearning);
+            }
+
+            // Validate file inputs
             if (file == null || file.Length == 0)
                 ModelState.AddModelError("FilePath", "PDF file is required.");
 
             if (image == null || image.Length == 0)
                 ModelState.AddModelError("Link", "Image is required.");
 
-            // Nếu model không hợp lệ thì trả về trang nhập liệu
             /*if (!ModelState.IsValid)
                 return View(eLearning);*/
 
@@ -69,16 +99,15 @@ namespace E_Administration.Areas.User.Controllers
                     await image.CopyToAsync(stream);
                 }
 
-                // Tạo đối tượng eLearning mới với các thuộc tính đầy đủ
+                // Create new Elearnings object
                 var elearningToAdd = new Elearnings
                 {
+                    UploadedBy = userId, // Assign the user ID from claims
                     Title = eLearning.Title,
                     Description = eLearning.Description,
                     FilePath = $"/uploads/pdf/{pdfFileName}",
-                    Link = $"/uploads/images/{imageFileName}",
-                    UploadedBy = eLearning.UploadedBy,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    Link = $"/uploads/images/{imageFileName}"
+                    
                 };
 
                 // Save to database
@@ -89,10 +118,11 @@ namespace E_Administration.Areas.User.Controllers
             }
             catch (DbUpdateException dbEx)
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while saving the resource." + dbEx.InnerException?.Message);
+                ModelState.AddModelError(string.Empty, "An error occurred while saving the resource: " + dbEx.InnerException?.Message);
                 return View(eLearning);
             }
         }
+
 
 
         public async Task<IActionResult> Edit(int? id)

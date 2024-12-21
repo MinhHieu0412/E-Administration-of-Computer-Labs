@@ -13,7 +13,7 @@
             {
                 @Html.AntiForgeryToken()
 
-                @* <!-- Hiển thị thông báo lỗi server-side -->
+                <!-- Hiển thị thông báo lỗi server-side -->
                 @if (!ViewData.ModelState.IsValid)
                 {
                     <div class="alert alert-danger">
@@ -25,13 +25,7 @@
                             }
                         </ul>
                     </div>
-                } *@
-
-                <!-- Hiển thị thông báo lỗi client-side -->
-                <div id="clientError" class="alert alert-danger d-none">
-                    <h5><strong>Errors Detected:</strong></h5>
-                    <ul id="errorList"></ul>
-                </div>
+                }
 
                 <div class="row">
                     <!-- UserName -->
@@ -50,13 +44,6 @@
                 </div>
 
                 <div class="row">
-                    <!-- Password -->
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(model => model.Password, new { @class = "form-label" })
-                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter password", id = "password" })
-                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                    </div>
-
                     <!-- Role -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.Role, "Role", new { @class = "form-label" })
@@ -68,9 +55,7 @@
                                  )
                         @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
                     </div>
-                </div>
 
-                <div class="row">
                     <!-- Department -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.DepartmentID, "Department", new { @class = "form-label" })
@@ -99,7 +84,6 @@
         const errors = [];
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
         const role = document.getElementById('role').value;
         const department = document.getElementById('department').value;
 
@@ -116,13 +100,6 @@
             errors.push("Email is required.");
         } else if (!emailRegex.test(email)) {
             errors.push("Invalid email format.");
-        }
-
-        // Validate password
-        if (password === '') {
-            errors.push("Password is required.");
-        } else if (password.length < 6) {
-            errors.push("Password must be at least 6 characters long.");
         }
 
         // Validate role
