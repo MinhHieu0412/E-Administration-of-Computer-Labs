@@ -29,11 +29,7 @@ namespace E_Administration.Areas.Admin.Controllers
             var lab = await ctx.Labs
                 .Include(x => x.Equipments) // Eager Loading: Lấy luôn dữ liệu từ bảng Equipment liên quan
                 .SingleOrDefaultAsync(x => x.ID == id);
-<<<<<<< HEAD
             if (lab == null)
-=======
-            if(lab == null)
->>>>>>> duyanh
             {
                 return NotFound();
             }

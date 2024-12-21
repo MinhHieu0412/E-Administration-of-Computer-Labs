@@ -1,0 +1,134 @@
+﻿<h2>Quản lý Đơn Xin Nghỉ và Đơn Xin Dạy Bù</h2>
+
+<!-- Danh sách đơn xin nghỉ -->
+<h3>Danh sách Đơn Xin Nghỉ</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Người dùng</th>
+            <th>Ngày bắt đầu nghỉ</th>
+            <th>Ngày kết thúc nghỉ</th>
+            <th>Lý do</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.LeaveRequests != null)
+        {
+            @foreach (var request in ViewBag.LeaveRequests)
+            {
+                <tr>
+                    <td>@request.UserName</td>
+                    <td>@request.StartDate.ToString("dd/MM/yyyy")</td>
+                    <td>@request.EndDate.ToString("dd/MM/yyyy")</td>
+                    <td>@request.Reason</td>
+                    <td>@(request.IsApproved ? "Đã duyệt" : "Chưa duyệt")</td>
+                    <td>
+                        @if (!request.IsApproved)
+                        {
+                            <a href="@Url.Action("ApproveLeave", "LeaveRequest", new { area = "Admin", id = request.Id })" class="btn btn-success">Duyệt</a>
+                            <a href="@Url.Action("RejectLeave", "LeaveRequest", new { area = "Admin", id = request.Id })" class="btn btn-danger">Từ chối</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Đã xử lý</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Danh sách đơn xin dạy bù -->
+<h3>Danh sách Đơn Xin Dạy Bù</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Người dùng</th>
+            <th>Ngày bắt đầu nghỉ</th>
+            <th>Ngày kết thúc nghỉ</th>
+            <th>Phòng dạy bù</th>
+            <th>Ngày dạy bù</th>
+            <th>Giờ dạy bù</th>
+            <th>Trạng thái</th>
+            <th>Phản hồi</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.MakeUpRequests != null)
+        {
+            @foreach (var request in ViewBag.MakeUpRequests)
+            {
+                <tr>
+                    <td>@request.UserName</td>
+                    <td>@request.LeaveRequestStartDate.ToString("dd/MM/yyyy")</td>
+                    <td>@request.LeaveRequestEndDate.ToString("dd/MM/yyyy")</td>
+                    <td>@request.LabName</td>
+                    <td>@request.MakeUpDate.ToString("dd/MM/yyyy")</td>
+                    <td>@request.MakeUpTime</td>
+                    <td>@(request.IsApproved ? "Đã duyệt" : "Chưa duyệt")</td>
+                    <td>@(request.Feedback ?? "Không có phản hồi")</td>
+                    <td>
+                        @if (!request.IsApproved)
+                        {
+                            <a href="@Url.Action("ApproveMakeUp", "LeaveRequest", new { area = "Admin", id = request.Id })" class="btn btn-success">Duyệt</a>
+                            <a href="javascript:void(0);" onclick="openRejectModal(@request.Id)" class="btn btn-danger">Từ chối</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Đã xử lý</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9" class="text-center">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal từ chối -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="RejectMakeUp" asp-controller="LeaveRequest" asp-area="Admin">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">Lý do từ chối</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="RequestId" name="id" />
+                    <div class="form-group">
+                        <label for="Feedback">Phản hồi</label>
+                        <textarea id="Feedback" name="feedback" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Gửi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openRejectModal(requestId) {
+        document.getElementById("RequestId").value = requestId;
+        var modal = new bootstrap.Modal(document.getElementById("rejectModal"));
+        modal.show();
+    }
+</script>

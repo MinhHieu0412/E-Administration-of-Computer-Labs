@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+<h2>Danh sách đơn dạy bù</h2>
+
+<a href="@Url.Action("Create", "MakeUpRequest", new { area = "User" })" class="btn btn-primary mb-3">
+    Đăng ký dạy bù
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Người dùng</th>
+            <th>Ngày bắt đầu nghỉ</th>
+            <th>Ngày kết thúc nghỉ</th>
+            <th>Phòng dạy bù</th>
+            <th>Ngày dạy bù</th>
+            <th>Giờ dạy bù</th>
+            <th>Trạng thái</th>
+            <th>Phản hồi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.MakeUpRequests != null)
+        {
+            @foreach (var request in ViewBag.MakeUpRequests)
+            {
+                <tr>
+                    <td>@request.UserName</td>
+                    <td>@request.LeaveRequestStartDate.ToShortDateString()</td>
+                    <td>@request.LeaveRequestEndDate.ToShortDateString()</td>
+                    <td>@request.LabName</td>
+                    <td>@request.MakeUpDate.ToShortDateString()</td>
+                    <td>@request.MakeUpTime</td>
+                    <td>
+                        @if (request.IsApproved)
+                        {
+                            <span class="text-success fw-bold">Đã duyệt</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger fw-bold">Chưa duyệt</span>
+                        }
+                    </td>
+                    <td>@(request.Feedback ?? "Không có phản hồi")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center">Không có dữ liệu</td>
+            </tr>
+        }
+    </tbody>
+</table>
