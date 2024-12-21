@@ -89,7 +89,7 @@
                                         <button class="btn btn-warning btn-sm edit-assignment" data-id="@item.ID">
                                             Edit
                                         </button>
-                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                        @Html.ActionLink("Delete", "Delete", new { id=item.ID })
                                     </td>
                                     
 
@@ -141,11 +141,23 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="inputUser">User ID </label>
-                                                <input type="number" class="form-control" id="inputUser">
+                                                <select class="form-control" id="inputUser" name="UserID">
+                                                    <option value="">-- Select User --</option>
+                                                    @foreach (var user in ViewBag.Users)
+                                                    {
+                                                        <option value="@user.ID">@user.UserName</option>
+                                                    }
+                                                </select>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="inputLab">Lab ID </label>
-                                                <input type="number" class="form-control" id="inputLab">
+                                                <select class="form-control" id="inputLab" name="LabID">
+                                                    <option value="">-- Select Lab --</option>
+                                                    @foreach (var lab in ViewBag.Labs)
+                                                    {
+                                                        <option value="@lab.ID">@lab.Name</option>
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -200,12 +212,16 @@
                         <input type="hidden" id="editStatus" />
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="editUserID">User ID *</label>
-                                <input type="number" class="form-control" id="editUserID"  />
+                                <label for="editUserID">User *</label>
+                                <select class="form-control" id="editUserID">
+                                    <!-- Options sẽ được thêm động qua JavaScript -->
+                                </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="editLabID">Lab ID *</label>
-                                <input type="number" class="form-control" id="editLabID"  />
+                                <label for="editLabID">Lab *</label>
+                                <select class="form-control" id="editLabID">
+                                    <!-- Options sẽ được thêm động qua JavaScript -->
+                                </select>
                             </div>
                         </div>
                         <div class="form-row">
@@ -340,13 +356,29 @@
 
                 // Populate form fields with the fetched assignment data
                 $('#editAssignmentID').val(assignment.id);  // Add this for the hidden field
-                $('#editUserID').val(assignment.userID);
-                $('#editLabID').val(assignment.labID);
+               
+                
                 $('#editDate').val(formattedDate);
                 $('#editTimeStart').val(assignment.timeStart);
                 $('#editTimeEnd').val(assignment.timeEnd);
                 $('#editNotes').val(assignment.notes);
                 $('#editStatus').val(assignment.status);
+
+                // Populate User dropdown
+                var userSelect = $('#editUserID');
+                userSelect.empty(); // Clear the existing options
+                $.each(assignment.users, function (index, user) {
+                    var selected = user.id === assignment.userID ? 'selected' : '';
+                    userSelect.append(`<option value="${user.id}" ${selected}>${user.userName}</option>`);
+                });
+
+                // Populate Lab dropdown
+                var labSelect = $('#editLabID');
+                labSelect.empty(); // Clear the existing options
+                $.each(assignment.labs, function (index, lab) {
+                    var selected = lab.id === assignment.labID ? 'selected' : '';
+                    labSelect.append(`<option value="${lab.id}" ${selected}>${lab.name}</option>`);
+                });
                 // Show the modal for editing
                 $('#editAssignmentModal').modal('show');
             });

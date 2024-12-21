@@ -59,6 +59,8 @@ namespace E_Administration.Controllers
 
             try {   
                 user.Status = true; // Đặt trạng thái mặc định là Active
+                                    // Hash the password before saving
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -99,7 +101,12 @@ namespace E_Administration.Controllers
                 {
                     existingUser.UserName = user.UserName;
                     existingUser.Email = user.Email;
-                    existingUser.Password = user.Password;
+                    // Hash the password only if it has changed
+                    if (!string.IsNullOrEmpty(user.Password) &&
+                        !BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
+                    {
+                        existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                    }
                     existingUser.Image = user.Image;
                     existingUser.Role = user.Role;
                     existingUser.DepartmentID = user.DepartmentID;

@@ -7,6 +7,5 @@ namespace E_Administration.Dto
         public IEnumerable<Lab> Labs { get; set; }
         public Lab Lab { get; set; }
         public IEnumerable<Department> Departments { get; set; }
-       
     }
 }

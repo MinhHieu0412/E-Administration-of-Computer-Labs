@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Net.Mail;
+using System.Net;
 
 namespace E_Administration.Controllers
 {
@@ -37,8 +39,10 @@ namespace E_Administration.Controllers
                         // Tạo thông tin xác thực
                         var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, acc.Email),
-                        new Claim(ClaimTypes.Role, acc.Role)
+                         new Claim(ClaimTypes.NameIdentifier, acc.ID.ToString()), // Thêm User ID vào claim
+        new Claim(ClaimTypes.Email, acc.Email),
+        new Claim(ClaimTypes.Role, acc.Role),
+        new Claim("UserName", acc.UserName)
                     };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -46,12 +50,16 @@ namespace E_Administration.Controllers
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
+                        ViewBag.UserEmail = acc.Email;
+                        ViewBag.UserRole = acc.Role;
+                        ViewBag.UserName = acc.UserName;
+
                         // Chuyển hướng sau khi đăng nhập
                         if (acc.Role == "Admin")
                         {
                             return RedirectToAction("Index", "Admin", new { area = "Admin" });
                         }
-                        else if(acc.Role == "Technician")
+                        else
                         {
                             return RedirectToAction("Index", "PageUser", new { area = "User" });
                         }
@@ -78,6 +86,87 @@ namespace E_Administration.Controllers
 
             // Chuyển hướng về trang đăng nhập
             return RedirectToAction("Login", "Account");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await ctx.Users.SingleOrDefaultAsync(x => x.Email == model.Email);
+                if (user != null)
+                {
+                    var token = Guid.NewGuid().ToString();
+                    user.ResetToken = token;
+                    user.ResetTokenExpiry = DateTime.Now.AddHours(1);
+                    await ctx.SaveChangesAsync();
+
+                    var resetLink = Url.Action("ResetPassword", "Account", new { token }, Request.Scheme);
+
+                    // Send Email
+                    using (var smtp = new SmtpClient("smtp.gmail.com"))
+                    {
+                        smtp.Port = 587;
+                        smtp.Credentials = new NetworkCredential("minhhieu114a@gmail.com", "xvgk edae kbki rbuz");
+                        smtp.EnableSsl = true;
+
+                        var mail = new MailMessage
+                        {
+                            From = new MailAddress("minhhieu114a@gmail.com"),
+                            Subject = "Password Reset",
+                            Body = $"Please click the link to reset your password: <a href='{resetLink}'>Reset Password</a>",
+                            IsBodyHtml = true
+                        };
+
+                        mail.To.Add(model.Email);
+                        await smtp.SendMailAsync(mail);
+                    }
+
+                    ViewBag.Message = "Password reset link has been sent to your email.";
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "Email not found.");
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token)
+        {
+            var model = new ResetPasswordModel { Token = token };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await ctx.Users.SingleOrDefaultAsync(x => x.ResetToken == model.Token && x.ResetTokenExpiry > DateTime.Now);
+                if (user != null)
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+                    user.ResetToken = null;
+                    user.ResetTokenExpiry = null;
+                    await ctx.SaveChangesAsync();
+
+                    ViewBag.Message = "Password has been reset successfully.";
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("Token", "Invalid or expired token.");
+                }
+            }
+            return View(model);
         }
     }
 }

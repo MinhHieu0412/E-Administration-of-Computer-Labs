@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<E_Administration.Models.Lab>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,22 +26,19 @@
         <div class="slider-caption">
             <div class="container">
                 <div class="caption-icons">
-                    <a href="labs.html" class="bg-orange icons-item">
+                    <a asp-controller="Home" asp-action="DisplayLab" class="bg-orange icons-item">
                         <i class="fas fa-desktop"></i>
                         <br>Labs
                     </a>
-                    <a href="complaint.html" class="bg-yellow icons-item">
-                        <i class="fas fa-lightbulb"></i>
-                        <br>Complains
-                    </a>
+                    
                     <a href="learning.html" class="bg-yellow icons-item">
                         <i class="fas fa-book-open"></i>
                         <br>Learning
                     </a>
-                    <a href="assignment.html" class="bg-orange icons-item">
+                    @* <a href="assignment.html" class="bg-orange icons-item">
                         <i class="fas fa-briefcase"></i>
                         <br>Assignments
-                    </a>
+                    </a> *@
                 </div>
             </div>
         </div>
@@ -65,20 +62,24 @@
             <h4>Our Labs</h4>
             <hr>
 
-            <!-- Owl Carousel Slider -->
-            <div class="owl-carousel owl-theme">
-                <div class="item px-3">
-                    <img src="~/img/lab.jpg" alt="lab1">
-                    <div class="text-paragraph py-2">
-                        <h6>Lab - I</h6>
-                        <p><span class="orange">Timing : </span> <span>01:00 PM to 04:00 PM</span></p>
-                        <p><span class="orange">Days : </span> <span>Mon, Wed, Fri</span></p>
-                        <p><span class="orange">Students Allowed : </span> <span>10</span></p>
-                        <br>
-                        <a href="lab-individual.html" class="btn">View Details &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
+           
+                <div class="owl-carousel owl-theme">
+                     @foreach( var item in Model)
+            {
+                    <div class="item px-3">
+                        <img src="~/img/lab.jpg" alt="lab1">
+                        <div class="text-paragraph py-2">
+                            <h6>  @Html.DisplayFor(modelItem => item.Name)</h6>
+                            <p><span class="orange">Location : </span> <span>@Html.DisplayFor(modelItem => item.Location)</span></p>
+                            <p><span class="orange">Students Allowed : </span> <span>@Html.DisplayFor(modelItem => item.Capacity)</span></p>
+                            <br>
+                            <a asp-controller="Home" asp-action="DetailLab" asp-route-id="@item.ID" class="btn">View Details &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
+                        </div>
                     </div>
+            }
                 </div>
-            </div>
+            <!-- Owl Carousel Slider -->
+           
             <!-- !Owl Carousel Slider -->
 
         </div>

@@ -13,6 +13,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login"; // Đường dẫn nếu chưa đăng nhập
         options.LogoutPath = "/Account/Logout"; // Đường dẫn đăng xuất
+        options.AccessDeniedPath = "/Account/AccessDenied";
     });
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -22,6 +23,7 @@ builder.Services.AddControllers()
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

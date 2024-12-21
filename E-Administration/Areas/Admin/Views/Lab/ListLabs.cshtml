@@ -328,11 +328,22 @@
                 data: JSON.stringify(labData),
                 success: function (response) {
                     if (response.success) {
+
+                        Toastify({
+                            text: "Lab created successfully!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "green",
+                            stopOnFocus: true
+                        }).showToast();
+                        
                         // Success: Close modal and reload table
                         $('#staticBackdrop').modal('hide');
-                        $('#staticBackdrop').on('hidden.bs.modal', function () {
+                        setTimeout(function () {
                             window.location.reload();
-                        });
+                        }, 3000);
+
                     } else {
                         // Show server-side errors (if any)
                         $('#validation-summary').text(response.error || 'An unexpected error occurred.');

@@ -32,7 +32,11 @@
                 </ul>
                 <div class="dropdown">
                     <a class="user-nav-show" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="">Hello! Shoaib</span>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <span>Welcome, @User.FindFirst("UserName")?.Value</span>
+                        }
+                       
                         <img src="assests/img/profile-pic.jpg" class="rounded-pill">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">

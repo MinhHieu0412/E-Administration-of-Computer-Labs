@@ -11,7 +11,7 @@
     <a asp-action="Create">Create New</a>
 </p>
 <button class="btn bg-orange text-white" data-toggle="modal" data-target="#staticBackdrop">
-    <i class="fas fa-file-medical mr-1"></i> Add User
+    <i class="fas fa-file-medical mr-1"></i> Add Equipment
 </button>
 @if (!Model.Any())
 {
@@ -31,8 +31,7 @@ else
                 <th>@Html.DisplayNameFor(model => model.First().SerialNumber)</th>
                 <th>@Html.DisplayNameFor(model => model.First().EquipmentDetails)</th>
                 <th>@Html.DisplayNameFor(model => model.First().Status)</th>
-                <th>@Html.DisplayNameFor(model => model.First().CreatedAt)</th>
-                <th>@Html.DisplayNameFor(model => model.First().UpdatedAt)</th>
+                
                 <th>Actions</th>
             </tr>
         </thead>
@@ -46,12 +45,12 @@ else
                     <td>@Html.DisplayFor(modelItem => item.SerialNumber)</td>
                     <td>@Html.DisplayFor(modelItem => item.EquipmentDetails)</td>
                     <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
-                    <td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
+                   
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-warning btn-sm" }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-info btn-sm" }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-sm" })
+
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID, labId = ViewBag.LabId }, new { @class = "btn btn-danger btn-sm" })
+
                     </td>
                 </tr>
             }
@@ -90,14 +89,18 @@ else
                             </div>
                             <div class="form-group">
                                 <label for="inputStatus">Status *</label>
-                                <input type="text" class="form-control" id="inputStatus">
+                                <select class="form-control" id="inputStatus">
+                                    <option value="Operational">Yes</option>
+                                    <option value="Maintance">No</option>
+                                </select>
                                 <span class="text-danger error-message" id="errorStatus"></span>
                             </div>
                             <div class="form-group">
-                                <label for="LabID">Lab ID *</label>
-                                <input type="number" class="form-control" id="LabID">
+                                <label for="LabID">Lab *</label>
+                                <input type="text" class="form-control" id="LabID" value="@ViewBag.labId" readonly>
                                 <span class="text-danger error-message" id="errorLabID"></span>
                             </div>
+
                             <div class="text-right pt-4">
                                 <button type="submit" class="btn px-4">Create Now</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -116,6 +119,7 @@ else
 
 <script>
     $(document).ready(function () {
+        // Get the labId from the URL query string
         $('#createEquipmentForm').on('submit', function (event) {
             event.preventDefault(); // Ngăn việc submit form theo cách truyền thống
 
