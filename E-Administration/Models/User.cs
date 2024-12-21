@@ -26,5 +26,11 @@ namespace E_Administration.Models
         // Không ánh xạ vào database, dùng để nhận file upload
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+        [NotMapped] // Prevents this property from being stored in the database
+        [Compare("Password", ErrorMessage = "Passwords and ConfirmPassword do not match.")]
+        public string? ConfirmPassword { get; set; }
+        [NotMapped]
+        public string? NewPassword { get; set; }
+
     }
 }

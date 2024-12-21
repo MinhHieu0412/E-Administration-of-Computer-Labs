@@ -1,0 +1,106 @@
+﻿@model IEnumerable<E_Administration.Models.LabRequests>
+
+@{
+    ViewData["Title"] = "Manage Lab Requests";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Manage Lab Requests</h3>
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-center text-muted">No lab requests available.</p>
+            }
+            else
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Department</th>
+                            <th>Purpose</th>
+                            <th>Status</th>
+                            <th>Admin Response</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.ID</td>
+                                <td>@(request.Department != null ? request.Department.Name : "Unknown")</td>
+                                <td>@request.Purpose</td>
+                                <td>
+                                    @if (request.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (request.Status == "Approved")
+                                    {
+                                        <span class="badge bg-success">Approved</span>
+                                    }
+                                    else if (request.Status == "Rejected")
+                                    {
+                                        <span class="badge bg-danger">Rejected</span>
+                                    }
+                                </td>
+                                <td>@(string.IsNullOrEmpty(request.AdminResponse) ? "No response yet" : request.AdminResponse)</td>
+                                <td>
+                                    <!-- Form to update status and response -->
+                                    <form asp-action="UpdateStatus" asp-controller="LabRequests" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@request.ID" />
+
+                                        <div class="form-group mb-2">
+                                            <select name="status" class="form-control form-control-sm mb-2">
+                                                @if (request.Status == "Pending")
+                                                {
+                                                    <option value="Pending" selected>Pending</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="Pending">Pending</option>
+                                                }
+
+                                                @if (request.Status == "Approved")
+                                                {
+                                                    <option value="Approved" selected>Approved</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="Approved">Approved</option>
+                                                }
+
+                                                @if (request.Status == "Rejected")
+                                                {
+                                                    <option value="Rejected" selected>Rejected</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="Rejected">Rejected</option>
+                                                }
+                                            </select>
+
+                                        </div>
+
+                                        <div class="form-group mb-2">
+                                            <input type="text" name="adminResponse" class="form-control form-control-sm" placeholder="Enter response" value="@request.AdminResponse" />
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                    </form>
+
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using E_Administration.Models;
 using Microsoft.EntityFrameworkCore;
+using E_Administration.Dto;
 
 namespace E_Administration.Data
 {
@@ -97,6 +98,7 @@ namespace E_Administration.Data
                 .HasForeignKey(ir => ir.DepartmentID)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+        public DbSet<E_Administration.Dto.LabRequestDto> LabRequestDto { get; set; } = default!;
 }
 
 }

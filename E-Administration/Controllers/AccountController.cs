@@ -36,10 +36,11 @@ namespace E_Administration.Controllers
                     {
                         // Tạo thông tin xác thực
                         var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, acc.Email),
-                        new Claim(ClaimTypes.Role, acc.Role)
-                    };
+                        {
+                            new Claim(ClaimTypes.Name, acc.Email),
+                            new Claim(ClaimTypes.Role, acc.Role),
+                            new Claim("UserID", acc.ID.ToString()) // Save the user ID in a custom claim
+                        };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(identity);
@@ -51,7 +52,7 @@ namespace E_Administration.Controllers
                         {
                             return RedirectToAction("Index", "Admin", new { area = "Admin" });
                         }
-                        else if(acc.Role == "Technician")
+                        else 
                         {
                             return RedirectToAction("Index", "PageUser", new { area = "User" });
                         }

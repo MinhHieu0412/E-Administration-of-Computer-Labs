@@ -15,19 +15,16 @@
             <div class="collapse navbar-collapse" id="navbar-Nav">
                 <ul class="navbar-nav m-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" asp-action="Index" asp-controller="PageUser" asp-area="user">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="User" asp-controller="AboutUs" asp-action="index">AboutUs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="learning.html">E Learning</a>
+                        <a class="nav-link" asp-action="Index" asp-controller="ELearning" asp-area="user">E Learning</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="User" asp-controller="Contact" asp-action="index">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                     </li>
                 </ul>
                 <div class="dropdown">
@@ -36,7 +33,7 @@
                         <img src="assests/img/profile-pic.jpg" class="rounded-pill">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#"><i class="fas fa-cog"></i>Edit Profile</a>
+                        <a class="dropdown-item" asp-action="Details" asp-controller="Profile" asp-area="User"><i class="fas fa-cog"></i>Edit Profile</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
                     </div>
