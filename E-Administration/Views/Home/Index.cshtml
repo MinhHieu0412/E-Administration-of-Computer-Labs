@@ -1,4 +1,4 @@
-﻿@model IEnumerable<E_Administration.Models.Lab>
+﻿@model E_Administration.Models.HomeViewModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -63,7 +63,7 @@
 
            
                 <div class="owl-carousel owl-theme">
-                     @foreach( var item in Model)
+                     @foreach( var item in Model.Labs)
             {
                     <div class="item px-3">
                         <img src="~/img/lab.jpg" alt="lab1">
@@ -85,7 +85,6 @@
     </section>
     <!-- !Lab Section -->
     <!-- Course Section -->
-    @Model HomeViewModel
     <section id="course-section" class="py-5 bg-orange text-white">
         <div class="container">
             <h4> E - Learning</h4>

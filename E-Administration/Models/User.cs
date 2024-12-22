@@ -26,5 +26,9 @@ namespace E_Administration.Models
         public IFormFile? ImageFile { get; set; }
         public string? ResetToken { get; set; } // Token for password reset
         public DateTime? ResetTokenExpiry { get; set; }
+        [NotMapped]
+        public string? NewPassword { get; set; }
+        [NotMapped]
+        public string? ConfirmPassword { get; set; }
     }
 }

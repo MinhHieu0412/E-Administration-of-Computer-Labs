@@ -1,4 +1,5 @@
 ﻿using E_Administration.Data;
+using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +16,16 @@ namespace E_Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var ELearnings = await ctx.ELearning.ToListAsync();
             var lab = await ctx.Labs.ToListAsync();
-            return View(lab);
+
+            // Tạo ViewModel và gán danh sách Elearnings
+            var viewModel = new HomeViewModel
+            {
+                Elearnings = ELearnings,
+                Labs = lab
+            };
+            return View(viewModel);
         }
 
         public async Task<IActionResult> DetailLab(int id)
