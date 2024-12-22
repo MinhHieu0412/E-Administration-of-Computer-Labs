@@ -88,12 +88,6 @@ namespace E_Administration.Controllers
                 return View(user);
             }
 
-<<<<<<< HEAD
-            try {   
-                user.Status = true; // Đặt trạng thái mặc định là Active
-                                    // Hash the password before saving
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-=======
             try
             {
                 // Generate random password
@@ -101,7 +95,6 @@ namespace E_Administration.Controllers
                 user.Password = BCrypt.Net.BCrypt.HashPassword(randomPassword);
                 user.Status = true;
 
->>>>>>> dev
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
