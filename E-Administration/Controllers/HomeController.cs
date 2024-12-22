@@ -24,6 +24,7 @@ namespace E_Administration.Controllers
             {
                 Elearnings = ELearnings,
                 Labs = lab
+
             };
             return View(viewModel);
         }
