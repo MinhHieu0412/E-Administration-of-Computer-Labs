@@ -4,6 +4,7 @@ using E_Administration.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Administration.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
-    partial class DemoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241223115505_feedback")]
+    partial class feedback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,6 +66,7 @@ namespace E_Administration.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -435,6 +439,7 @@ namespace E_Administration.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DepartmentID")
@@ -449,12 +454,6 @@ namespace E_Administration.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ResetToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ResetTokenExpiry")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
@@ -462,6 +461,7 @@ namespace E_Administration.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")

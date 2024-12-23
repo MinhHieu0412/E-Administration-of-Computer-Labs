@@ -51,11 +51,14 @@ namespace E_Administration.Areas.User.Controllers
         public IActionResult Create()
         {
             ViewBag.LeaveRequests = _context.LeaveRequests
-                .Select(lr => new SelectListItem
-                {
-                    Value = lr.Id.ToString(),
-                    Text = $"Nghỉ từ {lr.StartDate:dd/MM/yyyy} đến {lr.EndDate:dd/MM/yyyy}"
-                })
+                .Join(_context.Users,
+                      lr => lr.UserId,
+                      u => u.ID,
+                      (lr, u) => new SelectListItem
+                      {
+                          Value = lr.Id.ToString(),
+                          Text = $"{u.UserName} - Nghỉ từ {lr.StartDate:dd/MM/yyyy} đến {lr.EndDate:dd/MM/yyyy}"
+                      })
                 .ToList();
 
             ViewBag.Labs = _context.Labs
@@ -68,19 +71,31 @@ namespace E_Administration.Areas.User.Controllers
 
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(MakeUpRequestDto model)
         {
+            // Lấy thông tin của đơn nghỉ liên quan
+            var leaveRequest = _context.LeaveRequests.FirstOrDefault(lr => lr.Id == model.LeaveRequestId);
+
+            // Kiểm tra logic
+            if (leaveRequest != null && model.MakeUpDate <= leaveRequest.EndDate)
+            {
+                ModelState.AddModelError("MakeUpDate", "Ngày dạy bù phải lớn hơn ngày kết thúc nghỉ.");
+            }
+
             if (!ModelState.IsValid)
             {
+                // Reload danh sách nếu có lỗi
                 ViewBag.LeaveRequests = _context.LeaveRequests
-                    .Select(lr => new SelectListItem
-                    {
-                        Value = lr.Id.ToString(),
-                        Text = $"Nghỉ từ {lr.StartDate:dd/MM/yyyy} đến {lr.EndDate:dd/MM/yyyy}"
-                    })
+                    .Join(_context.Users,
+                          lr => lr.UserId,
+                          u => u.ID,
+                          (lr, u) => new SelectListItem
+                          {
+                              Value = lr.Id.ToString(),
+                              Text = $"{u.UserName} - Nghỉ từ {lr.StartDate:dd/MM/yyyy} đến {lr.EndDate:dd/MM/yyyy}"
+                          })
                     .ToList();
 
                 ViewBag.Labs = _context.Labs
@@ -94,6 +109,7 @@ namespace E_Administration.Areas.User.Controllers
                 return View(model);
             }
 
+            // Lưu dữ liệu nếu hợp lệ
             var makeUpRequest = new MakeUpRequest
             {
                 LeaveRequestId = model.LeaveRequestId,
