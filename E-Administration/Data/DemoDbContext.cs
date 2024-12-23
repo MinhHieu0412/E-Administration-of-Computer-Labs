@@ -100,7 +100,7 @@ namespace E_Administration.Data
                 .HasForeignKey(ir => ir.DepartmentID)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-        public DbSet<E_Administration.Dto.LabRequestDto> LabRequestDto { get; set; } = default!;
+        
 }
 
 }
