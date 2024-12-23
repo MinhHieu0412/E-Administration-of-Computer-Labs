@@ -29,7 +29,8 @@ namespace E_Administration.Areas.Admin.Controllers
                           lr.StartDate,
                           lr.EndDate,
                           lr.Reason,
-                          lr.IsApproved
+                          lr.IsApproved,
+                          lr.Feedback // Thêm lý do từ chối
                       })
                 .ToList();
 
@@ -69,19 +70,32 @@ namespace E_Administration.Areas.Admin.Controllers
             if (leaveRequest != null)
             {
                 leaveRequest.IsApproved = true;
+                leaveRequest.Feedback = null; // Xóa phản hồi nếu trước đó đã bị từ chối
                 _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult RejectLeave(int id)
+        [HttpPost]
+        public IActionResult RejectLeave(int id, string feedback)
         {
+            if (string.IsNullOrEmpty(feedback))
+            {
+                TempData["ErrorMessage"] = "Lý do từ chối không được để trống.";
+                return RedirectToAction("Index");
+            }
+
             var leaveRequest = _context.LeaveRequests.Find(id);
             if (leaveRequest != null)
             {
-                leaveRequest.IsApproved = false; // Từ chối bằng cách đánh dấu không duyệt
+                leaveRequest.IsApproved = false;
+                leaveRequest.Feedback = feedback; // Lưu phản hồi từ Admin
                 _context.SaveChanges();
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy đơn xin nghỉ.";
             }
 
             return RedirectToAction("Index");
@@ -103,12 +117,22 @@ namespace E_Administration.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult RejectMakeUp(int id, string feedback)
         {
+            if (string.IsNullOrEmpty(feedback))
+            {
+                TempData["ErrorMessage"] = "Lý do từ chối không được để trống.";
+                return RedirectToAction("Index");
+            }
+
             var makeUpRequest = _context.MakeUpRequests.Find(id);
             if (makeUpRequest != null)
             {
                 makeUpRequest.IsApproved = false;
                 makeUpRequest.Feedback = feedback; // Lưu phản hồi từ Admin
                 _context.SaveChanges();
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy đơn xin dạy bù.";
             }
 
             return RedirectToAction("Index");
