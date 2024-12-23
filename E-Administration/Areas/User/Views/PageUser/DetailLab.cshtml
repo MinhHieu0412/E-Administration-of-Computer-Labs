@@ -1,0 +1,40 @@
+﻿@model E_Administration.Models.Lab
+
+@{
+    ViewData["Title"] = "DetailLab";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<button class="btn bg-orange text-white btn-open-modal" data-toggle="modal" data-target="#staticBackdrop">
+    <i class="fas fa-file-medical mr-1"></i> View Time Table
+</button>
+
+<section class="lab-details">
+    <div class="lab-intro">
+        <h1 class="lab-title">@Html.DisplayFor(model => model.Name)</h1>
+        <p><strong>Location:</strong> @Html.DisplayFor(model => model.Location)</p>
+        <p><strong>Capacity:</strong> @Html.DisplayFor(model => model.Capacity)</p>
+        @*  <p><strong>Operational Status:</strong> @(Model.IsOperational ? "Operational" : "Not Operational")</p> *@
+        <p><strong>Description:</strong> @Html.DisplayFor(model => model.Description)</p>
+    </div>
+</section>
+
+<div class="lab-all">
+    <div class="header">
+        <div>Máy chủ</div>
+        <div>Tivi</div>
+    </div>
+    <div class="lab-layout">
+
+        @foreach (var item in Model.Equipments)
+        {
+            <div class="lab-room">
+                <div class="computer"></div>
+                <div class="computer-keyboard"></div>
+                <div class="room-name">@Html.DisplayFor(modelItem => item.Name)</div>
+            </div>
+        }
+
+
+    </div>
+</div>

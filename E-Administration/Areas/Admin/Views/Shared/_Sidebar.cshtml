@@ -9,16 +9,20 @@
     <div class="" id="side-Nav">
         <a class="active" asp-controller="Admin" asp-action="Index"><i class="fas fa-chart-pie"></i>Overview</a>
         <a asp-controller="Lab" asp-action="Index"><i class="fas fa-desktop"></i>Labs</a>
-        <a href="courses.html"><i class="fas fa-book-open"></i>Courses</a>
-        <a asp-controller="Assignment" asp-action="Index"><i class="fas fa-briefcase"></i>Assignments</a>
+        <a asp-controller="ELearning" asp-action="Index" asp-area="Admin"><i class="fas fa-book-open"></i>Courses</a>
+        <a asp-controller="LabRequests" asp-action="Index" asp-area="Admin"><i class="fas fa-briefcase"></i>Assignments</a>
         <a href="complaints.html"><i class="fas fa-lightbulb"></i>Complaints</a>
+
         <a href="announcement.html"><i class="fas fa-bullhorn"></i>Announcement</a>
-        <a href="users.html"><i class="fas fa-users"></i>Accounts</a>
+        <a asp-controller="Users" asp-action="Index" asp-area="Admin"> <i class="fas fa-users"></i>Accounts</a>
         <a asp-area="Admin" asp-controller="Admin" asp-action="Contact">
             <i class="fas fa-address-book"></i> Contact
         </a>
         <a asp-area="Admin" asp-controller="AboutUs" asp-action="Index">
             <i class="fas fa-address-book"></i> AboutUs
+        </a>
+        <a asp-area="Admin" asp-controller="LeaveRequest" asp-action="Index">
+            <i class="fas fa-address-book"></i> LeaveRequest
         </a>
     </div>
     <!-- !Sidebar Nav -->

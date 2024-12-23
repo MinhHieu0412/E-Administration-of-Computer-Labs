@@ -1,9 +1,9 @@
 ﻿
+@model E_Administration.Models.HomeViewModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
 }
-
 <main id="main-content">
 
     <!-- Banner Section -->
@@ -34,11 +34,11 @@
                         <i class="fas fa-lightbulb"></i>
                         <br>Complains
                     </a>
-                    <a href="learning.html" class="bg-yellow icons-item">
+                    <a asp-action="Index" asp-controller="ELearning" asp-area="user" class="bg-yellow icons-item">
                         <i class="fas fa-book-open"></i>
                         <br>Learning
                     </a>
-                    <a href="assignment.html" class="bg-orange icons-item">
+                    <a asp-area="User" asp-controller="Assignment" asp-action="Index" class="bg-orange icons-item">
                         <i class="fas fa-briefcase"></i>
                         <br>Assignments
                     </a>
@@ -67,17 +67,19 @@
 
             <!-- Owl Carousel Slider -->
             <div class="owl-carousel owl-theme">
-                <div class="item px-3">
-                    <img src="~/img/lab.jpg" alt="lab1">
-                    <div class="text-paragraph py-2">
-                        <h6>Lab - I</h6>
-                        <p><span class="orange">Timing : </span> <span>01:00 PM to 04:00 PM</span></p>
-                        <p><span class="orange">Days : </span> <span>Mon, Wed, Fri</span></p>
-                        <p><span class="orange">Students Allowed : </span> <span>10</span></p>
-                        <br>
-                        <a href="lab-individual.html" class="btn">View Details &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
+                @foreach( var lab in Model.Labs)
+            {
+                    <div class="item px-3">
+                        <img src="~/img/lab.jpg" alt="lab1">
+                        <div class="text-paragraph py-2">
+                            <h6>  @Html.DisplayFor(modelItem => lab.Name)</h6>
+                            <p><span class="orange">Location : </span> <span>@Html.DisplayFor(modelItem => lab.Location)</span></p>
+                            <p><span class="orange">Students Allowed : </span> <span>@Html.DisplayFor(modelItem => lab.Capacity)</span></p>
+                            <br>
+                            <a asp-controller="PageUser" asp-action="DetailLab" asp-route-id="@lab.ID" class="btn">View Details &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
+                        </div>
                     </div>
-                </div>
+            }
             </div>
             <!-- !Owl Carousel Slider -->
 
@@ -85,7 +87,6 @@
     </section>
     <!-- !Lab Section -->
     <!-- Course Section -->
-    @Model HomeViewModel
     <section id="course-section" class="py-5 bg-orange text-white">
         <div class="container">
             <h4> E - Learning</h4>
@@ -94,42 +95,42 @@
             <div class="owl-carousel owl-theme">
                 @foreach (var elearning in Model.Elearnings)
                 {
-                    <div class="item px-3">
-                        <!-- Hiển thị hình ảnh từ Link -->
+                        <div class="item px-3">
+                            <!-- Hiển thị hình ảnh từ Link -->
                         @if (!string.IsNullOrEmpty(elearning.Link))
                         {
-                            <img src="@elearning.Link" alt="@elearning.Title" style="max-width: 100%; height: auto;">
+                                    <img src="@elearning.Link" alt="@elearning.Title" style="max-width: 100%; height: auto;">
                         }
                         else
                         {
-                            <img src="~/img/default-placeholder.png" alt="Default Image" style="max-width: 100%; height: auto;">
+                                    <img src="~/img/default-placeholder.png" alt="Default Image" style="max-width: 100%; height: auto;">
                         }
 
-                        <div class="text-paragraph py-2 text-center">
-                            <!-- Hiển thị tiêu đề -->
-                            <h5>@elearning.Title</h5>
+                            <div class="text-paragraph py-2 text-center">
+                                <!-- Hiển thị tiêu đề -->
+                                <h5>@elearning.Title</h5>
 
-                            <!-- Hiển thị mô tả -->
-                            <p>@elearning.Description</p>
+                                <!-- Hiển thị mô tả -->
+                                <p>@elearning.Description</p>
 
-                            <!-- Nút tải PDF -->
+                                <!-- Nút tải PDF -->
                             @if (!string.IsNullOrEmpty(elearning.FilePath))
                             {
-                                <a href="@elearning.FilePath" download class="btn btn-primary">
-                                    Download PDF &nbsp; <i class="fas fa-download"></i>
-                                </a>
+                                        <a href="@elearning.FilePath" download class="btn btn-primary">
+                                            Download PDF &nbsp; <i class="fas fa-download"></i>
+                                        </a>
                             }
                             else
                             {
-                                <p class="text-danger">PDF file not available</p>
+                                        <p class="text-danger">PDF file not available</p>
                             }
 
-                            <!-- Nút Xem thêm (nếu cần điều hướng chi tiết) -->
-                            <a href="@Url.Action("Edit", "ELearning", new { id = elearning.ID, area = "User" })" class="btn btn-secondary">
-                                Learn More &nbsp; <i class="fas fa-info-circle"></i>
-                            </a>
+                                <!-- Nút Xem thêm (nếu cần điều hướng chi tiết) -->
+                                <a href="@Url.Action("Edit", "ELearning", new { id = elearning.ID, area = "User" })" class="btn btn-secondary">
+                                    Learn More &nbsp; <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
                 }
             </div>
             <!-- !Owl Carousel Slider -->
@@ -144,7 +145,7 @@
             <a href="complaint.html" class="btn rounded-pill px-4">Complain Now</a>
         </div>
     </section>
-    <!-- !Complain Section -->
+<!-- !Complain Section -->
     <!-- Instructor Section -->
     <section id="instructor-section" class="py-5 ">
         <div class="container">
@@ -172,4 +173,3 @@
     <!-- !Instructor Section -->
 
 </main>
-

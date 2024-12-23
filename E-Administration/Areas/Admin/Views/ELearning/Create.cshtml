@@ -1,0 +1,59 @@
+﻿ @model E_Administration.Models.Elearnings
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-success text-white text-center">
+            <h3>Create New eLearning Resource</h3>
+        </div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <strong>There are errors in your form submission:</strong>
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter title of the eLearning" required />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Provide a brief description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload PDF File</label>
+                    <input type="file" name="file" class="form-control" accept=".pdf" />
+                    <small class="form-text text-muted">Only PDF files are allowed.</small>
+                    <span asp-validation-for="FilePath" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload Image</label>
+                    <input type="file" name="image" class="form-control" accept="image/*" />
+                    <small class="form-text text-muted">Supported formats: JPG, PNG. </small>
+                    <span asp-validation-for="Link" class="text-danger"></span>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-success btn-lg px-4 py-2">Save & Create</button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg px-4 py-2 ml-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

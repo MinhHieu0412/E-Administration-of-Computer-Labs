@@ -1,0 +1,47 @@
+﻿@model E_Administration.Models.Elearnings
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-danger text-white">
+            <h2 class="mb-0">Delete eLearning</h2>
+        </div>
+        <div class="card-body">
+            <p class="text-warning">Are you sure you want to delete the following eLearning resource?</p>
+
+            <dl class="row">
+                <dt class="col-sm-3">Uploaded By</dt>
+                <dd class="col-sm-9">@(Model.User?.UserName ?? "Unknown")</dd> <!-- Display uploader's name -->
+
+                <dt class="col-sm-3">Title</dt>
+                <dd class="col-sm-9">@Model.Title</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">PDF File</dt>
+                <dd class="col-sm-9">
+                    <a href="@Model.FilePath" target="_blank" class="text-decoration-none">View File</a>
+                </dd>
+
+                <dt class="col-sm-3">Image</dt>
+                <dd class="col-sm-9">
+                    <img src="@Model.Link" alt="Image" class="img-thumbnail" style="width: 150px; height: auto;" />
+                </dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="ID" />
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -52,22 +52,54 @@ namespace E_Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(User model)
         {
-            var userID = GetLoggedInUserId();
+            var userID = GetLoggedInUserId(); // Get logged-in user's ID
             var userInDb = _context.Users.FirstOrDefault(u => u.ID == userID);
 
             if (userInDb != null)
             {
                 try
                 {
+                    // Check if the new username already exists (excluding the current user)
+                    if (_context.Users.Any(u => u.UserName == model.UserName && u.ID != userID))
+                    {
+                        ModelState.AddModelError("UserName", "Username already exists. Please choose a different one.");
+                        return View(model);
+                    }
+
+                    // Check if the new email already exists (excluding the current user)
+                    if (_context.Users.Any(u => u.Email == model.Email && u.ID != userID))
+                    {
+                        ModelState.AddModelError("Email", "Email already exists. Please use a different email.");
+                        return View(model);
+                    }
+
                     // Update other information
                     userInDb.UserName = model.UserName;
                     userInDb.Email = model.Email;
-                    if (model.Password != null)
+
+                    if (!string.IsNullOrEmpty(model.Password))
                     {
-                        userInDb.Password = model.Password;
+                        // Check if the CurrentPassword matches the hashed password in the database
+                        if (!BCrypt.Net.BCrypt.Verify(model.Password, userInDb.Password))
+                        {
+                            ModelState.AddModelError("Password", "Password is incorrect.");
+                            return View(model);
+                        }
+
+                        // Validate confirm password
+                        if (model.NewPassword == model.ConfirmPassword)
+                        {
+                            // Hash the new password before saving
+                            userInDb.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("ConfirmPassword", "NewPasswords and ConfirmPassword do not match.");
+                            return View(model);
+                        }
                     }
 
-                    // Handle file upload
+                    // Handle file upload (unchanged)
                     if (model.ImageFile != null)
                     {
                         string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -116,7 +148,9 @@ namespace E_Administration.Controllers
                     // Save changes to the database
                     _context.Update(userInDb);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { id = model.ID });
+                    // Add success message
+                    TempData["SuccessMessage"] = "Profile updated successfully!";
+                    return RedirectToAction("Details", new { id = userInDb.ID });
                 }
                 catch (Exception ex)
                 {
@@ -134,6 +168,9 @@ namespace E_Administration.Controllers
 
 
 
+
+
+
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.ID == id);
@@ -141,8 +178,16 @@ namespace E_Administration.Controllers
 
         private int GetLoggedInUserId()
         {
-            // Giả định bạn có logic lấy ID của user hiện tại, ví dụ qua session hoặc claims
-            return 2; // Ví dụ ID của user là 1 (thay thế bằng logic thực tế)
+            // Retrieve the UserID claim
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+
+            // Validate and convert the claim to an integer
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            {
+                throw new UnauthorizedAccessException("User ID not found in claims. Please ensure you are logged in.");
+            }
+
+            return userId;
         }
     }
 }

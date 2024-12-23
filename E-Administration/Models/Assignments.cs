@@ -12,12 +12,13 @@ namespace E_Administration.Models
         public DateTime Date { get; set; }
         public TimeSpan TimeStart { get; set; }
         public TimeSpan TimeEnd { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; } // Automatically updated on changes
+        [NotMapped]
         public string Status { get; set; }
     }
 }

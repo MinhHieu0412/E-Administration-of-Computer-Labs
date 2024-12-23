@@ -39,6 +39,12 @@ namespace E_Administration.Areas.Admin.Controllers
                 }
             }
 
+            var users = await ctx.Users.Where(u=>u.Role == "Lecturer").ToListAsync();
+            var labs = await ctx.Labs.ToListAsync();
+
+            ViewBag.Users = users;
+            ViewBag.Labs = labs;
+
             return View(assignments);
         }
 
@@ -73,6 +79,25 @@ namespace E_Administration.Areas.Admin.Controllers
 
             if (assignment != null)
             {
+                // Danh sách người dùng và phòng lab
+                var users = await ctx.Users
+                    .Where(u => u.Role == "Lecturer") // Chỉ lấy những người dùng có vai trò "Lecturer"
+                    .Select(u => new
+                    {
+                        u.ID,
+                        u.UserName
+                    })
+                    .ToListAsync();
+
+                var labs = await ctx.Labs
+                    .Select(l => new
+                    {
+                        l.ID,
+                        l.Name
+                    })
+                    .ToListAsync();
+
+                // Dữ liệu bài phân công
                 var assignmentData = new
                 {
                     assignment.ID,
@@ -82,13 +107,17 @@ namespace E_Administration.Areas.Admin.Controllers
                     assignment.TimeStart,
                     assignment.TimeEnd,
                     assignment.Notes,
-                    assignment.Status
+                    assignment.Status,
+                    users, // Thêm danh sách người dùng
+                    labs   // Thêm danh sách phòng lab
                 };
+
                 return Json(assignmentData);
             }
 
             return Json(new { success = false, message = "Assignment not found." });
         }
+
 
         // Handle assignment editing (This should be linked to the AJAX call for submitting the edited assignment)
         [HttpPost]
@@ -112,6 +141,18 @@ namespace E_Administration.Areas.Admin.Controllers
             }
             return Json(new { success = false, message = "Failed to update assignment." });
 
+        }
+
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var assignment = await ctx.Assignments.FindAsync(id);
+
+            ctx.Assignments.Remove(assignment);
+
+            await ctx.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
 

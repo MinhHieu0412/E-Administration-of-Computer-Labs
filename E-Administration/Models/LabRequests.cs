@@ -10,7 +10,8 @@ namespace E_Administration.Models
         public int RequestedByID { get; set; }
         public User RequestedBy { get; set; }
         public string Purpose { get; set; }
-        public string AdminResponse { get; set; }
+        public string? AdminResponse { get; set; }
+        public string Status { get; set; } = "Pending";
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
 

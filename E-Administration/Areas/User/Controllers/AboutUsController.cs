@@ -1,75 +1,75 @@
-﻿using E_Administration.Data;
-using E_Administration.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿    using E_Administration.Data;
+    using E_Administration.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
-namespace E_Administration.Areas.User.Controllers
-{
-    [Area("User")]
-    public class AboutUsController : Controller
+    namespace E_Administration.Areas.User.Controllers
     {
-        private readonly DemoDbContext ctx;
-
-        public AboutUsController(DemoDbContext context)
+        [Area("User")]
+        public class AboutUsController : Controller
         {
-            ctx = context;
-        }
+            private readonly DemoDbContext ctx;
 
-        public IActionResult Index()
-        {
-            var aboutUs = ctx.AboutUs.FirstOrDefault();
-            return View(aboutUs);
-        }
-
-        public IActionResult Edit()
-        {
-            var aboutUs = ctx.AboutUs.FirstOrDefault();
-            if (aboutUs == null)
+            public AboutUsController(DemoDbContext context)
             {
-                return RedirectToAction("Create");
+                ctx = context;
             }
 
-            return View(aboutUs);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(AboutUs model)
-        {
-            if (ModelState.IsValid)
+            public IActionResult Index()
             {
                 var aboutUs = ctx.AboutUs.FirstOrDefault();
-                if (aboutUs != null)
+                return View(aboutUs);
+            }
+
+            public IActionResult Edit()
+            {
+                var aboutUs = ctx.AboutUs.FirstOrDefault();
+                if (aboutUs == null)
                 {
-                    aboutUs.Description = model.Description;
-                    aboutUs.Mission = model.Mission;
-                    aboutUs.ImageUrl = model.ImageUrl; // Save the image URL
-                    ctx.SaveChanges();
+                    return RedirectToAction("Create");
                 }
 
-                return RedirectToAction("Index");
+                return View(aboutUs);
             }
 
-            return View(model);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(AboutUs model)
-        {
-            if (ModelState.IsValid)
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public IActionResult Edit(AboutUs model)
             {
-                ctx.AboutUs.Add(model);
-                ctx.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    var aboutUs = ctx.AboutUs.FirstOrDefault();
+                    if (aboutUs != null)
+                    {
+                        aboutUs.Description = model.Description;
+                        aboutUs.Mission = model.Mission;
+                        aboutUs.ImageUrl = model.ImageUrl; // Save the image URL
+                        ctx.SaveChanges();
+                    }
+
+                    return RedirectToAction("Index");
+                }
+
+                return View(model);
             }
 
-            return View(model);
+            public IActionResult Create()
+            {
+                return View();
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public IActionResult Create(AboutUs model)
+            {
+                if (ModelState.IsValid)
+                {
+                    ctx.AboutUs.Add(model);
+                    ctx.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                return View(model);
+            }
         }
     }
-}

@@ -1,12 +1,15 @@
 ﻿using E_Administration.Data;
 using E_Administration.Dto;
 using E_Administration.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace E_Administration.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class LabController : Controller
     {
         private readonly DemoDbContext ctx;

@@ -1,9 +1,8 @@
-﻿
+﻿@model E_Administration.Models.HomeViewModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <main id="main-content">
 
     <!-- Banner Section -->
@@ -26,22 +25,19 @@
         <div class="slider-caption">
             <div class="container">
                 <div class="caption-icons">
-                    <a href="labs.html" class="bg-orange icons-item">
+                    <a asp-controller="Home" asp-action="DisplayLab" class="bg-orange icons-item">
                         <i class="fas fa-desktop"></i>
                         <br>Labs
                     </a>
-                    <a href="complaint.html" class="bg-yellow icons-item">
-                        <i class="fas fa-lightbulb"></i>
-                        <br>Complains
-                    </a>
+                    
                     <a href="learning.html" class="bg-yellow icons-item">
                         <i class="fas fa-book-open"></i>
                         <br>Learning
                     </a>
-                    <a href="assignment.html" class="bg-orange icons-item">
+                    @* <a href="assignment.html" class="bg-orange icons-item">
                         <i class="fas fa-briefcase"></i>
                         <br>Assignments
-                    </a>
+                    </a> *@
                 </div>
             </div>
         </div>
@@ -65,20 +61,24 @@
             <h4>Our Labs</h4>
             <hr>
 
-            <!-- Owl Carousel Slider -->
-            <div class="owl-carousel owl-theme">
-                <div class="item px-3">
-                    <img src="~/img/lab.jpg" alt="lab1">
-                    <div class="text-paragraph py-2">
-                        <h6>Lab - I</h6>
-                        <p><span class="orange">Timing : </span> <span>01:00 PM to 04:00 PM</span></p>
-                        <p><span class="orange">Days : </span> <span>Mon, Wed, Fri</span></p>
-                        <p><span class="orange">Students Allowed : </span> <span>10</span></p>
-                        <br>
-                        <a href="lab-individual.html" class="btn">View Details &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
+           
+                <div class="owl-carousel owl-theme">
+                     @foreach( var item in Model.Labs)
+            {
+                    <div class="item px-3">
+                        <img src="~/img/lab.jpg" alt="lab1">
+                        <div class="text-paragraph py-2">
+                            <h6>  @Html.DisplayFor(modelItem => item.Name)</h6>
+                            <p><span class="orange">Location : </span> <span>@Html.DisplayFor(modelItem => item.Location)</span></p>
+                            <p><span class="orange">Students Allowed : </span> <span>@Html.DisplayFor(modelItem => item.Capacity)</span></p>
+                            <br>
+                            <a asp-controller="Home" asp-action="DetailLab" asp-route-id="@item.ID" class="btn">View Details &nbsp; <i class="fas fa-long-arrow-alt-right"></i></a>
+                        </div>
                     </div>
+            }
                 </div>
-            </div>
+            <!-- Owl Carousel Slider -->
+           
             <!-- !Owl Carousel Slider -->
 
         </div>
@@ -91,25 +91,47 @@
 
             <!-- Owl Carousel Slider -->
             <div class="owl-carousel owl-theme">
-                <div class="item px-3">
-                    <img src="~/img/learning/ms-word.jpg" alt="lab1">
-                    <div class="text-paragraph py-2 text-center">
-                        <h5>MS Word</h5>
-                        <p>Beginner's Guide</p>
-                        <a href="learning-individual.html" class="btn ">Learn More  &nbsp; <i class="fas fa-caret-right"></i></a>
-                    </div>
-                </div>
-                <div class="item px-3">
-                    <img src="~/img/learning/ms-excel.jpg" alt="lab1">
-                    <div class="text-paragraph py-2 text-center">
-                        <h5>MS Excel</h5>
-                        <p>Advance Guide</p>
-                        <a href="learning-individual.html" class="btn">Learn More  &nbsp; <i class="fas fa-caret-right"></i></a>
-                    </div>
-                </div>
+                @foreach (var elearning in Model.Elearnings)
+                {
+                        <div class="item px-3">
+                            <!-- Hiển thị hình ảnh từ Link -->
+                        @if (!string.IsNullOrEmpty(elearning.Link))
+                        {
+                                    <img src="@elearning.Link" alt="@elearning.Title" style="max-width: 100%; height: auto;">
+                        }
+                        else
+                        {
+                                    <img src="~/img/default-placeholder.png" alt="Default Image" style="max-width: 100%; height: auto;">
+                        }
+
+                            <div class="text-paragraph py-2 text-center">
+                                <!-- Hiển thị tiêu đề -->
+                                <h5>@elearning.Title</h5>
+
+                                <!-- Hiển thị mô tả -->
+                                <p>@elearning.Description</p>
+
+                                <!-- Nút tải PDF -->
+                            @if (!string.IsNullOrEmpty(elearning.FilePath))
+                            {
+                                        <a href="@elearning.FilePath" download class="btn btn-primary">
+                                            Download PDF &nbsp; <i class="fas fa-download"></i>
+                                        </a>
+                            }
+                            else
+                            {
+                                        <p class="text-danger">PDF file not available</p>
+                            }
+
+                                <!-- Nút Xem thêm (nếu cần điều hướng chi tiết) -->
+                                <a href="@Url.Action("Edit", "ELearning", new { id = elearning.ID, area = "User" })" class="btn btn-secondary">
+                                    Learn More &nbsp; <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                }
             </div>
             <!-- !Owl Carousel Slider -->
-
         </div>
     </section>
     <!-- !Course Section -->
@@ -121,7 +143,7 @@
             <a href="complaint.html" class="btn rounded-pill px-4">Complain Now</a>
         </div>
     </section>
-    <!-- !Complain Section -->
+<!-- !Complain Section -->
     <!-- Instructor Section -->
     <section id="instructor-section" class="py-5 ">
         <div class="container">
@@ -149,4 +171,3 @@
     <!-- !Instructor Section -->
 
 </main>
-

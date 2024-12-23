@@ -1,0 +1,48 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+<h2>Danh sách đơn xin nghỉ</h2>
+<a href="@Url.Action("Create", "LeaveRequest", new { area = "User" })" class="btn btn-primary">Tạo đơn mới</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Người dùng</th>
+            <th>Ngày bắt đầu nghỉ</th>
+            <th>Ngày kết thúc nghỉ</th>
+            <th>Trạng thái</th>
+            <th>Phản hồi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">Không có đơn xin nghỉ nào được tạo bởi người dùng hiện tại.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td>@request.UserName</td>
+                    <td>@request.StartDate.ToShortDateString()</td>
+                    <td>@request.EndDate.ToShortDateString()</td>
+                    <td>
+                        @if (request.IsApproved)
+                        {
+                            <span class="text-success fw-bold">Đã duyệt</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger fw-bold">Chưa duyệt</span>
+                        }
+                    </td>
+                    <td>@(string.IsNullOrEmpty(request.Feedback) ? "Không có phản hồi" : request.Feedback)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
