@@ -14,10 +14,12 @@
     <div class="form-group">
         <label for="StartDate">Ngày bắt đầu nghỉ</label>
         <input asp-for="StartDate" class="form-control" type="date" />
+        @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
         <label for="EndDate">Ngày kết thúc nghỉ</label>
         <input asp-for="EndDate" class="form-control" type="date" />
+        @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
         <label for="Reason">Lý do</label>

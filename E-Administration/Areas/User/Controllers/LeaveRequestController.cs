@@ -29,6 +29,7 @@ namespace E_Administration.Areas.User.Controllers
                           lr.StartDate,
                           lr.EndDate,
                           lr.Reason,
+                          lr.Feedback,
                           lr.IsApproved
                       })
                 .ToList();
@@ -48,27 +49,41 @@ namespace E_Administration.Areas.User.Controllers
 
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(LeaveRequest model)
         {
-            if (ModelState.IsValid)
+            // Kiểm tra ngày bắt đầu
+            if (model.StartDate <= DateTime.Now)
             {
-                _context.LeaveRequests.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                ModelState.AddModelError("StartDate", "Ngày bắt đầu nghỉ phải lớn hơn ngày hiện tại.");
             }
 
-            ViewBag.Users = _context.Users
-                .Select(u => new SelectListItem
-                {
-                    Value = u.ID.ToString(),
-                    Text = u.UserName
-                })
-                .ToList();
+            // Kiểm tra ngày kết thúc
+            if (model.EndDate <= model.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "Ngày kết thúc nghỉ phải lớn hơn ngày bắt đầu nghỉ.");
+            }
 
-            return View(model);
+            // Nếu có lỗi, trả về View với lỗi
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Users = _context.Users
+                    .Select(u => new SelectListItem
+                    {
+                        Value = u.ID.ToString(),
+                        Text = u.UserName
+                    })
+                    .ToList();
+
+                return View(model);
+            }
+
+            // Nếu hợp lệ, lưu dữ liệu
+            _context.LeaveRequests.Add(model);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
