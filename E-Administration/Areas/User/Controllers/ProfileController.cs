@@ -3,6 +3,7 @@ using E_Administration.Data;
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using User = E_Administration.Models.User;
 
 namespace E_Administration.Controllers
@@ -179,7 +180,7 @@ namespace E_Administration.Controllers
         private int GetLoggedInUserId()
         {
             // Retrieve the UserID claim
-            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             // Validate and convert the claim to an integer
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
