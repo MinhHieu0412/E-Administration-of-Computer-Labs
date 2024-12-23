@@ -16,12 +16,15 @@ namespace E_Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var ELearnings = await ctx.ELearning.ToListAsync();
             var lab = await ctx.Labs.ToListAsync();
-            var elearnings = await ctx.ELearning.ToListAsync();
+
+            // Tạo ViewModel và gán danh sách Elearnings
             var viewModel = new HomeViewModel
             {
-                Labs = lab,
-                Elearnings = elearnings,
+                Elearnings = ELearnings,
+                Labs = lab
+
             };
             return View(viewModel);
         }
