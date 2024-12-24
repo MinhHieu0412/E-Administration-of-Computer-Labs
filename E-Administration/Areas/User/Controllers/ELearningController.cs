@@ -290,6 +290,8 @@ namespace E_Administration.Areas.User.Controllers
         {
             return ctx.ELearning.Any(e => e.ID == id);
         }
+        
+
     }
 
 }

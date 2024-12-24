@@ -179,7 +179,7 @@ namespace E_Administration.Controllers
 
         private int GetLoggedInUserId()
         {
-            // Retrieve the UserID claim
+            // Retrieve the NameIdentifier claim (UserID)
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             // Validate and convert the claim to an integer

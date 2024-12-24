@@ -2,6 +2,7 @@
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace E_Administration.Areas.Admin.Controllers
 {
@@ -39,7 +40,7 @@ namespace E_Administration.Areas.Admin.Controllers
         {
             ViewBag.DebugElearning = eLearning;
 
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim))
             {
                 ModelState.AddModelError(string.Empty, "User ID not found. Please ensure you are logged in.");
