@@ -1,4 +1,15 @@
-﻿<h2>Quản lý Đơn Xin Nghỉ và Đơn Xin Dạy Bù</h2>
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<h2>Quản lý Đơn Xin Nghỉ và Đơn Xin Dạy Bù</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <!-- Danh sách đơn xin nghỉ -->
 <h3>Danh sách Đơn Xin Nghỉ</h3>
@@ -10,6 +21,7 @@
             <th>Ngày kết thúc nghỉ</th>
             <th>Lý do</th>
             <th>Trạng thái</th>
+            <th>Phản hồi</th>
             <th>Hành động</th>
         </tr>
     </thead>
@@ -24,11 +36,12 @@
                     <td>@request.EndDate.ToString("dd/MM/yyyy")</td>
                     <td>@request.Reason</td>
                     <td>@(request.IsApproved ? "Đã duyệt" : "Chưa duyệt")</td>
+                    <td>@(request.Feedback ?? "Không có phản hồi")</td>
                     <td>
                         @if (!request.IsApproved)
                         {
                             <a href="@Url.Action("ApproveLeave", "LeaveRequest", new { area = "Admin", id = request.Id })" class="btn btn-success">Duyệt</a>
-                            <a href="@Url.Action("RejectLeave", "LeaveRequest", new { area = "Admin", id = request.Id })" class="btn btn-danger">Từ chối</a>
+                            <button class="btn btn-danger" onclick="openRejectModalLeave(@request.Id)">Từ chối</button>
                         }
                         else
                         {
@@ -41,7 +54,7 @@
         else
         {
             <tr>
-                <td colspan="6" class="text-center">Không có dữ liệu</td>
+                <td colspan="7" class="text-center">Không có dữ liệu</td>
             </tr>
         }
     </tbody>
@@ -81,7 +94,7 @@
                         @if (!request.IsApproved)
                         {
                             <a href="@Url.Action("ApproveMakeUp", "LeaveRequest", new { area = "Admin", id = request.Id })" class="btn btn-success">Duyệt</a>
-                            <a href="javascript:void(0);" onclick="openRejectModal(@request.Id)" class="btn btn-danger">Từ chối</a>
+                            <button class="btn btn-danger" onclick="openRejectModal(@request.Id)">Từ chối</button>
                         }
                         else
                         {
@@ -100,7 +113,32 @@
     </tbody>
 </table>
 
-<!-- Modal từ chối -->
+<!-- Modal từ chối LeaveRequest -->
+<div class="modal fade" id="rejectModalLeave" tabindex="-1" aria-labelledby="rejectModalLeaveLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="RejectLeave" asp-controller="LeaveRequest" asp-area="Admin">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLeaveLabel">Từ chối đơn xin nghỉ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="leaveRequestId" name="id" />
+                    <div class="form-group">
+                        <label for="feedback">Lý do từ chối</label>
+                        <textarea name="feedback" id="feedback" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Gửi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal từ chối MakeUpRequest -->
 <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -112,7 +150,7 @@
                 <div class="modal-body">
                     <input type="hidden" id="RequestId" name="id" />
                     <div class="form-group">
-                        <label for="Feedback">Phản hồi</label>
+                        <label for="Feedback">Lý do từ chối</label>
                         <textarea id="Feedback" name="feedback" class="form-control" rows="4" required></textarea>
                     </div>
                 </div>
@@ -129,6 +167,12 @@
     function openRejectModal(requestId) {
         document.getElementById("RequestId").value = requestId;
         var modal = new bootstrap.Modal(document.getElementById("rejectModal"));
+        modal.show();
+    }
+
+    function openRejectModalLeave(requestId) {
+        document.getElementById("leaveRequestId").value = requestId;
+        var modal = new bootstrap.Modal(document.getElementById("rejectModalLeave"));
         modal.show();
     }
 </script>

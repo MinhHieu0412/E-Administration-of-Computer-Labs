@@ -60,9 +60,11 @@
         <div class="container">
             <h4>Our Labs</h4>
             <hr>
-            <div class="owl-carousel owl-theme">
-                @foreach (var item in Model.Labs)
-                {
+
+           
+                <div class="owl-carousel owl-theme">
+                     @foreach( var item in Model.Labs)
+            {
                     <div class="item px-3">
                         <img src="~/img/lab.jpg" alt="lab1">
                         <div class="text-paragraph py-2">

@@ -66,6 +66,9 @@ namespace E_Administration.Areas.Admin.Controllers
             // Gắn Department vào Lab
             lab.Department = department;
 
+            lab.CreatedAt = DateTime.Now;
+            lab.UpdatedAt = DateTime.Now;
+
             // Lưu Lab mới vào cơ sở dữ liệu
             await ctx.Labs.AddAsync(lab);
             await ctx.SaveChangesAsync();
@@ -134,6 +137,17 @@ namespace E_Administration.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SearchLabs(string query)
+        {
+            var results = string.IsNullOrWhiteSpace(query)
+         ? await ctx.Labs.ToListAsync()
+         : await ctx.Labs
+             .Where(lab => lab.Name.Contains(query) || lab.Location.Contains(query))
+             .ToListAsync();
+
+            return Json(results);
+        }
 
 
 

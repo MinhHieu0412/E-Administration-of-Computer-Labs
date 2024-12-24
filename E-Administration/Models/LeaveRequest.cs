@@ -23,5 +23,6 @@ namespace E_Administration.Models
         public string Reason { get; set; } // Lý do nghỉ
 
         public bool IsApproved { get; set; } // Trạng thái duyệt (true/false)
+        public string? Feedback { get; set; }
     }
 }
