@@ -6,6 +6,9 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+
+
+
 <main id="main-dashboard-content" class="p-3">
     <div class="container">
         <div class="dashboard-container">
@@ -21,9 +24,12 @@
                 </button>
             </div>
             <div class="content-section py-3">
+                <div class="mb-3">
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Enter search query..." />
+                </div>
                 <!-- Table Content Section -->
                 <div class="table-responsive">
-                    <table class="w-100 table-bordered table">
+                    <table class="w-100 table-bordered table" id="labTable">
                         <thead>
                             <tr>
                                 <th>
@@ -428,8 +434,20 @@
                 data: JSON.stringify(labData),
                 success: function (response) {
                     if (response.success) {
+                        Toastify({
+                            text: "Lab Updated successfully!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "green",
+                            stopOnFocus: true
+                        }).showToast();
+
+                        // Success: Close modal and reload table
                         $('#editLabModal').modal('hide');
-                        location.reload(); // Refresh table
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
                     } else {
                         alert('Failed to update lab. Please check the input values.');
                     }
@@ -443,7 +461,8 @@
 
     //change-status
     $(document).ready(function () {
-        $('.toggle-status').on('change', function () {
+        // Use event delegation
+        $('#labTable').on('change', '.toggle-status', function () {
             var labId = $(this).data('id');
             var isOperational = $(this).is(':checked');
 
@@ -461,6 +480,75 @@
                 },
                 error: function () {
                     alert('An error occurred while updating the status.');
+                }
+            });
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('#searchQuery').on('input', function () {
+            const query = $(this).val();
+
+            $.ajax({
+                url: '/Admin/Lab/SearchLabs',
+                type: 'GET',
+                data: { query: query },
+                success: function (labs) {
+                    const tableBody = $('#labTable tbody');
+                    tableBody.empty();
+
+                    if (labs.length === 0) {
+                        tableBody.append('<tr><td colspan="6" class="text-center">No labs found.</td></tr>');
+                    } else {
+                        labs.forEach(lab => {
+                            tableBody.append(`
+                                    <tr>
+                                        <td>${lab.id}</td>
+                                        <td>${lab.name}</td>
+                                        <td>${lab.departmentID}</td>
+                                        <td>${lab.location}</td>
+                                        <td>${lab.capacity}</td>
+                                       
+                                                <td>
+                                            <div class="toggle-button">
+                                                <input type="checkbox" id="toggle-${lab.id}" class="toggle-status" data-id="${lab.id}" ${lab.isOperational ? 'checked' : ''} />
+                                                <label for="toggle-${lab.id}" class="toggle-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm edit-lab" data-id="${lab.id}">
+                                                Edit
+                                            </button>
+                                            <a href="/Admin/ListEquipment/Index?labId=${lab.id}" class="btn btn-info btn-sm">
+                                                View Equipment
+                                            </a>
+                                        </td>
+                                    </tr>
+                                `);
+                        });
+                        // Gán lại sự kiện click cho các nút Edit sau khi dữ liệu được cập nhật
+                        // Reattach the event listener for the edit buttons
+                        $('.edit-lab').on('click', function () {
+                            var labId = $(this).data('id');
+
+                            // Fetch Lab details via AJAX
+                            $.get('/Admin/Lab/DetailsAjax/' + labId, function (lab) {
+                                $('#Edit_Lab_ID').val(lab.id);
+                                $('#Edit_Lab_Name').val(lab.name);
+                                $('#Edit_Lab_DepartmentID').val(lab.departmentID);
+                                $('#Edit_Lab_Desc').val(lab.description);
+                                $('#Edit_Lab_Location').val(lab.location);
+                                $('#Edit_Lab_Capacity').val(lab.capacity);
+                                $('#Edit_Lab_IsOperational').val(lab.isOperational.toString());
+
+                                $('#editLabModal').modal('show');
+                            });
+                        });
+                    }
+                },
+                error: function () {
+                    alert('Error occurred while searching for labs.');
                 }
             });
         });

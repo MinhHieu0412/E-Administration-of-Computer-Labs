@@ -17,7 +17,6 @@ namespace E_Administration.Controllers
         // Action để hiển thị timetable theo LabID
         public async Task<IActionResult> Timetable(int labId, int? weekNumber)
         {
-            labId = 1;
             // Lấy thông tin Lab từ cơ sở dữ liệu
             var lab = await _context.Labs.FirstOrDefaultAsync(l => l.ID == labId);
             if (lab == null)

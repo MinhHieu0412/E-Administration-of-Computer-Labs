@@ -26,25 +26,25 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.ID)
+                                   ID
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.UserID)
+                                    Lecturer
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.LabID)
+                                    Lab
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Date)
+                                    Date
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TimeStart)
+                                    TimeStart
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TimeEnd)
+                                    TimeEnd
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Notes)
+                                   Notes
                                 </th>
                                 <th>Status</th>
                                 <th></th>
@@ -317,8 +317,20 @@
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.success) {
-                        alert(response.message);
-                        location.reload();
+                        Toastify({
+                            text: "Assignment created successfully!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "green",
+                            stopOnFocus: true
+                        }).showToast();
+
+                        // Success: Close modal and reload table
+                        $('#staticBackdrop').modal('hide');
+                        setTimeout(function () {
+                           location.reload();
+                        }, 3000);
                     } else {
                         alert("An unexpected error occurred.");
                     }

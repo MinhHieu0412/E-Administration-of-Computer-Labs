@@ -130,12 +130,7 @@
             isValid = false;
         }
 
-        // Validate Current Password
-        const password = document.getElementById('Password').value.trim();
-        if (password === '') {
-            document.getElementById('passwordError').innerText = 'Current password is required.';
-            isValid = false;
-        }
+        
 
         // Validate New Password
         const newPassword = document.getElementById('NewPassword').value.trim();
