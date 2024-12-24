@@ -12,17 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Administration.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
-<<<<<<< HEAD:E-Administration/Migrations/20241220115015_v1.Designer.cs
-    [Migration("20241220115015_v1")]
-=======
-<<<<<<<< HEAD:E-Administration/Migrations/20241218142207_v1.Designer.cs
     [Migration("20241218142207_v1")]
->>>>>>> dev:E-Administration/Migrations/20241218142207_v1.Designer.cs
     partial class v1
-========
-    [Migration("20241223115505_feedback")]
-    partial class feedback
->>>>>>>> origin/dev:E-Administration/Migrations/20241223115505_feedback.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
