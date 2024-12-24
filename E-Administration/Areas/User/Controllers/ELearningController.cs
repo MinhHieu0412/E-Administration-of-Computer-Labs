@@ -2,6 +2,7 @@
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace E_Administration.Areas.User.Controllers
 {
@@ -19,7 +20,7 @@ namespace E_Administration.Areas.User.Controllers
         public async Task<IActionResult> Index()
         {
             // Retrieve the logged-in user's ID from claims
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
             {
                 return Unauthorized(); // Handle missing or invalid claims
@@ -45,7 +46,7 @@ namespace E_Administration.Areas.User.Controllers
         {
             ViewBag.DebugElearning = eLearning;
 
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim))
             {
                 ModelState.AddModelError(string.Empty, "User ID not found. Please ensure you are logged in.");
@@ -289,6 +290,8 @@ namespace E_Administration.Areas.User.Controllers
         {
             return ctx.ELearning.Any(e => e.ID == id);
         }
+        
+
     }
 
 }

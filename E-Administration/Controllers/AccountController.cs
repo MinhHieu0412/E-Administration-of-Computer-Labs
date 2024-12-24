@@ -40,9 +40,9 @@ namespace E_Administration.Controllers
                         var claims = new List<Claim>
                     {
                          new Claim(ClaimTypes.NameIdentifier, acc.ID.ToString()), // Thêm User ID vào claim
-        new Claim(ClaimTypes.Email, acc.Email),
-        new Claim(ClaimTypes.Role, acc.Role),
-        new Claim("UserName", acc.UserName)
+                        new Claim(ClaimTypes.Email, acc.Email),
+                        new Claim(ClaimTypes.Role, acc.Role),
+                        new Claim("UserName", acc.UserName)
                     };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
