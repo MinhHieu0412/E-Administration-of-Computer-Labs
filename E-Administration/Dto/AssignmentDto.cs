@@ -7,6 +7,7 @@ namespace E_Administration.Dto
 {
     public class AssignmentDto
     {
+        public int ID { get; set; }
         [Required]
         public int UserID { get; set; }
 
@@ -26,5 +27,6 @@ namespace E_Administration.Dto
 
         [MaxLength(500)]
         public string Notes { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -1,0 +1,197 @@
+﻿@model IEnumerable<E_Administration.Models.Equipments>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<button class="btn bg-orange text-white" data-toggle="modal" data-target="#staticBackdrop">
+    <i class="fas fa-file-medical mr-1"></i> Add Equipment
+</button>
+@if (!Model.Any())
+{
+    <div class="alert alert-warning" role="alert">
+        No equipment available to display.
+    </div>
+
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().ID)</th>
+                <th>@Html.DisplayNameFor(model => model.First().LabID)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+                <th>@Html.DisplayNameFor(model => model.First().SerialNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.First().EquipmentDetails)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Status)</th>
+                
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LabID)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SerialNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.EquipmentDetails)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                   
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-warning btn-sm" }) |
+
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID, labId = ViewBag.LabId }, new { @class = "btn btn-danger btn-sm" })
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="modal fade " id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Equipment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Section -->
+                <section id="form-section" class="py-3">
+                    <div class="container">
+                        <form id="createEquipmentForm">
+                            <div class="form-group">
+                                <label for="inputName">Name *</label>
+                                <input type="text" class="form-control" id="inputName">
+                                <span class="text-danger error-message" id="errorName"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSerialNumber">Serial Number *</label>
+                                <input type="text" class="form-control" id="inputSerialNumber">
+                                <span class="text-danger error-message" id="errorSerialNumber"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEquipmentDetails">Equipment Details *</label>
+                                <input type="text" class="form-control" id="inputEquipmentDetails">
+                                <span class="text-danger error-message" id="errorEquipmentDetails"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStatus">Status *</label>
+                                <select class="form-control" id="inputStatus">
+                                    <option value="Operational">Yes</option>
+                                    <option value="Maintance">No</option>
+                                </select>
+                                <span class="text-danger error-message" id="errorStatus"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="LabID">Lab *</label>
+                                <input type="text" class="form-control" id="LabID" value="@ViewBag.labId" readonly>
+                                <span class="text-danger error-message" id="errorLabID"></span>
+                            </div>
+
+                            <div class="text-right pt-4">
+                                <button type="submit" class="btn px-4">Create Now</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </section>
+                <!-- !Form Section -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- !Modal Section -->
+
+<script>
+    $(document).ready(function () {
+        // Get the labId from the URL query string
+        $('#createEquipmentForm').on('submit', function (event) {
+            event.preventDefault(); // Ngăn việc submit form theo cách truyền thống
+
+            // Xóa thông báo lỗi cũ
+            $('.error-message').text('');
+
+            // Lấy dữ liệu từ form
+            const equipmentData = {
+                Name: $('#inputName').val().trim(),
+                SerialNumber: $('#inputSerialNumber').val().trim(),
+                EquipmentDetails: $('#inputEquipmentDetails').val().trim(),
+                Status: $('#inputStatus').val().trim(),
+                LabID: $('#LabID').val().trim(),
+            };
+
+            // Validation dữ liệu
+            let isValid = true;
+
+            if (!equipmentData.Name || equipmentData.Name.length > 100) {
+                $('#errorName').text('Name is required and must not exceed 100 characters.');
+                isValid = false;
+            }
+
+            if (!equipmentData.SerialNumber || equipmentData.SerialNumber.length > 50) {
+                $('#errorSerialNumber').text('Serial Number is required and must not exceed 50 characters.');
+                isValid = false;
+            }
+
+            if (!equipmentData.EquipmentDetails || equipmentData.EquipmentDetails.length > 200) {
+                $('#errorEquipmentDetails').text('Equipment Details are required and must not exceed 200 characters.');
+                isValid = false;
+            }
+
+            if (!equipmentData.Status || equipmentData.Status.length > 50) {
+                $('#errorStatus').text('Status is required and must not exceed 50 characters.');
+                isValid = false;
+            }
+
+            if (!equipmentData.LabID || isNaN(parseInt(equipmentData.LabID))) {
+                $('#errorLabID').text('Lab ID is required and must be a valid number.');
+                isValid = false;
+            }
+
+            // Nếu dữ liệu không hợp lệ, dừng việc gửi AJAX
+            if (!isValid) {
+                return;
+            }
+
+            // Gửi AJAX request nếu dữ liệu hợp lệ
+            $.ajax({
+                url: '/Admin/ListEquipment/AddEquipment',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(equipmentData),
+                success: function (response) {
+                    // Xử lý thành công
+                    alert('Equipment added successfully!');
+                    $('#staticBackdrop').modal('hide'); // Đóng modal
+                    location.reload(); // Làm mới trang (nếu cần)
+                },
+                error: function (xhr) {
+                    // Xử lý lỗi từ server
+                    const errors = xhr.responseJSON;
+                    if (errors) {
+                        if (errors.Name) $('#errorName').text(errors.Name);
+                        if (errors.SerialNumber) $('#errorSerialNumber').text(errors.SerialNumber);
+                        if (errors.EquipmentDetails) $('#errorEquipmentDetails').text(errors.EquipmentDetails);
+                        if (errors.Status) $('#errorStatus').text(errors.Status);
+                        if (errors.LabID) $('#errorLabID').text(errors.LabID);
+                    } else {
+                        alert("An unexpected error occurred.");
+                    }
+                }
+            });
+        });
+    });
+
+
+</script>
+

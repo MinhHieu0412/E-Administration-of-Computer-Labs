@@ -1,0 +1,83 @@
+﻿@model List<List<dynamic>>
+
+@{
+    ViewData["Title"] = $"Timetable for Lab: {ViewBag.LabName}";
+    var weekDays = ViewBag.WeekDays as List<string>; // Danh sách ngày trong tuần
+}
+
+<h1 class="text-center mt-3">@ViewData["Title"]</h1>
+
+<!-- Hiển thị phạm vi tuần -->
+<p class="text-center">
+    <strong>Week Range:</strong>
+    <span class="badge bg-primary">@ViewBag.StartOfWeek</span> -
+    <span class="badge bg-primary">@ViewBag.EndOfWeek</span>
+</p>
+
+<!-- Form chọn tuần -->
+<div class="text-center my-3">
+    <form method="get" asp-action="Timetable" asp-controller="LabTimeTable" class="form-inline d-flex justify-content-center">
+        <input type="hidden" name="labId" value="@ViewBag.LabId" />
+        <div class="form-group me-2">
+            <label for="weekNumber" class="form-label">Select Week:</label>
+            <select id="weekNumber" name="weekNumber" class="form-select">
+                @for (var i = 1; i <= 52; i++)
+                {
+                    if (i == (ViewBag.CurrentWeek ?? 0))
+                    {
+                        <option value="@i" selected>Week @i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">Week @i</option>
+                    }
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Show Timetable</button>
+    </form>
+</div>
+
+<!-- Bảng timetable -->
+<table class="table table-bordered table-hover table-striped text-center mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>Time</th>
+            @for (var i = 0; i < 7; i++) @* Lặp qua các ngày từ Monday đến Sunday *@
+            {
+                <th>@((DayOfWeek)i) <br> <span class="text-muted">@weekDays[i]</span></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < Model.First().Count; i++) @* Lặp qua các giờ *@
+        {
+            <tr>
+                <td class="fw-bold">@Model.First()[i].Time</td>
+                @foreach (var day in Model) @* Lặp qua từng ngày *@
+                {
+                    <td>
+                        @if (!string.IsNullOrEmpty(day[i].Assignment))
+                        {
+                            <div>
+                                <span class="text-success"><i class="bi bi-check-circle-fill"></i> @day[i].Assignment</span>
+                            </div>
+                            <div class="text-muted small">@day[i].Status</div>
+                        }
+                        else
+                        {
+                            <span class="text-muted"><i class="bi bi-dash-circle"></i></span>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Nút quay lại -->
+<div class="text-center mt-4">
+    <a asp-controller="Home" asp-action="DisplayLab" class="btn btn-info btn-sm">
+        <i class="bi bi-arrow-left-circle"></i> Back to Labs
+    </a>
+</div>

@@ -1,5 +1,6 @@
 ﻿using E_Administration.Models;
 using Microsoft.EntityFrameworkCore;
+using E_Administration.Dto;
 
 namespace E_Administration.Data
 {
@@ -21,6 +22,8 @@ namespace E_Administration.Data
         public DbSet<LabRequests> LabRequests { get; set; }
         public DbSet<Elearnings> ELearning { get; set; }
         public DbSet<RepairAssignments> RepairAssignments { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
+        public DbSet<MakeUpRequest> MakeUpRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,6 +100,7 @@ namespace E_Administration.Data
                 .HasForeignKey(ir => ir.DepartmentID)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+        
 }
 
 }

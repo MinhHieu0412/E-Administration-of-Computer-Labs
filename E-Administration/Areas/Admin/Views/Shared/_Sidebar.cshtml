@@ -1,25 +1,62 @@
 ﻿<div class="sidebar">
-    <div class="p-md-2 px-5 py-3 " id="dashboard-brand">
+    <div class="p-md-2 px-5 py-3" id="dashboard-brand">
         <a href="dashboard.html"><img src="~/img/logo-dark.png" width="60px" alt=""></a>
         <button class="btn toggler-btn">
             <i class="fas fa-bars"></i>
         </button>
     </div>
     <!-- Sidebar Nav -->
-    <div class="" id="side-Nav">
-        <a class="active" asp-controller="Admin" asp-action="Index"><i class="fas fa-chart-pie"></i>Overview</a>
-        <a asp-controller="Lab" asp-action="Index"><i class="fas fa-desktop"></i>Labs</a>
-        <a href="courses.html"><i class="fas fa-book-open"></i>Courses</a>
-        <a asp-controller="Assignment" asp-action="Index"><i class="fas fa-briefcase"></i>Assignments</a>
-        <a href="complaints.html"><i class="fas fa-lightbulb"></i>Complaints</a>
-        <a href="announcement.html"><i class="fas fa-bullhorn"></i>Announcement</a>
-        <a href="users.html"><i class="fas fa-users"></i>Accounts</a>
-        <a asp-area="Admin" asp-controller="Admin" asp-action="Contact">
-            <i class="fas fa-address-book"></i> Contact
+    <div id="side-Nav">
+        <a class="sidebar-link" asp-controller="Admin" asp-action="Index">
+            <i class="fas fa-chart-pie"></i>Overview
         </a>
-        <a asp-area="Admin" asp-controller="AboutUs" asp-action="Index">
-            <i class="fas fa-address-book"></i> AboutUs
+        <a class="sidebar-link" asp-controller="Lab" asp-action="Index">
+            <i class="fas fa-desktop"></i>Labs
+        </a>
+        <a class="sidebar-link" asp-controller="ELearning" asp-action="Index" asp-area="Admin">
+            <i class="fas fa-book-open"></i>Courses
+        </a>
+        <a class="sidebar-link" asp-controller="Assignment" asp-action="Index" asp-area="Admin">
+            <i class="fas fa-briefcase"></i>Assignments
+        </a>
+        <a class="sidebar-link" href="complaints.html">
+            <i class="fas fa-lightbulb"></i>Complaints
+        </a>
+        <a class="sidebar-link" asp-controller="Users" asp-action="Index" asp-area="Admin">
+            <i class="fas fa-users"></i>Accounts
+        </a>
+        <a class="sidebar-link" asp-area="Admin" asp-controller="Admin" asp-action="Contact">
+            <i class="fas fa-address-book"></i>Contact
+        </a>
+        <a class="sidebar-link" asp-area="Admin" asp-controller="AboutUs" asp-action="Index">
+            <i class="fas fa-address-book"></i>AboutUs
+        </a>
+        <a class="sidebar-link" asp-area="Admin" asp-controller="LeaveRequest" asp-action="Index">
+            <i class="fas fa-address-book"></i>LeaveRequest
         </a>
     </div>
     <!-- !Sidebar Nav -->
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const currentPath = window.location.pathname;
+
+        sidebarLinks.forEach(link => {
+            const href = link.getAttribute('href') || link.dataset.href;
+            if (href && currentPath.includes(href)) {
+                link.classList.add('active');
+            }
+        });
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+
+</script>

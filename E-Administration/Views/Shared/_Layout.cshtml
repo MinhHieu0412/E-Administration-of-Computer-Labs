@@ -17,6 +17,276 @@
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/responsive.css">
 
+
+
+    <style>
+        .lab-all {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 60%;
+            margin-bottom: 20px;
+        }
+
+            .header div {
+                background-color: #d9c3c3;
+                text-align: center;
+                padding: 10px;
+                border-radius: 5px;
+                width: 30%;
+                font-weight: bold;
+            }
+
+        .grid {
+            margin-bottom: 30px;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 200px);
+            grid-gap: 10px;
+        }
+
+        .box {
+            width: 150px;
+            height: 150px;
+            background-color: #d3d3d3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+            .box:hover {
+                background-color: #a3a3ff;
+                color: #fff;
+                transform: scale(1.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        .grid-item:nth-child(7n) {
+            margin-right: 0;
+        }
+
+        .grid-details {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 10px;
+            width: 60%;
+        }
+
+        .grid-item {
+            background-color: #d9c3c3;
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+            .grid-item:hover {
+                background-color: #a3a3ff;
+                color: #fff;
+                transform: scale(1.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        .lab-details {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+        }
+
+        .lab-intro {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .lab-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .lab-intro p {
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        .lab-equipments {
+            margin-top: 30px;
+        }
+
+            .lab-equipments h2 {
+                font-size: 1.8em;
+                color: #555;
+                margin-bottom: 20px;
+            }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .equipment-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+            .equipment-card h3 {
+                margin: 0 0 10px;
+                font-size: 1.2em;
+                color: #333;
+            }
+
+            .equipment-card p {
+                margin: 0;
+                font-size: 1em;
+                color: #666;
+            }
+
+        .lab-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 200px);
+            grid-gap: 20px;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        .lab-room {
+            background-color: #ffffff;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .lab-room:hover {
+                background-color: #a3a3ff;
+                color: #fff;
+                transform: scale(1.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+
+        .computer {
+            width: 80px;
+            height: 50px;
+            background-color: #333;
+            border-radius: 5px;
+            position: relative;
+        }
+
+            .computer:before {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 30%;
+                width: 40%;
+                height: 10px;
+                background-color: #555;
+                border-radius: 2px;
+            }
+
+        .computer-keyboard {
+            margin-top: 10px;
+            width: 70%;
+            height: 10px;
+            background-color: #aaa;
+            border-radius: 3px;
+        }
+
+        .room-name {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .text-danger.field-validation {
+            font-size: 0.70rem; /* Giảm kích thước chữ */
+        }
+
+        /* Toggle Button Styles */
+        .toggle-button {
+            display: inline-block;
+            position: relative;
+            width: 50px;
+            height: 25px;
+        }
+
+            .toggle-button input {
+                display: none; /* Hide the default checkbox */
+            }
+
+        .toggle-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .toggle-label::after {
+                content: "";
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 19px;
+                height: 19px;
+                background-color: white;
+                border-radius: 50%;
+                transition: transform 0.3s ease;
+            }
+
+        /* Toggle Active State */
+        input:checked + .toggle-label {
+            background-color: #4caf50;
+        }
+
+            input:checked + .toggle-label::after {
+                transform: translateX(25px);
+            }
+
+        .small-text {
+            font-size: 1.5em;
+        }
+
+        .error-message {
+            font-size: 0.875rem; /* Cỡ chữ nhỏ hơn (14px) */
+            color: #dc3545; /* Màu đỏ nhấn mạnh */
+            display: block; /* Hiển thị dưới dạng khối để căn chỉnh đúng */
+            margin-bottom: 5px; /* Tạo khoảng cách với input */
+        }
+
+    </style>
+
 </head>
 <body>
     

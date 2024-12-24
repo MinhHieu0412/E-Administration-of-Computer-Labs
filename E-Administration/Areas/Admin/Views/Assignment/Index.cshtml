@@ -5,13 +5,6 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-
 <main id="main-dashboard-content" class="p-3">
     <div class="container">
         <div class="dashboard-container">
@@ -33,26 +26,27 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.ID)
+                                   ID
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.UserID)
+                                    Lecturer
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.LabID)
+                                    Lab
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Date)
+                                    Date
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TimeStart)
+                                    TimeStart
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TimeEnd)
+                                    TimeEnd
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Notes)
+                                   Notes
                                 </th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -81,12 +75,24 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Notes)
                                     </td>
-
                                     <td>
-                                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                        @if (item.Date.Add(item.TimeStart) < DateTime.Now)
+                                        {
+                                            <span class="badge bg-success">Completed</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">UnCompleted</span>
+                                        }
                                     </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm edit-assignment" data-id="@item.ID">
+                                            Edit
+                                        </button>
+                                        @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+                                    </td>
+                                    
+
                                 </tr>
                             }
                         </tbody>
@@ -134,17 +140,29 @@
                                     <form id="assignmentForm">
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label for="inputUser">User ID *</label>
-                                                <input type="number" class="form-control" id="inputUser">
+                                                <label for="inputUser">User ID </label>
+                                                <select class="form-control" id="inputUser" name="UserID">
+                                                    <option value="">-- Select User --</option>
+                                                    @foreach (var user in ViewBag.Users)
+                                                    {
+                                                        <option value="@user.ID">@user.UserName</option>
+                                                    }
+                                                </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="inputLab">Lab ID *</label>
-                                                <input type="number" class="form-control" id="inputLab">
+                                                <label for="inputLab">Lab ID </label>
+                                                <select class="form-control" id="inputLab" name="LabID">
+                                                    <option value="">-- Select Lab --</option>
+                                                    @foreach (var lab in ViewBag.Labs)
+                                                    {
+                                                        <option value="@lab.ID">@lab.Name</option>
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label for="inputDate">Date *</label>
+                                                <label for="inputDate">Date </label>
                                                 <input type="date" class="form-control" id="inputDate">
                                             </div>
                                             <div class="form-group col-md-3">
@@ -174,6 +192,65 @@
             </div>
         </div>
     </div>
+    <!-- !Modal Section -->
+
+   
+    <!-- Modal Edit Section -->
+    <!-- Modal for Editing -->
+    <div class="modal fade" id="editAssignmentModal" tabindex="-1" role="dialog" aria-labelledby="editAssignmentLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAssignmentLabel">Edit Assignment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAssignmentForm">
+                        <input type="hidden" id="editAssignmentID" />
+                        <input type="hidden" id="editStatus" />
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editUserID">User *</label>
+                                <select class="form-control" id="editUserID">
+                                    <!-- Options sẽ được thêm động qua JavaScript -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editLabID">Lab *</label>
+                                <select class="form-control" id="editLabID">
+                                    <!-- Options sẽ được thêm động qua JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editDate">Date *</label>
+                                <input type="date" class="form-control" id="editDate"  />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="editTimeStart">Start Time *</label>
+                                <input type="time" class="form-control" id="editTimeStart"  />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="editTimeEnd">End Time *</label>
+                                <input type="time" class="form-control" id="editTimeEnd"  />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editNotes">Notes</label>
+                            <textarea class="form-control" id="editNotes" rows="3"></textarea>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- !Modal Section -->
 </main>
 <script>
@@ -240,14 +317,158 @@
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.success) {
-                        alert(response.message);
-                        location.reload();
+                        Toastify({
+                            text: "Assignment created successfully!",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "green",
+                            stopOnFocus: true
+                        }).showToast();
+
+                        // Success: Close modal and reload table
+                        $('#staticBackdrop').modal('hide');
+                        setTimeout(function () {
+                           location.reload();
+                        }, 3000);
                     } else {
                         alert("An unexpected error occurred.");
                     }
                 },
                 error: function () {
                     alert("An error occurred while creating the assignment.");
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        // Edit button click event
+        $('.edit-assignment').on('click', function () {
+            var assignmentId = $(this).data('id');
+
+            // Fetch assignment details via AJAX
+            $.get('/Admin/Assignment/DetailsAjax/' + assignmentId, function (assignment) {
+                console.log(assignment);
+
+                console.log("Raw Date:", assignment.date);  // Ghi lại giá trị ngày thô
+
+                // Loại bỏ phần microseconds nếu có và chuyển đổi thành định dạng mà JavaScript có thể hiểu được
+                var rawDate = assignment.date;
+                var date = new Date(rawDate.replace(/\.\d+$/, ''));  // Loại bỏ phần microseconds
+
+                if (isNaN(date.getTime())) {
+                    console.error("Invalid date value:", assignment.date);
+                    alert("Giá trị ngày không hợp lệ nhận được.");
+                    return;
+                }
+
+                // Chuyển đổi thành định dạng YYYY-MM-DD
+                var formattedDate = date.toISOString().split('T')[0];
+
+                // Populate form fields with the fetched assignment data
+                $('#editAssignmentID').val(assignment.id);  // Add this for the hidden field
+               
+                
+                $('#editDate').val(formattedDate);
+                $('#editTimeStart').val(assignment.timeStart);
+                $('#editTimeEnd').val(assignment.timeEnd);
+                $('#editNotes').val(assignment.notes);
+                $('#editStatus').val(assignment.status);
+
+                // Populate User dropdown
+                var userSelect = $('#editUserID');
+                userSelect.empty(); // Clear the existing options
+                $.each(assignment.users, function (index, user) {
+                    var selected = user.id === assignment.userID ? 'selected' : '';
+                    userSelect.append(`<option value="${user.id}" ${selected}>${user.userName}</option>`);
+                });
+
+                // Populate Lab dropdown
+                var labSelect = $('#editLabID');
+                labSelect.empty(); // Clear the existing options
+                $.each(assignment.labs, function (index, lab) {
+                    var selected = lab.id === assignment.labID ? 'selected' : '';
+                    labSelect.append(`<option value="${lab.id}" ${selected}>${lab.name}</option>`);
+                });
+                // Show the modal for editing
+                $('#editAssignmentModal').modal('show');
+            });
+        });
+
+        // Handle form submission for editing
+        $("#editAssignmentForm").submit(function (e) {
+            e.preventDefault();
+
+            // Clear previous error messages
+            $(".text-danger").remove();
+
+            let hasError = false;
+
+            // Gather form data
+            const formData = {
+                ID: $("#editAssignmentID").val(),  // Include ID of the assignment
+                UserID: parseInt($("#editUserID").val()),
+                LabID: parseInt($("#editLabID").val()),
+                Date: $("#editDate").val(),
+                TimeStart: $("#editTimeStart").val(),
+                TimeEnd: $("#editTimeEnd").val(),
+                Notes: $("#editNotes").val(),
+                status: $('#editStatus').val()
+            };
+
+            // Validate form data
+            if (!formData.UserID || formData.UserID <= 0) {
+                $("#editUserID").after('<span class="text-danger error-message">User ID is required and must be a positive number.</span>');
+                hasError = true;
+            }
+
+            if (!formData.LabID || formData.LabID <= 0) {
+                $("#editLabID").after('<span class="text-danger error-message">Lab ID is required and must be a positive number.</span>');
+                hasError = true;
+            }
+
+            if (!formData.Date) {
+                $("#editDate").after('<span class="text-danger error-message">Date is required.</span>');
+                hasError = true;
+            }
+
+            if (!formData.TimeStart) {
+                $("#editTimeStart").after('<span class="text-danger error-message">Start Time is required.</span>');
+                hasError = true;
+            }
+
+            if (!formData.TimeEnd) {
+                $("#editTimeEnd").after('<span class="text-danger error-message">End Time is required.</span>');
+                hasError = true;
+            }
+
+            if (formData.TimeStart && formData.TimeEnd && formData.TimeStart >= formData.TimeEnd) {
+                $("#editTimeEnd").after('<span class="text-danger">End Time must be later than Start Time.</span>');
+                hasError = true;
+            }
+
+            // If there are validation errors, prevent form submission
+            if (hasError) {
+                return;
+            }
+
+            // Send form data via AJAX if no errors
+            $.ajax({
+                url: '/Admin/Assignment/EditAssignment',  // Ensure this URL is correct for editing assignment
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload();  // Refresh the page after successful edit
+                    } else {
+                        alert("An unexpected error occurred.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while editing the assignment.");
                 }
             });
         });

@@ -1,0 +1,128 @@
+﻿@model E_Administration.Models.User
+@{
+    ViewBag.Title = "Create User";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Create New User</h2>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Create", "Users", FormMethod.Post, new { id = "createUserForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <!-- Hiển thị thông báo lỗi server-side -->
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <h5><strong>Errors Detected:</strong></h5>
+                        <ul>
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="row">
+                    <!-- UserName -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", placeholder = "Enter username", id = "username" })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.Email, new { @class = "form-label" })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter email address", id = "email" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Role -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.Role, "Role", new { @class = "form-label" })
+                        @Html.DropDownListFor(
+                                 model => model.Role,
+                                 (SelectList)ViewBag.Roles,
+                                 "Select Role",
+                                 new { @class = "form-control", id = "role" }
+                                 )
+                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Department -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.DepartmentID, "Department", new { @class = "form-label" })
+                        @Html.DropDownList(
+                                 "DepartmentID",
+                                 (SelectList)ViewBag.Departments,
+                                 "Select Department",
+                                 new { @class = "form-control", id = "department" }
+                                 )
+                        @Html.ValidationMessageFor(model => model.DepartmentID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-5">Create User</button>
+                    <a href="@Url.Action("Index", "Users")" class="btn btn-secondary btn-lg px-5">Cancel</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('createUserForm').addEventListener('submit', function (e) {
+        const errors = [];
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const role = document.getElementById('role').value;
+        const department = document.getElementById('department').value;
+
+        // Validate username
+        if (username === '') {
+            errors.push("Username is required.");
+        } else if (username.length < 3) {
+            errors.push("Username must be at least 3 characters long.");
+        }
+
+        // Validate email
+        const emailRegex = @Html.Raw(" /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ ");
+        if (email === '') {
+            errors.push("Email is required.");
+        } else if (!emailRegex.test(email)) {
+            errors.push("Invalid email format.");
+        }
+
+        // Validate role
+        if (role === "Select Role") {
+            errors.push("Role selection is required.");
+        }
+
+        // Validate department
+        if (department === "Select Department") {
+            errors.push("Department selection is required.");
+        }
+
+        // If there are errors, prevent form submission and show errors
+        if (errors.length > 0) {
+            e.preventDefault();
+            const errorList = document.getElementById('errorList');
+            errorList.innerHTML = '';
+            errors.forEach(error => {
+                const li = document.createElement('li');
+                li.textContent = error;
+                errorList.appendChild(li);
+            });
+            document.getElementById('clientError').classList.remove('d-none');
+        }
+    });
+</script>

@@ -13,6 +13,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login"; // Đường dẫn nếu chưa đăng nhập
         options.LogoutPath = "/Account/Logout"; // Đường dẫn đăng xuất
+        options.AccessDeniedPath = "/Account/AccessDenied";
     });
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -22,6 +23,7 @@ builder.Services.AddControllers()
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -38,6 +40,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+
 // Route cho các controller trong Area
 app.MapControllerRoute(
     name: "areas",
@@ -52,10 +55,10 @@ app.MapControllerRoute(
 
 
 // Đặt trang mặc định là Home trong Area User
-app.MapControllerRoute(
+/*app.MapControllerRoute(
     name: "user_default",
     pattern: "",
-    defaults: new { area = "User", controller = "Home", action = "Index" });
+    defaults: new { area = "User", controller = "Home", action = "Index" });*/
 
 
 app.Run();

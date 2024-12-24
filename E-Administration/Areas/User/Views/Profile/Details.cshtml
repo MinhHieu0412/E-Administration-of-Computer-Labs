@@ -1,0 +1,69 @@
+﻿@model E_Administration.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Profile Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-4">
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <img src="@Model.Image" alt="Profile Image" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
+                }
+                else
+                {
+                    <img src="~/images/default-profile.png" alt="Default Image" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
+                }
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>User Name:</strong>
+                </div>
+                <div class="col-md-8">
+                    @Model.UserName
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>Email:</strong>
+                </div>
+                <div class="col-md-8">
+                    @Model.Email
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>Role:</strong>
+                </div>
+                <div class="col-md-8">
+                    @Model.Role
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>Department:</strong>
+                </div>
+                <div class="col-md-8">
+                    @Model.Department?.Name
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Edit" class="btn btn-warning">Edit Profile</a>
+        </div>
+    </div>
+</div>

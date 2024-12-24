@@ -13,15 +13,22 @@ namespace E_Administration.Models
         public string? Image { get; set; }
         public string? Role { get; set; }
         public bool? Status { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; } // Automatically updated on changes
         public int DepartmentID { get; set; }
         public Department Department { get; set; }
         public ICollection<Assignments> Assignments { get; set; }
         public ICollection<IssueReports> IssueReports { get; set; }
         public ICollection<LabRequests> LabRequests { get; set; }
+        // Không ánh xạ vào database, dùng để nhận file upload
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
+        public string? ResetToken { get; set; } // Token for password reset
+        public DateTime? ResetTokenExpiry { get; set; }
+        [NotMapped]
+        public string? NewPassword { get; set; }
+        [NotMapped]
+        public string? ConfirmPassword { get; set; }
     }
 }
