@@ -1,0 +1,82 @@
+﻿@model E_Administration.Models.RepairAssignments
+
+<div class="container mt-4">
+    <h2>Edit Repair Assignment</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" name="ID" value="@Model.ID" />
+
+        <!-- Dropdown Issue Reports -->
+        <div class="form-group">
+            <label for="IssueReportID">Select Issue Report</label>
+            <select id="IssueReportID" name="IssueReportID" class="form-control" required>
+                <option value="">-- Select Issue Report --</option>
+                @if (ViewBag.IssueReports != null)
+                {
+                    foreach (var report in ViewBag.IssueReports)
+                    {   
+                        if(Model.IssueReportID == report.ID)
+                        {
+                            <option value="@report.ID" selected>
+                            @report.Description
+                            </option>
+                        }
+                        else
+                        {
+                         <option value="@report.ID">
+                            @report.Description
+                        </option>    
+                        }
+                       
+                    }
+                }
+                else
+                {
+                    <option value="">No issue reports available</option>
+                }
+            </select>
+        </div>
+
+        <!-- Dropdown Technicians -->
+        <div class="form-group">
+            <label for="TechnicianID">Assign to Technician</label>
+            <select id="TechnicianID" name="TechnicianID" class="form-control" required>
+                <option value="">-- Select Technician --</option>
+                @if (ViewBag.Technicians != null)
+                {
+                    foreach (var technician in ViewBag.Technicians)
+                    {
+                        if (Model.TechnicianID == technician.ID)
+                        {
+                            <option value="@technician.ID" selected>
+                                @technician.UserName
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@technician.ID">
+                                @technician.UserName
+                            </option>
+                        }
+                       
+                    }
+                }
+                else
+                {
+                    <option value="">No technicians available</option>
+                }
+            </select>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="/Admin/RepairAssignment/Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

@@ -25,6 +25,8 @@ namespace E_Administration.Data
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<MakeUpRequest> MakeUpRequests { get; set; }
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // User -> Department (Many-to-One)
@@ -72,6 +74,11 @@ namespace E_Administration.Data
                 .HasForeignKey(ir => ir.ReporterID)
                 .OnDelete(DeleteBehavior.NoAction);  // Giữ cascade cho khóa ngoại ReporterID
 
+            modelBuilder.Entity<IssueReports>()
+           .HasOne(ir => ir.Equipments)
+           .WithMany(e => e.IssueReports)
+           .HasForeignKey(ir => ir.EquipmentID);
+
             // LabRequest -> Department (Many-to-One)
             modelBuilder.Entity<LabRequests>()
                 .HasOne(lr => lr.Department)
@@ -86,13 +93,20 @@ namespace E_Administration.Data
                 .HasForeignKey(lr => lr.RequestedByID)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // RepairAssignment -> IssueReport (One-to-One)
             modelBuilder.Entity<RepairAssignments>()
                 .HasOne(ra => ra.IssueReports)
-                .WithOne(ir => ir.RepairAssignment)
-                .HasForeignKey<RepairAssignments>(ra => ra.IssueReportID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .WithMany() // IssueReport không cần danh sách các RepairAssignments
+                .HasForeignKey(ra => ra.IssueReportID);
 
+            modelBuilder.Entity<RepairAssignments>()
+                .HasOne(ra => ra.Technician)
+                .WithMany() // User không cần danh sách các RepairAssignments
+                .HasForeignKey(ra => ra.TechnicianID);
+
+            //modelBuilder.Entity<RepairAssignments>()
+            //    .HasOne(ra => ra.IssueReports)
+            //    .WithMany()
+            //    .HasForeignKey(ra => ra.IssueReportID);
 
             modelBuilder.Entity<IssueReports>()
                 .HasOne(ir => ir.Department)

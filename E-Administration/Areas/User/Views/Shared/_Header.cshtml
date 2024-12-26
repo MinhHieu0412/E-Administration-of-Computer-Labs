@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="MakeUpRequest" asp-action="Index">MakeUpRequest</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="User" asp-controller="Report" asp-action="Report">Report</a>
+                    </li>
                 </ul>
                 <div class="dropdown">
                     <a class="user-nav-show" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,7 +46,7 @@
                             <span>Welcome, @User.FindFirst("UserName")?.Value</span>
                         }
                        
-                        <img src="assests/img/profile-pic.jpg" class="rounded-pill">
+                        <img src="~/img/profile-pic.jpg" class="rounded-pill">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" asp-action="Details" asp-controller="Profile" asp-area="User"><i class="fas fa-cog"></i>Edit Profile</a>

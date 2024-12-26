@@ -121,6 +121,19 @@ namespace E_Administration.Controllers
             }
         }
 
+
+        [HttpGet("Details/{id}")]
+        public IActionResult Details(int id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.ID == id);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return RedirectToAction("Index", "RepairAssignment");
+            }
+
+            return View(user);
+        }
         private string GenerateRandomPassword()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";

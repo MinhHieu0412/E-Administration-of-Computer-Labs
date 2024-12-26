@@ -1,0 +1,29 @@
+﻿@model E_Administration.Models.User
+
+<div class="container mt-4">
+    <h2>User Details</h2>
+    <dl class="row">
+        <dt class="col-sm-3">User ID</dt>
+        <dd class="col-sm-9">@Model.ID</dd>
+
+        <dt class="col-sm-3">Username</dt>
+        <dd class="col-sm-9">@Model.UserName</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <tr>
+            <th>Created At</th>
+            <td>@Model.CreatedAt?.ToString("g")</td>
+        </tr>
+        <tr>
+            <th>Updated At</th>
+            <td>@Model.UpdatedAt?.ToString("g") </td>
+        </tr>
+
+
+        <!-- Add other fields as needed -->
+    </dl>
+
+    <a href="/Admin/RepairAssignment/Index" class="btn btn-primary">Back to Assignments</a>
+</div>

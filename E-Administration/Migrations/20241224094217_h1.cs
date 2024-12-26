@@ -6,11 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace E_Administration.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class h1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
+            migrationBuilder.AddColumn<DateTime>(
+       name: "CreatedAt",
+       table: "RepairAssignments",
+       nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "RepairAssignments",
+                nullable: true);
             migrationBuilder.CreateTable(
                 name: "AboutUs",
                 columns: table => new
@@ -57,6 +67,25 @@ namespace E_Administration.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LabRequestDto",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DepartmentID = table.Column<int>(type: "int", nullable: false),
+                    RequestedByID = table.Column<int>(type: "int", nullable: false),
+                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdminResponse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LabRequestDto", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LeaveRequests",
                 columns: table => new
                 {
@@ -66,7 +95,8 @@ namespace E_Administration.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    Feedback = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -196,8 +226,7 @@ namespace E_Administration.Migrations
                     TimeEnd = table.Column<TimeSpan>(type: "time", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -249,7 +278,7 @@ namespace E_Administration.Migrations
                     LabID = table.Column<int>(type: "int", nullable: false),
                     ReporterID = table.Column<int>(type: "int", nullable: false),
                     DepartmentID = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EquipmentID = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -285,7 +314,8 @@ namespace E_Administration.Migrations
                     DepartmentID = table.Column<int>(type: "int", nullable: false),
                     RequestedByID = table.Column<int>(type: "int", nullable: false),
                     Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdminResponse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdminResponse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -426,6 +456,9 @@ namespace E_Administration.Migrations
 
             migrationBuilder.DropTable(
                 name: "Equipments");
+
+            migrationBuilder.DropTable(
+                name: "LabRequestDto");
 
             migrationBuilder.DropTable(
                 name: "LabRequests");

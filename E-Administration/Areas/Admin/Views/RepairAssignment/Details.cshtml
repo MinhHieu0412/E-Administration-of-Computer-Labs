@@ -1,0 +1,33 @@
+﻿@model E_Administration.Models.RepairAssignments
+
+<div class="container mt-4">
+    <h2>Repair Assignment Details</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>@Model.ID</td>
+        </tr>
+        <tr>
+            <th>Issue Report</th>
+            <td>
+                @Model.IssueReports?.Description ?? "No description available"
+            </td>
+        </tr>
+        <tr>
+            <th>Assigned Technician</th>
+            <td>
+                @Model.Technician?.UserName ?? "No technician assigned"
+            </td>
+        </tr>
+        <tr>
+            <th>Created At</th>
+            <td>@Model.CreatedAt?.ToString("g") ?? "N/A"</td>
+        </tr>
+        <tr>
+            <th>Updated At</th>
+            <td>@Model.UpdatedAt?.ToString("g") ?? "N/A"</td>
+        </tr>
+    </table>
+
+    <a href="/Admin/RepairAssignment/Index" class="btn btn-secondary">Back to List</a>
+</div>

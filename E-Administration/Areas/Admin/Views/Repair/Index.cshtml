@@ -1,0 +1,97 @@
+﻿@model IEnumerable<E_Administration.Models.IssueReports>
+
+@{
+    ViewData["Title"] = "Reports Management";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    // URLs for status filter
+    string allUrl = Url.Action("Index", new { status = "All" });
+    string pendingUrl = Url.Action("Index", new { status = "Pending" });
+    string approvedUrl = Url.Action("Index", new { status = "Approved" });
+
+    string currentStatus = ViewData["CurrentStatus"]?.ToString() ?? "All";
+}
+
+<main id="main-content">
+    <section class="py-5">
+        <div class="container">
+            <h2>Reports Management</h2>
+
+            <!-- Filter and Search Section -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <label for="statusFilter" class="form-label">Filter by Status:</label>
+                    <select id="statusFilter" class="form-select" onchange="location.href=this.value;">
+                        <option value="@allUrl" selected="@((currentStatus == "All").ToString().ToLower())">All</option>
+                        <option value="@pendingUrl" selected="@((currentStatus == "Pending").ToString().ToLower())">Pending</option>
+                        <option value="@approvedUrl" selected="@((currentStatus == "Approved").ToString().ToLower())">Approved</option>
+                    </select>
+                </div>
+
+                <form class="d-flex" method="get" action="@Url.Action("Index")">
+                    <div class="input-group">
+                        <input type="text" name="searchByID" placeholder="Search by ID" class="form-control me-2" />
+                        <input type="text" name="searchByName" placeholder="Search by Name" class="form-control me-2" />
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Reports Table -->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Lab</th>
+                        <th>Department</th>
+                        <th>Reporter</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center">No reports found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var report in Model)
+                        {
+                            <tr>
+                                <td>@report.ID</td>
+                                <td>@report.Lab?.Name ??</td>
+                                <td>@report.Department?.Name ?? </td>
+                                <td>@report.Reporter?.UserName ?</td>
+                                <td>@report.Description</td>
+                                <td>@report.Status</td>
+                                <td>@report.UpdatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    <a asp-area="Admin"
+                                       asp-controller="Repair"
+                                       asp-action="Details"
+                                       asp-route-id="@report.ID"
+                                       class="btn btn-info btn-sm">
+                                        View Details
+                                    </a>
+
+                                    @if (report.Status == "Pending")
+                                    {
+                                        <form method="post" asp-area="Admin" asp-controller="Repair" asp-action="ApproveConfirmed" asp-route-id="@report.ID" class="d-inline">
+                                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
