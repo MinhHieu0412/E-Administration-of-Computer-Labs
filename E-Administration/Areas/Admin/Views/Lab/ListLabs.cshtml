@@ -14,10 +14,9 @@
         <div class="dashboard-container">
             <div class="page-title d-flex justify-content-between py-2">
                 <nav class="my-auto" aria-label="breadcrumb">
-                    <ol class="breadcrumb p-0 my-auto" style="background: none;">
-                        <li class="breadcrumb-item"><a href="dashboard.html" class="orange">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Lab </li>
-                    </ol>
+                    <div class="item my-auto">
+                        <a asp-controller="Lab" asp-action="Index" class="text-black"><i class="fas fa-long-arrow-alt-left mr-2"></i> Back to Site</a>
+                    </div>
                 </nav>
                 <button class="btn bg-orange text-white btn-open-modal" data-toggle="modal" data-target="#staticBackdrop">
                     <i class="fas fa-file-medical mr-1"></i> Add New Lab
@@ -39,7 +38,7 @@
                                     @Html.DisplayNameFor(model => model.Labs.First().Name)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Labs.First().DepartmentID)
+                                    Department
                                 </th>
                                
                                 <th>
@@ -65,7 +64,7 @@
                                         @Html.DisplayFor(modelItem => lab.Name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => lab.DepartmentID)
+                                        @Html.DisplayFor(modelItem => lab.Department.Name)
                                     </td>
                                    
                                     <td>
@@ -96,7 +95,7 @@
                     </table>
                 </div>
                 <!-- !Table Content Section -->
-                <!-- Pagination -->
+                @* <!-- Pagination -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
@@ -114,7 +113,7 @@
                         </li>
                     </ul>
                 </nav>
-                <!-- !Pagination -->
+                <!-- !Pagination --> *@
             </div>
         </div>
     </div>
@@ -337,7 +336,7 @@
 
                         Toastify({
                             text: "Lab created successfully!",
-                            duration: 3000,
+                            duration: 2000,
                             gravity: "top",
                             position: "center",
                             backgroundColor: "green",
@@ -348,7 +347,7 @@
                         $('#staticBackdrop').modal('hide');
                         setTimeout(function () {
                             window.location.reload();
-                        }, 3000);
+                        }, 2000);
 
                     } else {
                         // Show server-side errors (if any)
@@ -506,7 +505,7 @@
                                     <tr>
                                         <td>${lab.id}</td>
                                         <td>${lab.name}</td>
-                                        <td>${lab.departmentID}</td>
+                                         <td>${lab.departmentName}</td>
                                         <td>${lab.location}</td>
                                         <td>${lab.capacity}</td>
                                        
