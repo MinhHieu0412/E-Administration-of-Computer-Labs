@@ -2,23 +2,23 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
 }
-<h2>Danh sách đơn dạy bù</h2>
+<h2>Make-Up Request List</h2>
 
 <a href="@Url.Action("Create", "MakeUpRequest", new { area = "User" })" class="btn btn-primary mb-3">
-    Đăng ký dạy bù
+    Register for Make-Up Class
 </a>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Người dùng</th>
-            <th>Ngày bắt đầu nghỉ</th>
-            <th>Ngày kết thúc nghỉ</th>
-            <th>Phòng dạy bù</th>
-            <th>Ngày dạy bù</th>
-            <th>Giờ dạy bù</th>
-            <th>Trạng thái</th>
-            <th>Phản hồi</th>
+            <th>User</th>
+            <th>Leave Start Date</th>
+            <th>Leave End Date</th>
+            <th>Make-Up Room</th>
+            <th>Make-Up Date</th>
+            <th>Make-Up Time</th>
+            <th>Status</th>
+            <th>Feedback</th>
         </tr>
     </thead>
     <tbody>
@@ -36,21 +36,21 @@
                     <td>
                         @if (request.IsApproved)
                         {
-                            <span class="text-success fw-bold">Đã duyệt</span>
+                            <span class="text-success fw-bold">Approved</span>
                         }
                         else
                         {
-                            <span class="text-danger fw-bold">Chưa duyệt</span>
+                            <span class="text-danger fw-bold">Not Approved</span>
                         }
                     </td>
-                    <td>@(request.Feedback ?? "Không có phản hồi")</td>
+                    <td>@(request.Feedback ?? "No Feedback")</td>
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td colspan="8" class="text-center">Không có dữ liệu</td>
+                <td colspan="8" class="text-center">No Data Available</td>
             </tr>
         }
     </tbody>

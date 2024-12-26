@@ -30,5 +30,6 @@ namespace E_Administration.Models
         public string? NewPassword { get; set; }
         [NotMapped]
         public string? ConfirmPassword { get; set; }
+        public ICollection<LeaveRequest> LeaveRequests { get; set; }
     }
 }
