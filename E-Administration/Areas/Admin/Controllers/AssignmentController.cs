@@ -148,12 +148,23 @@ namespace E_Administration.Areas.Admin.Controllers
         {
             var assignment = await ctx.Assignments.FindAsync(id);
 
-            ctx.Assignments.Remove(assignment);
+            if (assignment != null)
+            {
+                ctx.Assignments.Remove(assignment);
+                await ctx.SaveChangesAsync();
 
-            await ctx.SaveChangesAsync();
+                TempData["ToastrMessage"] = "Assignment deleted successfully.";
+                TempData["ToastrType"] = "success"; // Bạn có thể đặt "info", "warning", "error" tùy theo thông báo.
+            }
+            else
+            {
+                TempData["ToastrMessage"] = "Assignment not found.";
+                TempData["ToastrType"] = "error";
+            }
 
             return RedirectToAction("Index");
         }
+
 
 
     }

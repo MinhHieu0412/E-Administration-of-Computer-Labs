@@ -1,0 +1,28 @@
+﻿@model IEnumerable<E_Administration.Models.Lab>
+
+@{
+    ViewData["Title"] = "DisplayLab";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<div class="lab-all">
+    <div class="grid">
+        @foreach (var item in Model)
+        {
+            if (item.IsOperational == true)
+            {
+                <!-- Lab hoạt động -->
+                <a asp-controller="PageUser" asp-action="DetailLab" asp-route-id="@item.ID">
+                    <div class="box small-text">Room @Html.DisplayFor(modelItem => item.ID)</div>
+                </a>
+            }
+            else
+            {
+                <!-- Lab không hoạt động -->
+                <div class="box text-muted" style="pointer-events: none; opacity: 0.5;">
+                    Room @Html.DisplayFor(modelItem => item.ID)<br />
+                </div>
+            }
+        }
+        </div>
+ </div>
