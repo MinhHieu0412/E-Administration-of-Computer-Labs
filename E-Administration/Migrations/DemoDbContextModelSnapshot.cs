@@ -22,42 +22,6 @@ namespace E_Administration.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("E_Administration.Dto.LabRequestDto", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("AdminResponse")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DepartmentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequestedByID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("LabRequestDto");
-                });
-
             modelBuilder.Entity("E_Administration.Models.AboutUs", b =>
                 {
                     b.Property<int>("Id")
@@ -424,6 +388,8 @@ namespace E_Administration.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("LeaveRequests");
                 });
 
@@ -640,6 +606,17 @@ namespace E_Administration.Migrations
                     b.Navigation("RequestedBy");
                 });
 
+            modelBuilder.Entity("E_Administration.Models.LeaveRequest", b =>
+                {
+                    b.HasOne("E_Administration.Models.User", "User")
+                        .WithMany("LeaveRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("E_Administration.Models.RepairAssignments", b =>
                 {
                     b.HasOne("E_Administration.Models.IssueReports", "IssueReports")
@@ -722,6 +699,8 @@ namespace E_Administration.Migrations
                     b.Navigation("IssueReports");
 
                     b.Navigation("LabRequests");
+
+                    b.Navigation("LeaveRequests");
                 });
 #pragma warning restore 612, 618
         }

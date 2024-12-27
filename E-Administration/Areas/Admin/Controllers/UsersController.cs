@@ -145,7 +145,7 @@ namespace E_Administration.Controllers
             <p><b>Email:</b> {email}</p>
             <p><b>Password:</b> {password}</p>
             <p>Please log in and change your password immediately: 
-               <a href='http://localhost:5285/Account/Login'>Login Here</a></p>
+               <a href='http://localhost:5285/Account/Login'>Login Here</a></p> 
             <p>Thank you,</p>
             <p><b>E_Administration Team</b></p>
         ",

@@ -1,9 +1,7 @@
 ﻿<header id="dashboard-header" class="py-2 bg-dark">
     <div class="container">
         <div class="d-flex justify-content-between px-md-3 px-1">
-            <div class="item my-auto">
-                <a href="../index.html" class="text-white"><i class="fas fa-long-arrow-alt-left mr-2"></i> Back to Site</a>
-            </div>
+           
             <div class="item">
                 <div class="d-flex">
                     <div class="item mr-1">
@@ -35,7 +33,7 @@
             <div class="item">
                 <div class="dropdown">
                     <div class="btn text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="px-4">Hello! <img src="~/img/profile-pic.jpg" width="30px" class="ml-2 rounded-pill"></span>
+                        <span class="px-4">Hello! <img src="@User.FindFirst("UserImage")?.Value" width="30px" class="ml-2 rounded-pill"></span>
                     </div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item disabled" href="#">M. Shoaib <div class="user-role">Student</div></a>

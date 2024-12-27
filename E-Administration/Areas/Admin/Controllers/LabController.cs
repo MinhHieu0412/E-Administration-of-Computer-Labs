@@ -22,7 +22,9 @@ namespace E_Administration.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var labs = await ctx.Labs.ToListAsync();
+            var labs = await ctx.Labs
+        .Include(l => l.Department) // Eager Loading thông tin từ bảng Department
+        .ToListAsync();
             return View(labs);
         }
 
@@ -142,9 +144,30 @@ namespace E_Administration.Areas.Admin.Controllers
         public async Task<IActionResult> SearchLabs(string query)
         {
             var results = string.IsNullOrWhiteSpace(query)
-         ? await ctx.Labs.ToListAsync()
+         ? await ctx.Labs
+             .Include(lab => lab.Department) // Include để lấy thông tin Department
+             .Select(lab => new
+             {
+                 lab.ID,
+                 lab.Name,
+                 DepartmentName = lab.Department.Name, // Lấy tên Department
+                 lab.Location,
+                 lab.Capacity,
+                 lab.IsOperational
+             })
+             .ToListAsync()
          : await ctx.Labs
+             .Include(lab => lab.Department) // Include để lấy thông tin Department
              .Where(lab => lab.Name.Contains(query) || lab.Location.Contains(query))
+             .Select(lab => new
+             {
+                 lab.ID,
+                 lab.Name,
+                 DepartmentName = lab.Department.Name, // Lấy tên Department
+                 lab.Location,
+                 lab.Capacity,
+                 lab.IsOperational
+             })
              .ToListAsync();
 
             return Json(results);

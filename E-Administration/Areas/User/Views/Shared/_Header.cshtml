@@ -70,7 +70,7 @@
                             <span>Welcome, @User.FindFirst("UserName")?.Value</span>
                         }
                        
-                        <img src="assests/img/profile-pic.jpg" class="rounded-pill">
+                        <img src="@User.FindFirst("UserImage")?.Value" class="rounded-pill">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" asp-action="Details" asp-controller="Profile" asp-area="User"><i class="fas fa-cog"></i>Edit Profile</a>
