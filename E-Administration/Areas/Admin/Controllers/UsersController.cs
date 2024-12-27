@@ -251,8 +251,6 @@ namespace E_Administration.Controllers
 
 
                 // Update user information
-                existingUser.UserName = user.UserName;
-                existingUser.Email = user.Email;
                 existingUser.Role = user.Role; // Role selected from dropdown
                 existingUser.DepartmentID = user.DepartmentID;
                 _context.SaveChanges();
