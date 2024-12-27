@@ -10,17 +10,11 @@
         <div class="card-header bg-warning text-white text-center">
             <h3>Edit eLearning</h3>
         </div>
+       
         <div class="card-body">
             <form asp-action="Edit" method="post" enctype="multipart/form-data">
 
                 <input type="hidden" asp-for="ID" />
-
-                <!-- Uploaded By -->
-                @* <div class="form-group">
-                    <label asp-for="UploadedBy"></label>
-                    <input asp-for="UploadedBy" class="form-control" />
-                    <span asp-validation-for="UploadedBy" class="text-danger"></span>
-                </div> *@
 
                 <!-- Title -->
                 <div class="form-group">
@@ -68,3 +62,41 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $("form").validate({
+            rules: {
+                Title: {
+                    required: true,
+                },
+                Description: {
+                    required: true,
+                },
+                file: {
+                    required: false,
+                    extension: "pdf",
+                },
+                image: {
+                    required: false,
+                    extension: "jpg|jpeg|png|gif",
+                },
+            },
+            messages: {
+                Title: {
+                    required: "Title is required.",
+                },
+                Description: {
+                    required: "Description is required.",
+                },
+                file: {
+                    extension: "Only PDF files are allowed.",
+                },
+                image: {
+                    extension: "Only image files (JPG, JPEG, PNG, GIF) are allowed.",
+                },
+            },
+            errorClass: "text-danger",
+            errorElement: "span",
+        });
+    });
+</script>

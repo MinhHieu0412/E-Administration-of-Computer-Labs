@@ -4,6 +4,7 @@ using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace E_Administration.Areas.User.Controllers
@@ -32,7 +33,7 @@ namespace E_Administration.Areas.User.Controllers
         public async Task<IActionResult> Create(LabRequestDto labRequestDto)
         {
             // Lấy thông tin UserID từ Claims (xác nhận người dùng đã đăng nhập)
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
                 ModelState.AddModelError(string.Empty, "User ID is missing or invalid. Please log in again.");
@@ -91,7 +92,7 @@ namespace E_Administration.Areas.User.Controllers
         // Optional: List the logged-in user's lab requests
         public async Task<IActionResult> MyRequests()
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
                 return RedirectToAction("Login", "Account");
 

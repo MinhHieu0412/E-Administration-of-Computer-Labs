@@ -1,0 +1,35 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center my-4">Issue Reports</h2>
+
+<div class="container">
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Reporter</th>
+                <th>Equipment</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Report.ID</td>
+                    <td>@item.Report.Reporter.UserName</td> <!-- Display Reporter Name -->
+                    <td>@(item.Equipment != null ? item.Equipment.Name : "Unknown")</td> <!-- Display Equipment Name -->
+                    <td>@item.Report.Description</td>
+                    <td>@item.Report.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

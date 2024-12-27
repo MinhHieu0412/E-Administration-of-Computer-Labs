@@ -33,8 +33,10 @@ namespace E_Administration.Areas.User.Controllers
 
             // Lấy danh sách Assignment của người dùng
             var assignments = await ctx.Assignments
-                .Where(a => a.UserID == userId)
-                .ToListAsync();
+       .Where(a => a.UserID == userId)
+       .Include(a => a.User)
+       .Include(a => a.Lab)
+       .ToListAsync();
 
             /*var assignment = await ctx.Assignments.ToListAsync();*/
 

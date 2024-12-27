@@ -53,6 +53,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
+app.MapControllerRoute(
+    name: "get_week_by_year",
+    pattern: "LabTimeTable/GetWeekByYear/{year}",
+    defaults: new { controller = "LabTimeTable", action = "GetWeekByYear" });
 
 // Đặt trang mặc định là Home trong Area User
 /*app.MapControllerRoute(
