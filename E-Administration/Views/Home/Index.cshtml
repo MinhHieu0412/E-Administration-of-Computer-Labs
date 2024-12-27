@@ -92,44 +92,31 @@
             <div class="owl-carousel owl-theme">
                 @foreach (var elearning in Model.Elearnings)
                 {
-                    <div class="item px-3">
-                        <div class="card h-100 shadow border-0 d-flex flex-column">
+                    <div class="elearning-item px-3">
+                        <div class="elearning-card h-100 shadow border-0 d-flex flex-column rounded-lg overflow-hidden">
                             <!-- Display Image from Link -->
                             @if (!string.IsNullOrEmpty(elearning.Link))
                             {
-                                <img src="@elearning.Link" alt="@elearning.Title" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                                <img src="@elearning.Link" alt="@elearning.Title" class="elearning-card-img-top" style="height: 200px; object-fit: cover;">
                             }
                             else
                             {
-                                <img src="~/img/default-placeholder.png" alt="Default Image" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                                <img src="~/img/default-placeholder.png" alt="Default Image" class="elearning-card-img-top" style="height: 200px; object-fit: cover;">
                             }
 
-                            <div class="card-body d-flex flex-column">
-                                <!-- Display Title -->
-                                <h5 class="card-title text-primary">@elearning.Title</h5>
-
-                                <!-- Display Description -->
-                                <p class="card-text text-muted text-truncate" style="max-height: 80px;">
-                                    @if (!string.IsNullOrEmpty(elearning.Description))
-                                    {
-                                        var shortDescription = elearning.Description.Length > 80
-                                        ? elearning.Description.Substring(0, 80) + "..."
-                                        : elearning.Description;
-                                        @shortDescription
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No description available</span>
-                                    }
-                                </p>
+                            <!-- Display Title -->
+                            <div class="elearning-card-body d-flex flex-column align-items-stretch">
+                                <h5 class="elearning-card-title text-primary font-weight-bold text-center" style="min-height: 60px;">@elearning.Title</h5>
                             </div>
 
-                            <div class="card-footer bg-white border-0 mt-auto">
+                            <!-- Footer with Buttons -->
+                            <div class="elearning-card-footer bg-white border-0 mt-auto p-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     @if (!string.IsNullOrEmpty(elearning.FilePath))
                                     {
-                                        <a href="@elearning.FilePath" download class="btn btn-sm btn-primary">
-                                            <i class="fas fa-download"></i> Download PDF
+                                        <a href="@elearning.FilePath" download class="elearning-btn elearning-btn-primary d-flex align-items-center gap-2">
+                                            <i class="fas fa-download"></i>
+                                            <span> PDF</span>
                                         </a>
                                     }
                                     else
@@ -137,8 +124,9 @@
                                         <span class="text-danger small">No PDF available</span>
                                     }
 
-                                    <a href="@Url.Action("Details", "ELearning", new { id = elearning.ID })" class="btn btn-sm btn-secondary">
-                                        <i class="fas fa-info-circle"></i> View Details
+                                    <a href="@Url.Action("Details", "ELearning", new { id = elearning.ID })" class="elearning-btn elearning-btn-secondary d-flex align-items-center gap-2">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Details</span>
                                     </a>
                                 </div>
                             </div>
@@ -149,6 +137,8 @@
             <!-- !Owl Carousel Slider -->
         </div>
     </section>
+
+
     <!-- !Course Section -->
     <!-- Complain Section -->
     <section id="complain-section">

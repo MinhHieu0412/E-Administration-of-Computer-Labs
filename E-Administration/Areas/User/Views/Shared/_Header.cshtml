@@ -39,7 +39,16 @@
                     }
                     else if (User.IsInRole("Technician"))
                     {
-                        
+
+                    }
+                    else if (User.IsInRole("HOD"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LabRequests" asp-action="MyRequests" asp-area="User">Lab Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="ViewReport" asp-action="Index" asp-area="User">IssueReports</a>
+                        </li>
                     }
                     @* @if (User.Identity.IsAuthenticated)
                     {

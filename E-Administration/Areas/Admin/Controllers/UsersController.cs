@@ -24,34 +24,34 @@ namespace E_Administration.Controllers
         // List Users
         public ActionResult Index(string searchString = null, string roleFilter = null)
         {
-            // Lấy danh sách role để hiển thị trong dropdown
+            // Get the list of roles to display in the dropdown
             ViewBag.Roles = _context.Users
                 .Select(u => u.Role)
                 .Distinct()
                 .ToList();
 
-            // Lưu giá trị roleFilter vào ViewBag để giữ lại lựa chọn trong dropdown
+            // Save roleFilter value to ViewBag to retain selection in dropdown
             ViewBag.RoleFilter = roleFilter;
 
             // Eager load Department bằng Include
             var users = _context.Users.Include(u => u.Department).AsQueryable();
 
-            // Nếu có roleFilter, lọc theo role
+            
             if (!string.IsNullOrEmpty(roleFilter))
             {
                 users = users.Where(u => u.Role == roleFilter);
             }
 
-            // Nếu có searchString, lọc theo username hoặc email
+            // If there is a searchString, filter by username or email
             if (!string.IsNullOrEmpty(searchString))
             {
                 users = users.Where(u => u.UserName.Contains(searchString) || u.Email.Contains(searchString));
             }
 
-            // Lưu giá trị searchString vào ViewData để giữ lại trong form tìm kiếm
+            // Save searchString value to ViewData to retain in search form
             ViewData["SearchString"] = searchString;
 
-            // Trả về danh sách users sau khi lọc
+            // Returns the list of users after filtering
             return View(users.ToList());
         }
 
@@ -61,7 +61,7 @@ namespace E_Administration.Controllers
         // Create User (GET)
         public ActionResult Create()
         {
-            // Truyền danh sách Departments và Roles vào View
+            // Pass the Departments and Roles list to the View
             ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name");
             ViewBag.Roles = new SelectList(new List<string> { "Student", "Lecturer", "HOD", "Technician" });
             return View();
@@ -131,17 +131,18 @@ namespace E_Administration.Controllers
         private void SendAccountEmail(string email, string userName, string password)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("E_Administration", "caonguyen2288@gmail.com")); // Sử dụng email domain của bạn
+            message.From.Add(new MailboxAddress("E_Administration", "caonguyen2288@gmail.com")); 
             message.To.Add(new MailboxAddress(userName, email));
             message.Subject = "Welcome to E_Administration - Your Account Details";
 
-            // Nội dung email HTML và Plain Text để cải thiện chất lượng
+            
             var bodyBuilder = new BodyBuilder
             {
                 HtmlBody = $@"
             <h3>Hello {userName},</h3>
             <p>Your account has been successfully created.</p>
             <p><b>Username:</b> {userName}</p>
+            <p><b>Email:</b> {email}</p>
             <p><b>Password:</b> {password}</p>
             <p>Please log in and change your password immediately: 
                <a href='http://localhost:5285/Account/Login'>Login Here</a></p>
@@ -154,6 +155,7 @@ namespace E_Administration.Controllers
             Your account has been successfully created.
 
             Username: {userName}
+            Email:    {email}
             Password: {password}
 
             Please log in and change your password immediately:
@@ -174,7 +176,7 @@ namespace E_Administration.Controllers
                     client.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
 
                     // Authenticate
-                    client.Authenticate("caonguyen2288@gmail.com", "jcxf ntvr buwh ibne"); // Sử dụng email và mật khẩu thật hoặc App Password
+                    client.Authenticate("caonguyen2288@gmail.com", "jcxf ntvr buwh ibne"); 
 
                     // Send the email
                     client.Send(message);
@@ -210,7 +212,7 @@ namespace E_Administration.Controllers
         {
             try
             {
-                // Tìm người dùng hiện tại trong cơ sở dữ liệu
+                
                 var existingUser = _context.Users.Find(user.ID);
                 if (existingUser == null)
                 {
@@ -220,7 +222,7 @@ namespace E_Administration.Controllers
                     return View(user);
                 }
 
-                // Kiểm tra nếu email đã thay đổi và trùng lặp
+                // Check if email has changed and duplicates
                 if (!string.Equals(existingUser.Email, user.Email, StringComparison.OrdinalIgnoreCase))
                 {
                     var emailExists = _context.Users.Any(u => u.Email == user.Email && u.ID != user.ID);
@@ -233,7 +235,7 @@ namespace E_Administration.Controllers
                     }
                 }
 
-                // Kiểm tra nếu username đã thay đổi và trùng lặp
+                // Check if username has changed and duplicates
                 if (!string.Equals(existingUser.UserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
                     var usernameExists = _context.Users.Any(u => u.UserName == user.UserName && u.ID != user.ID);
@@ -246,9 +248,9 @@ namespace E_Administration.Controllers
                     }
                 }
 
-                
 
-                // Cập nhật thông tin người dùng
+
+                // Update user information
                 existingUser.UserName = user.UserName;
                 existingUser.Email = user.Email;
                 existingUser.Role = user.Role; // Role selected from dropdown

@@ -17,10 +17,10 @@ namespace E_Administration.Models
         public string Description { get; set; } // Optional description
 
         [MaxLength(255)]
-        public string FilePath { get; set; } // Optional file path for uploaded documents
+        public string? FilePath { get; set; } // Optional file path for uploaded documents
 
         [MaxLength(255)]
-        public string Link { get; set; } // Optional link for online resources
+        public string? Link { get; set; } // Optional link for online resources
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp

@@ -3,6 +3,7 @@
     ViewBag.Title = "Edit User";
 }
 
+
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white text-center">
@@ -16,23 +17,20 @@
                 @Html.HiddenFor(model => model.ID)
 
                 <div class="row">
-                    <!-- UserName -->
+                    <!-- UserName (read-only) -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
-                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", placeholder = "Enter username" })
-                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                        <input type="text" value="@Model.UserName" class="form-control" readonly />
                     </div>
 
-                    <!-- Email -->
+                    <!-- Email (read-only) -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.Email, new { @class = "form-label" })
-                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter email address" })
-                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        <input type="email" value="@Model.Email" class="form-control" readonly />
                     </div>
                 </div>
 
                 <div class="row">
-
                     <!-- Department -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.DepartmentID, "Department", new { @class = "form-label" })
@@ -44,6 +42,7 @@
                                  )
                         @Html.ValidationMessageFor(model => model.DepartmentID, "", new { @class = "text-danger" })
                     </div>
+
                     <!-- Role -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.Role, "Role", new { @class = "form-label" })
@@ -62,6 +61,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script>

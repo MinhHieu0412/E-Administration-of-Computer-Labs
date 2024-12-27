@@ -13,5 +13,7 @@ namespace E_Administration.Extensions
             }
             return dateTime.AddDays(-diff).Date;
         }
+
+        
     }
 }
