@@ -5,14 +5,13 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<button class="btn custom-orange-button"
+        data-toggle="modal"
+        data-target="#staticBackdrop"
+        onclick="location.href='@Url.Action("Timetable", "Lab", new { labId = Model.ID })'">
+    <i class="fas fa-file-medical mr-1"></i> View Time Table
+</button>
 
-<div class="page-title d-flex justify-content-between py-2">
-    <nav class="my-auto" aria-label="breadcrumb">
-        <div class="item my-auto">
-            <a asp-controller="Lab" asp-action="Index" class="text-black"><i class="fas fa-long-arrow-alt-left mr-2"></i> Back to Site</a>
-        </div>
-    </nav>
-</div>
 <section class="lab-details">
     <div class="lab-intro">
         <h1 class="lab-title">@Html.DisplayFor(model => model.Name)</h1>    
