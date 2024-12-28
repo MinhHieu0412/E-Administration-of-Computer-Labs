@@ -26,13 +26,13 @@
         <div class="slider-caption">
             <div class="container">
                 <div class="caption-icons">
-                    <a href="labs.html" class="bg-orange icons-item">
+                    <a asp-controller="PageUser" asp-action="DisplayLab" class="bg-orange icons-item">
                         <i class="fas fa-desktop"></i>
                         <br>Labs
                     </a>
-                    <a href="complaint.html" class="bg-yellow icons-item">
+                    <a asp-controller="Report" asp-action="Report" class="bg-yellow icons-item">
                         <i class="fas fa-lightbulb"></i>
-                        <br>Complains
+                        <br>Report
                     </a>
                     <a asp-action="Index" asp-controller="ELearning" asp-area="user" class="bg-yellow icons-item">
                         <i class="fas fa-book-open"></i>
@@ -111,7 +111,19 @@
                                 <h5>@elearning.Title</h5>
 
                                 <!-- Hiển thị mô tả -->
-                                <p>@elearning.Description</p>
+                            <p>
+                                @if (!string.IsNullOrEmpty(elearning.Description))
+                                {
+                                    var shortDescription = elearning.Description.Length > 100
+                                    ? elearning.Description.Substring(0, 100) + "..."
+                                    : elearning.Description;
+                                    @shortDescription
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No description available</span>
+                                }
+                            </p>
 
                                 <!-- Nút tải PDF -->
                             @if (!string.IsNullOrEmpty(elearning.FilePath))
@@ -125,10 +137,7 @@
                                         <p class="text-danger">PDF file not available</p>
                             }
 
-                                <!-- Nút Xem thêm (nếu cần điều hướng chi tiết) -->
-                                <a href="@Url.Action("Edit", "ELearning", new { id = elearning.ID, area = "User" })" class="btn btn-secondary">
-                                    Learn More &nbsp; <i class="fas fa-info-circle"></i>
-                                </a>
+                                
                             </div>
                         </div>
                 }

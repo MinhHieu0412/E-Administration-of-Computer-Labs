@@ -5,9 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<button class="btn bg-orange text-white btn-open-modal" data-toggle="modal" data-target="#staticBackdrop">
+<button class="btn bg-orange text-white btn-open-modal"
+        data-toggle="modal"
+        data-target="#staticBackdrop"
+        onclick="location.href='@Url.Action("Timetable", "LabTimeTable", new { labId = Model.ID })'">
     <i class="fas fa-file-medical mr-1"></i> View Time Table
 </button>
+
 
 <section class="lab-details">
     <div class="lab-intro">

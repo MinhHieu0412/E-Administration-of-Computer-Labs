@@ -90,13 +90,42 @@ CREATE TABLE Labs (
     UpdatedAt DATETIME DEFAULT GETDATE(),        -- Thời gian cập nhật, mặc định là thời gian hiện tại
     CONSTRAINT FK_Labs_Departments FOREIGN KEY (DepartmentID) REFERENCES Departments(ID) ON DELETE CASCADE
 );
-INSERT INTO Labs (Name, DepartmentID, Description, Location, Capacity, IsOperational, CreatedAt, UpdatedAt)
+INSERT INTO Equipments (LabID, Name, SerialNumber, EquipmentDetails, Status, CreatedAt, UpdatedAt)
 VALUES
-('Physics Lab', 1, 'Lab for physics experiments', 'Building A, Room 101', 30, 1, GETDATE(), GETDATE()),
-('Chemistry Lab', 2, 'Lab for chemistry research', 'Building B, Room 202', 25, 1, GETDATE(), GETDATE()),
-('Biology Lab', 3, 'Lab for biology research', 'Building C, Room 303', 20, 1, GETDATE(), GETDATE()),
-('Computer Lab', 4, 'Lab for computer programming', 'Building D, Room 404', 35, 1, GETDATE(), GETDATE()),
-('Robotics Lab', 5, 'Lab for robotics projects', 'Building E, Room 505', 15, 0, GETDATE(), GETDATE());
+-- 5 thiết bị cho LabID = 1
+(1, 'Microscope-1',       'SN101', 'High precision optical microscope',   'Operational',         GETDATE(), GETDATE()),
+(1, 'Centrifuge-1',       'SN102', 'High-speed centrifuge',               'Operational',         GETDATE(), GETDATE()),
+(1, 'Spectrophotometer-1','SN103', 'UV-Vis spectrophotometer',           'Maintenance Required', GETDATE(), GETDATE()),
+(1, 'Pipette Set-1',      'SN104', 'Micropipette set for measurements',   'Operational',         GETDATE(), GETDATE()),
+(1, 'Incubator-1',        'SN105', 'Temperature controlled incubator',    'Operational',         GETDATE(), GETDATE()),
+
+-- 5 thiết bị cho LabID = 2
+(2, 'Microscope-2',       'SN201', 'High precision optical microscope',   'Operational',         GETDATE(), GETDATE()),
+(2, 'Centrifuge-2',       'SN202', 'High-speed centrifuge',               'Operational',         GETDATE(), GETDATE()),
+(2, 'Spectrophotometer-2','SN203', 'UV-Vis spectrophotometer',           'Maintenance Required', GETDATE(), GETDATE()),
+(2, 'Pipette Set-2',      'SN204', 'Micropipette set for measurements',   'Operational',         GETDATE(), GETDATE()),
+(2, 'Incubator-2',        'SN205', 'Temperature controlled incubator',    'Operational',         GETDATE(), GETDATE()),
+
+-- 5 thiết bị cho LabID = 3
+(3, 'Microscope-3',       'SN301', 'High precision optical microscope',   'Operational',         GETDATE(), GETDATE()),
+(3, 'Centrifuge-3',       'SN302', 'High-speed centrifuge',               'Operational',         GETDATE(), GETDATE()),
+(3, 'Spectrophotometer-3','SN303', 'UV-Vis spectrophotometer',           'Maintenance Required', GETDATE(), GETDATE()),
+(3, 'Pipette Set-3',      'SN304', 'Micropipette set for measurements',   'Operational',         GETDATE(), GETDATE()),
+(3, 'Incubator-3',        'SN305', 'Temperature controlled incubator',    'Operational',         GETDATE(), GETDATE()),
+
+-- 5 thiết bị cho LabID = 4
+(4, 'Microscope-4',       'SN401', 'High precision optical microscope',   'Operational',         GETDATE(), GETDATE()),
+(4, 'Centrifuge-4',       'SN402', 'High-speed centrifuge',               'Operational',         GETDATE(), GETDATE()),
+(4, 'Spectrophotometer-4','SN403', 'UV-Vis spectrophotometer',           'Maintenance Required', GETDATE(), GETDATE()),
+(4, 'Pipette Set-4',      'SN404', 'Micropipette set for measurements',   'Operational',         GETDATE(), GETDATE()),
+(4, 'Incubator-4',        'SN405', 'Temperature controlled incubator',    'Operational',         GETDATE(), GETDATE()),
+
+-- 5 thiết bị cho LabID = 5
+(5, 'Microscope-5',       'SN501', 'High precision optical microscope',   'Operational',         GETDATE(), GETDATE()),
+(5, 'Centrifuge-5',       'SN502', 'High-speed centrifuge',               'Operational',         GETDATE(), GETDATE()),
+(5, 'Spectrophotometer-5','SN503', 'UV-Vis spectrophotometer',           'Maintenance Required', GETDATE(), GETDATE()),
+(5, 'Pipette Set-5',      'SN504', 'Micropipette set for measurements',   'Operational',         GETDATE(), GETDATE()),
+(5, 'Incubator-5',        'SN505', 'Temperature controlled incubator',    'Operational',         GETDATE(), GETDATE());
 
 SELECT * FROM Labs;
 

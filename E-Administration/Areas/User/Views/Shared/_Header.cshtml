@@ -20,24 +20,47 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="User" asp-controller="AboutUs" asp-action="index">AboutUs</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Index" asp-controller="ELearning" asp-area="user">E Learning</a>
-                    </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link" asp-area="User" asp-controller="Contact" asp-action="index">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="LeaveRequest" asp-action="Index">LeaveRequest</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="MakeUpRequest" asp-action="Index">MakeUpRequest</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="User" asp-controller="Report" asp-action="Report">Report</a>
-                    </li>
+                    
+                    @if (User.IsInRole("Lecturer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LeaveRequest" asp-action="Index">Leave Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="MakeUpRequest" asp-action="Index">MakeUpRequest</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="ELearning" asp-area="User">E Learning</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Report" asp-controller="Report" asp-area="User">Report</a>
+                        </li>
+                    }
+                    else if (User.IsInRole("Technician"))
+                    {
+
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="RepairAssignment" asp-area="Admin">Repair Assignment</a>
+                        </li>
+                    }
+                    @* @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    } *@
                 </ul>
                 <div class="dropdown">
                     <a class="user-nav-show" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,12 +69,12 @@
                             <span>Welcome, @User.FindFirst("UserName")?.Value</span>
                         }
                        
-                        <img src="~/img/profile-pic.jpg" class="rounded-pill">
+                        <img src="@User.FindFirst("UserImage")?.Value" class="rounded-pill">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" asp-action="Details" asp-controller="Profile" asp-area="User"><i class="fas fa-cog"></i>Edit Profile</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
                     </div>
                 </div>
             </div>

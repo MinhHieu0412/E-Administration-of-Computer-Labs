@@ -3,23 +3,24 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
 }
-<h2>Danh sách đơn xin nghỉ</h2>
-<a href="@Url.Action("Create", "LeaveRequest", new { area = "User" })" class="btn btn-primary">Tạo đơn mới</a>
+<h2>Leave Request List</h2>
+<a href="@Url.Action("Create", "LeaveRequest", new { area = "User" })" class="btn btn-primary">Create New Request</a>
 <table class="table">
     <thead>
         <tr>
-            <th>Người dùng</th>
-            <th>Ngày bắt đầu nghỉ</th>
-            <th>Ngày kết thúc nghỉ</th>
-            <th>Trạng thái</th>
-            <th>Phản hồi</th>
+            <th>User</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th>Reason</th>
+            <th>Feedback</th>
         </tr>
     </thead>
     <tbody>
         @if (!Model.Any())
         {
             <tr>
-                <td colspan="5" class="text-center">Không có đơn xin nghỉ nào được tạo bởi người dùng hiện tại.</td>
+                <td colspan="5" class="text-center">No leave requests have been created by the current user.</td>
             </tr>
         }
         else
@@ -33,14 +34,15 @@
                     <td>
                         @if (request.IsApproved)
                         {
-                            <span class="text-success fw-bold">Đã duyệt</span>
+                            <span class="text-success fw-bold">Approved</span>
                         }
                         else
                         {
-                            <span class="text-danger fw-bold">Chưa duyệt</span>
+                            <span class="text-danger fw-bold">Not Approved</span>
                         }
                     </td>
-                    <td>@(string.IsNullOrEmpty(request.Feedback) ? "Không có phản hồi" : request.Feedback)</td>
+                    <td>@request.Reason</td>
+                    <td>@(string.IsNullOrEmpty(request.Feedback) ? "No Feedback" : request.Feedback)</td>
                 </tr>
             }
         }

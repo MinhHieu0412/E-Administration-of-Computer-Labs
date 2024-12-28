@@ -1,0 +1,63 @@
+﻿@model E_Administration.Models.Elearnings
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                @if (!string.IsNullOrEmpty(Model.Link))
+                {
+                    <img src="@Model.Link" class="card-img-top" alt="Illustration" style="max-height: 400px; object-fit: cover;" />
+                }
+                else
+                {
+                    <img src="https://via.placeholder.com/800x400?text=No+Image" class="card-img-top" alt="No illustration available" />
+                }
+
+                <div class="card-body">
+                    <h1 class="card-title text-primary">@Model.Title</h1>
+
+                    <p class="card-text">
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            @Model.Description
+                        }
+                        else
+                        {
+                            <em>No description available.</em>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Details</h5>
+                    <p class="text-muted small mb-2">
+                        <strong>Uploaded by:</strong> @Model.User?.UserName
+                    </p>
+
+                    @if (!string.IsNullOrEmpty(Model.FilePath))
+                    {
+                        <a href="@Url.Content(Model.FilePath)" target="_blank" class="btn btn-primary w-100">
+                            <i class="bi bi-file-earmark-arrow-down"></i> Download PDF
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-danger">No file available for download.</p>
+                    }
+                </div>
+            </div>
+
+            <a href="@Url.Action("ViewElearning", "ELearning")" class="btn btn-secondary w-100">
+                <i class="bi bi-arrow-left"></i> Back to Elearning Resources
+            </a>
+        </div>
+    </div>
+</section>

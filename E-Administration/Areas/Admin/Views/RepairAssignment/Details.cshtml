@@ -10,22 +10,22 @@
         <tr>
             <th>Issue Report</th>
             <td>
-                @Model.IssueReports?.Description ?? "No description available"
+                @(Model.IssueReports?.Description ?? "No description available")
             </td>
         </tr>
         <tr>
             <th>Assigned Technician</th>
             <td>
-                @Model.Technician?.UserName ?? "No technician assigned"
+                @(Model.Technician?.UserName ?? "No technician assigned")
             </td>
         </tr>
         <tr>
             <th>Created At</th>
-            <td>@Model.CreatedAt?.ToString("g") ?? "N/A"</td>
+            <td>@(Model.CreatedAt?.ToString("g") ?? "N/A")</td>
         </tr>
         <tr>
             <th>Updated At</th>
-            <td>@Model.UpdatedAt?.ToString("g") ?? "N/A"</td>
+            <td>@(Model.UpdatedAt?.ToString("g") ?? "N/A")</td>
         </tr>
     </table>
 

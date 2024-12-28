@@ -157,7 +157,7 @@ namespace E_Administration.Controllers
             <p><b>Username:</b> {userName}</p>
             <p><b>Password:</b> {password}</p>
             <p>Please log in and change your password immediately: 
-               <a href='http://localhost:5285/Account/Login'>Login Here</a></p>
+               <a href='http://localhost:5285/Account/Login'>Login Here</a></p> 
             <p>Thank you,</p>
             <p><b>E_Administration Team</b></p>
         ",
@@ -205,7 +205,6 @@ namespace E_Administration.Controllers
 
 
 
-
         // Edit User (GET)
         public ActionResult Edit(int id)
         {
@@ -213,6 +212,7 @@ namespace E_Administration.Controllers
             if (user == null) return NotFound();
 
             ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name", user.DepartmentID);
+            ViewBag.Roles = new SelectList(new[] { "Student", "Lecturer", "HOD", "Technician" }, user.Role);
             return View(user);
         }
 
@@ -221,29 +221,67 @@ namespace E_Administration.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(User user)
         {
-            if (ModelState.IsValid)
+            try
             {
+                // Tìm người dùng hiện tại trong cơ sở dữ liệu
                 var existingUser = _context.Users.Find(user.ID);
-                if (existingUser != null)
+                if (existingUser == null)
                 {
-                    existingUser.UserName = user.UserName;
-                    existingUser.Email = user.Email;
-                    // Hash the password only if it has changed
-                    if (!string.IsNullOrEmpty(user.Password) &&
-                        !BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
-                    {
-                        existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                    }
-                    existingUser.Image = user.Image;
-                    existingUser.Role = user.Role;
-                    existingUser.DepartmentID = user.DepartmentID;
-                    _context.SaveChanges();
+                    ModelState.AddModelError("", "User not found.");
+                    ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name", user.DepartmentID);
+                    ViewBag.Roles = new SelectList(new[] { "Student", "Lecturer", "HOD", "Technician" }, user.Role);
+                    return View(user);
                 }
+
+                // Kiểm tra nếu email đã thay đổi và trùng lặp
+                if (!string.Equals(existingUser.Email, user.Email, StringComparison.OrdinalIgnoreCase))
+                {
+                    var emailExists = _context.Users.Any(u => u.Email == user.Email && u.ID != user.ID);
+                    if (emailExists)
+                    {
+                        ModelState.AddModelError("Email", "Email is already in use by another user.");
+                        ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name", user.DepartmentID);
+                        ViewBag.Roles = new SelectList(new[] { "Student", "Lecturer", "HOD", "Technician" }, user.Role);
+                        return View(user);
+                    }
+                }
+
+                // Kiểm tra nếu username đã thay đổi và trùng lặp
+                if (!string.Equals(existingUser.UserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var usernameExists = _context.Users.Any(u => u.UserName == user.UserName && u.ID != user.ID);
+                    if (usernameExists)
+                    {
+                        ModelState.AddModelError("UserName", "Username is already in use by another user.");
+                        ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name", user.DepartmentID);
+                        ViewBag.Roles = new SelectList(new[] { "Student", "Lecturer", "HOD", "Technician" }, user.Role);
+                        return View(user);
+                    }
+                }
+
+                
+
+                // Cập nhật thông tin người dùng
+                existingUser.UserName = user.UserName;
+                existingUser.Email = user.Email;
+                existingUser.Role = user.Role; // Role selected from dropdown
+                existingUser.DepartmentID = user.DepartmentID;
+                _context.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name", user.DepartmentID);
-            return View(user);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while updating the user. Please try again.");
+                ModelState.AddModelError("", $"Error Details: {ex.Message}");
+                ViewBag.Departments = new SelectList(_context.Departments, "ID", "Name", user.DepartmentID);
+                ViewBag.Roles = new SelectList(new[] { "Student", "Lecturer", "HOD", "Technician" }, user.Role);
+                return View(user);
+            }
         }
+
+
+
 
         // Activate/Deactivate User
         public ActionResult ToggleStatus(int id)

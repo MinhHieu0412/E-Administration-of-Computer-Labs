@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/responsive.css">
     <script src="@Url.Content("~/js/jquery-3.5.1.min.js")"></script>
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
  
     <style>
@@ -316,6 +316,8 @@
     </div>
 
     <!-- External JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 
@@ -334,6 +336,25 @@
         });
     </script> *@
 
-   
+    <script>
+        $(document).ready(function () {
+            var message = '@TempData["ToastrMessage"]';
+            var type = '@TempData["ToastrType"]';
+
+            console.log(message, type);  // Check if values are correctly passed
+
+            if (message) {
+                Toastify({
+                    text: message,
+                    duration: 4000, // Customize the duration
+                    close: true,
+                    gravity: "top", // Position of the toast
+                    position: "right", // Position of the toast
+                    backgroundColor: type === "success" ? "green" : type === "error" ? "red" : "blue"
+                }).showToast();
+            }
+        });
+
+    </script>
 </body>
 </html>

@@ -421,6 +421,8 @@ namespace E_Administration.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("LeaveRequests");
                 });
 
@@ -637,6 +639,17 @@ namespace E_Administration.Migrations
                     b.Navigation("RequestedBy");
                 });
 
+            modelBuilder.Entity("E_Administration.Models.LeaveRequest", b =>
+                {
+                    b.HasOne("E_Administration.Models.User", "User")
+                        .WithMany("LeaveRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("E_Administration.Models.RepairAssignments", b =>
                 {
                     b.HasOne("E_Administration.Models.IssueReports", "IssueReports")
@@ -718,6 +731,8 @@ namespace E_Administration.Migrations
                     b.Navigation("IssueReports");
 
                     b.Navigation("LabRequests");
+
+                    b.Navigation("LeaveRequests");
                 });
 #pragma warning restore 612, 618
         }

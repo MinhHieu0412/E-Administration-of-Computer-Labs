@@ -1,44 +1,45 @@
 ﻿@model E_Administration.Dto.MakeUpRequestDto
 
 @{
-    ViewData["Title"] = "Tạo đơn dạy bù";
+    ViewData["Title"] = "Create Make-Up Request";
     Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
 }
 }
 
-<h2>Tạo đơn dạy bù</h2>
+<h2>Create Make-Up Request</h2>
 
 <form asp-action="Create" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label for="LeaveRequestId">Đơn xin nghỉ</label>
+        <label for="LeaveRequestId">Leave Request</label>
         <select asp-for="LeaveRequestId" asp-items="ViewBag.LeaveRequests" class="form-control">
-            <option value="">-- Chọn đơn xin nghỉ --</option>
+            <option value="">-- Select Leave Request --</option>
         </select>
         @Html.ValidationMessageFor(m => m.LeaveRequestId, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <label for="LabId">Phòng dạy bù</label>
+        <label for="LabId">Make-Up Room</label>
         <select asp-for="LabId" asp-items="ViewBag.Labs" class="form-control">
-            <option value="">-- Chọn phòng --</option>
+            <option value="">-- Select Room --</option>
         </select>
         @Html.ValidationMessageFor(m => m.LabId, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <label for="MakeUpDate">Ngày dạy bù</label>
+        <label for="MakeUpDate">Make-Up Date</label>
         <input asp-for="MakeUpDate" class="form-control" type="date" />
         @Html.ValidationMessageFor(m => m.MakeUpDate, "", new { @class = "text-danger" })
     </div>
 
 
     <div class="form-group">
-        <label for="MakeUpTime">Giờ dạy bù</label>
+        <label for="MakeUpTime">Make-Up Time</label>
         <input asp-for="MakeUpTime" class="form-control" type="time" />
         @Html.ValidationMessageFor(m => m.MakeUpTime, "", new { @class = "text-danger" })
     </div>
 
-    <button type="submit" class="btn btn-primary">Tạo</button>
+    <button type="submit" class="btn btn-primary">Create</button>
+
 </form>

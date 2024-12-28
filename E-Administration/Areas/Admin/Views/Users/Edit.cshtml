@@ -9,6 +9,7 @@
             <h2>Edit User</h2>
         </div>
         <div class="card-body">
+            <!-- Hiển thị lỗi -->
             @using (Html.BeginForm("Edit", "Users", FormMethod.Post, new { @id = "editUserForm" }))
             {
                 @Html.AntiForgeryToken()
@@ -31,22 +32,7 @@
                 </div>
 
                 <div class="row">
-                    <!-- Password -->
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(model => model.Password, new { @class = "form-label" })
-                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter password" })
-                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                    </div>
 
-                    <!-- Role -->
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(model => model.Role, new { @class = "form-label" })
-                        @Html.TextBoxFor(model => model.Role, new { @class = "form-control", placeholder = "Enter role" })
-                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="row">
                     <!-- Department -->
                     <div class="col-md-6 mb-3">
                         @Html.LabelFor(model => model.DepartmentID, "Department", new { @class = "form-label" })
@@ -58,6 +44,13 @@
                                  )
                         @Html.ValidationMessageFor(model => model.DepartmentID, "", new { @class = "text-danger" })
                     </div>
+                    <!-- Role -->
+                    <div class="col-md-6 mb-3">
+                        @Html.LabelFor(model => model.Role, "Role", new { @class = "form-label" })
+                        @Html.DropDownListFor(model => model.Role, (SelectList)ViewBag.Roles, "Select Role", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                    </div>
+
                 </div>
 
                 <!-- Submit and Cancel Buttons -->
