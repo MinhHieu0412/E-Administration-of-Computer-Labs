@@ -1,83 +1,160 @@
 ﻿@model List<List<dynamic>>
-
 @{
     ViewData["Title"] = $"Timetable for Lab: {ViewBag.LabName}";
-    var weekDays = ViewBag.WeekDays as List<string>; // Danh sách ngày trong tuần
+    var weekDays = ViewBag.WeekDays as List<string>;
+    var selectedYear = ViewBag.SelectedYear;
+    var selectedStartDate = ViewBag.StartDate;
+    var selectedEndDate = ViewBag.EndDate;
+    var dayNamesWithDates = ViewBag.DayNamesWithDates as List<dynamic>;
 }
 
 <h1 class="text-center mt-3">@ViewData["Title"]</h1>
 
-<!-- Hiển thị phạm vi tuần -->
 <p class="text-center">
     <strong>Week Range:</strong>
-    <span class="badge bg-primary">@ViewBag.StartOfWeek</span> -
-    <span class="badge bg-primary">@ViewBag.EndOfWeek</span>
+    <span class="badge bg-primary custom-badge">@selectedStartDate</span> -
+    <span class="badge bg-primary custom-badge">@selectedEndDate</span>
 </p>
 
-<!-- Form chọn tuần -->
+<!-- Form Section: Year and Week on the same row, Show Timetable button below -->
 <div class="text-center my-3">
-    <form method="get" asp-action="Timetable" asp-controller="LabTimeTable" class="form-inline d-flex justify-content-center">
-        <input type="hidden" name="labId" value="@ViewBag.LabId" />
-        <div class="form-group me-2">
-            <label for="weekNumber" class="form-label">Select Week:</label>
-            <select id="weekNumber" name="weekNumber" class="form-select">
-                @for (var i = 1; i <= 52; i++)
-                {
-                    if (i == (ViewBag.CurrentWeek ?? 0))
+    <form method="get" action="@Url.Action("Timetable", "LabTimeTable")">
+        <div class="row justify-content-center mb-3">
+            <!-- Year Select -->
+            <div class="col-auto">
+                <label for="year">Year:</label>
+                <select id="year" name="year" class="form-select form-select-sm">
+                    @for (int i = DateTime.Now.Year - 5; i <= DateTime.Now.Year + 2; i++)
                     {
-                        <option value="@i" selected>Week @i</option>
+                        if (i == ViewBag.SelectedYear)
+                        {
+                            <option value="@i" selected>@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
                     }
-                    else
+                </select>
+            </div>
+
+            <!-- Week Select -->
+            <div class="col-auto">
+                <label for="weekNumber">Week:</label>
+                <select id="weekNumber" name="weekNumber" class="form-select form-select-sm">
+                    @if (ViewBag.WeeksInYear != null)
                     {
-                        <option value="@i">Week @i</option>
+                        foreach (var week in ViewBag.WeeksInYear)
+                        {
+                            var startDate = week.Item1;
+                            var endDate = week.Item2;
+
+                            if (!string.IsNullOrEmpty(ViewBag.SelectedWeek) && startDate == (ViewBag.SelectedWeek.Split(" - ")[0]))
+                            {
+                                <option value="@startDate - @endDate" selected>
+                                    @startDate -> @endDate
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@startDate - @endDate">
+                                    @startDate -> @endDate
+                                </option>
+                            }
+                        }
                     }
-                }
-            </select>
+                </select>
+            </div>
+            <div class="col-auto">
+                <!-- Show Timetable button -->
+                <input type="hidden" name="labId" value="@ViewBag.LabId" />
+                <button type="submit" class="btn btn-primary btn-sm align-self-center">Show Timetable</button>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Show Timetable</button>
+
+        
     </form>
 </div>
 
-<!-- Bảng timetable -->
+<!-- Timetable Table -->
 <table class="table table-bordered table-hover table-striped text-center mt-3">
     <thead class="table-dark">
         <tr>
             <th>Time</th>
-            @for (var i = 0; i < 7; i++) @* Lặp qua các ngày từ Monday đến Sunday *@
+            @foreach (var day in dayNamesWithDates)
             {
-                <th>@((DayOfWeek)i) <br> <span class="text-muted">@weekDays[i]</span></th>
+                <th>
+                    <div>@day.Day</div>
+                    <span class="text-muted">@day.Date</span>
+                </th>
             }
         </tr>
     </thead>
     <tbody>
-        @for (var i = 0; i < Model.First().Count; i++) @* Lặp qua các giờ *@
+        @if (Model.Any())
+        {
+            for (int i = 0; i < Model.First().Count; i++)
+            {
+                <tr>
+                    <td class="fw-bold">@Model.First()[i].Time</td>
+                    @foreach (var day in Model)
+                    {
+                        <td>
+                            @if (!string.IsNullOrEmpty(day[i].Assignment))
+                            {
+                                <span class="text-success">
+                                    <i class="bi bi-check-circle-fill"></i> @day[i].Assignment
+                                </span>
+                                <div class="text-muted small">@day[i].Status</div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    <i class="bi bi-dash-circle"></i>
+                                </span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td class="fw-bold">@Model.First()[i].Time</td>
-                @foreach (var day in Model) @* Lặp qua từng ngày *@
-                {
-                    <td>
-                        @if (!string.IsNullOrEmpty(day[i].Assignment))
-                        {
-                            <div>
-                                <span class="text-success"><i class="bi bi-check-circle-fill"></i> @day[i].Assignment</span>
-                            </div>
-                            <div class="text-muted small">@day[i].Status</div>
-                        }
-                        else
-                        {
-                            <span class="text-muted"><i class="bi bi-dash-circle"></i></span>
-                        }
-                    </td>
-                }
+                <td colspan="8" class="text-center">No data available</td>
             </tr>
         }
     </tbody>
 </table>
 
-<!-- Nút quay lại -->
+<!-- Back Button Section -->
 <div class="text-center mt-4">
-    <a asp-controller="Labs" asp-action="Index" class="btn btn-secondary">
+    <a asp-controller="Home" asp-action="DisplayLab" class="btn custom-orange-button">
         <i class="bi bi-arrow-left-circle"></i> Back to Labs
     </a>
 </div>
+
+<!-- JavaScript for Dynamic Week Change -->
+<script>
+    document.getElementById('year').addEventListener('change', function () {
+        var selectedYear = this.value;
+        var weekDropdown = document.getElementById('weekNumber');
+
+        fetch(`/LabTimeTable/GetWeeksByYear?year=${selectedYear}`)
+            .then(response => response.json())
+            .then(data => {
+                weekDropdown.innerHTML = '';
+                data.forEach(week => {
+                    var option = document.createElement('option');
+                    option.value = `${week.startDate} - ${week.endDate}`;
+                    option.text = `${week.startDate} - ${week.endDate}`;
+                    weekDropdown.appendChild(option);
+                });
+
+                if (data.length > 0) {
+                    weekDropdown.value = `${data[0].startDate} - ${data[0].endDate}`;
+                }
+            })
+            .catch(error => console.error('Error fetching weeks:', error));
+    });
+</script>

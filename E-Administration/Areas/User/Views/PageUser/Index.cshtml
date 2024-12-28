@@ -26,7 +26,7 @@
         <div class="slider-caption">
             <div class="container">
                 <div class="caption-icons">
-                    <a href="labs.html" class="bg-orange icons-item">
+                    <a asp-controller="PageUser" asp-action="DisplayLab" class="bg-orange icons-item">
                         <i class="fas fa-desktop"></i>
                         <br>Labs
                     </a>
@@ -89,53 +89,55 @@
     <!-- Course Section -->
     <section id="course-section" class="py-5 bg-orange text-white">
         <div class="container">
-            <h4> E - Learning</h4>
+            <h4 class="text-center mb-4">E-Learning Resources</h4>
 
             <!-- Owl Carousel Slider -->
             <div class="owl-carousel owl-theme">
                 @foreach (var elearning in Model.Elearnings)
                 {
-                        <div class="item px-3">
-                            <!-- Hiển thị hình ảnh từ Link -->
-                        @if (!string.IsNullOrEmpty(elearning.Link))
-                        {
-                                    <img src="@elearning.Link" alt="@elearning.Title" style="max-width: 100%; height: auto;">
-                        }
-                        else
-                        {
-                                    <img src="~/img/default-placeholder.png" alt="Default Image" style="max-width: 100%; height: auto;">
-                        }
-
-                            <div class="text-paragraph py-2 text-center">
-                                <!-- Hiển thị tiêu đề -->
-                                <h5>@elearning.Title</h5>
-
-                                <!-- Hiển thị mô tả -->
-                                <p>@elearning.Description</p>
-
-                                <!-- Nút tải PDF -->
-                            @if (!string.IsNullOrEmpty(elearning.FilePath))
+                    <div class="elearning-item px-3">
+                        <div class="elearning-card h-100 shadow border-0 d-flex flex-column rounded-lg overflow-hidden">
+                            <!-- Hiển thị hình ảnh -->
+                            @if (!string.IsNullOrEmpty(elearning.Link))
                             {
-                                        <a href="@elearning.FilePath" download class="btn btn-primary">
-                                            Download PDF &nbsp; <i class="fas fa-download"></i>
-                                        </a>
+                                <img src="@elearning.Link" alt="@elearning.Title" class="elearning-card-img-top">
                             }
                             else
                             {
-                                        <p class="text-danger">PDF file not available</p>
+                                <img src="~/img/default-placeholder.png" alt="Default Image" class="elearning-card-img-top">
                             }
 
-                                <!-- Nút Xem thêm (nếu cần điều hướng chi tiết) -->
-                                <a href="@Url.Action("Edit", "ELearning", new { id = elearning.ID, area = "User" })" class="btn btn-secondary">
-                                    Learn More &nbsp; <i class="fas fa-info-circle"></i>
+                            <!-- Tiêu đề -->
+                            <div class="elearning-card-body">
+                                <h5 class="elearning-card-title">@elearning.Title</h5>
+                            </div>
+
+                            <!-- Footer với các nút -->
+                            <div class="elearning-card-footer">
+                                @if (!string.IsNullOrEmpty(elearning.FilePath))
+                                {
+                                    <a href="@elearning.FilePath" download class="elearning-btn elearning-btn-primary">
+                                        <i class="fas fa-download"></i>PDF
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-danger small">PDF not available</span>
+                                }
+
+                                <a href="@Url.Action("Details", "ELearning", new { id = elearning.ID })" class="elearning-btn elearning-btn-secondary">
+                                    <i class="fas fa-info-circle"></i> Details
                                 </a>
                             </div>
                         </div>
+                    </div>
                 }
             </div>
             <!-- !Owl Carousel Slider -->
         </div>
     </section>
+
+
     <!-- !Course Section -->
     <!-- Complain Section -->
     <section id="complain-section">
@@ -154,13 +156,13 @@
             <!-- Owl Carousel Slider -->
             <div class="owl-carousel owl-theme">
                 <div class="item px-3">
-                    <img src="assests/img/instructor/instructor1.jpg" alt="lab1">
+                    <img src="~/img/instructor/instructor1.jpg" alt="lab1">
                     <div class="text-paragraph py-2">
                         <h6 class="text-center">Sir Ali</h6>
                     </div>
                 </div>
                 <div class="item px-3">
-                    <img src="assests/img/instructor/instructor2.jpg" alt="lab1">
+                    <img src="~/img/instructor/instructor2.jpg" alt="lab1">
                     <div class="text-paragraph py-2">
                         <h6 class="text-center">Miss Alina</h6>
                     </div>

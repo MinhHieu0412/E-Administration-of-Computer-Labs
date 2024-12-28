@@ -27,6 +27,11 @@ namespace E_Administration.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<LeaveRequest>()
+               .HasOne(lr => lr.User)
+               .WithMany(u => u.LeaveRequests)
+               .HasForeignKey(lr => lr.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
             // User -> Department (Many-to-One)
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Department)
@@ -100,7 +105,7 @@ namespace E_Administration.Data
                 .HasForeignKey(ir => ir.DepartmentID)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-        public DbSet<E_Administration.Dto.LabRequestDto> LabRequestDto { get; set; } = default!;
+        
 }
 
 }

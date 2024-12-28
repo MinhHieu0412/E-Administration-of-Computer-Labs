@@ -4,6 +4,7 @@ using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using System.Security.Claims;
 
 namespace E_Administration.Areas.User.Controllers
 {
@@ -19,7 +20,7 @@ namespace E_Administration.Areas.User.Controllers
 
         public IActionResult Index()
         {
-            // Lấy danh sách đơn dạy bù và kết nối các bảng liên quan
+            // Retrieve the list of make-up requests and join related tables
             var makeUpRequests = _context.MakeUpRequests
                 .Join(_context.LeaveRequests,
                       mr => mr.LeaveRequestId,
@@ -42,7 +43,7 @@ namespace E_Administration.Areas.User.Controllers
                       })
                 .ToList();
 
-            // Truyền dữ liệu vào ViewBag
+            // Pass data to ViewBag
             ViewBag.MakeUpRequests = makeUpRequests;
 
             return View();
@@ -50,12 +51,20 @@ namespace E_Administration.Areas.User.Controllers
 
         public IActionResult Create()
         {
+            // Get the UserId of the current user
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            // Filter the leave requests of the current user
             ViewBag.LeaveRequests = _context.LeaveRequests
-                .Select(lr => new SelectListItem
-                {
-                    Value = lr.Id.ToString(),
-                    Text = $"Nghỉ từ {lr.StartDate:dd/MM/yyyy} đến {lr.EndDate:dd/MM/yyyy}"
-                })
+                .Where(lr => lr.UserId == userId)
+                .Join(_context.Users,
+                      lr => lr.UserId,
+                      u => u.ID,
+                      (lr, u) => new SelectListItem
+                      {
+                          Value = lr.Id.ToString(),
+                          Text = $"{u.UserName} - Leave from {lr.StartDate:dd/MM/yyyy} to {lr.EndDate:dd/MM/yyyy}"
+                      })
                 .ToList();
 
             ViewBag.Labs = _context.Labs
@@ -73,14 +82,35 @@ namespace E_Administration.Areas.User.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(MakeUpRequestDto model)
         {
+            // Get the UserId of the current user
+            var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            // Retrieve the related leave request
+            var leaveRequest = _context.LeaveRequests.FirstOrDefault(lr => lr.Id == model.LeaveRequestId && lr.UserId == userId);
+
+            // Validate logic
+            if (leaveRequest == null)
+            {
+                ModelState.AddModelError("LeaveRequestId", "Invalid leave request.");
+            }
+            else if (model.MakeUpDate <= leaveRequest.EndDate)
+            {
+                ModelState.AddModelError("MakeUpDate", "The make-up date must be after the leave end date.");
+            }
+
             if (!ModelState.IsValid)
             {
+                // Reload lists if there are errors
                 ViewBag.LeaveRequests = _context.LeaveRequests
-                    .Select(lr => new SelectListItem
-                    {
-                        Value = lr.Id.ToString(),
-                        Text = $"Nghỉ từ {lr.StartDate:dd/MM/yyyy} đến {lr.EndDate:dd/MM/yyyy}"
-                    })
+                    .Where(lr => lr.UserId == userId)
+                    .Join(_context.Users,
+                          lr => lr.UserId,
+                          u => u.ID,
+                          (lr, u) => new SelectListItem
+                          {
+                              Value = lr.Id.ToString(),
+                              Text = $"{u.UserName} - Leave from {lr.StartDate:dd/MM/yyyy} to {lr.EndDate:dd/MM/yyyy}"
+                          })
                     .ToList();
 
                 ViewBag.Labs = _context.Labs
@@ -94,6 +124,7 @@ namespace E_Administration.Areas.User.Controllers
                 return View(model);
             }
 
+            // Create a new make-up request
             var makeUpRequest = new MakeUpRequest
             {
                 LeaveRequestId = model.LeaveRequestId,

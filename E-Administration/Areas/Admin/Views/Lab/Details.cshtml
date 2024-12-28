@@ -5,11 +5,16 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-
+<button class="btn custom-orange-button"
+        data-toggle="modal"
+        data-target="#staticBackdrop"
+        onclick="location.href='@Url.Action("Timetable", "Lab", new { labId = Model.ID })'">
+    <i class="fas fa-file-medical mr-1"></i> View Time Table
+</button>
 
 <section class="lab-details">
     <div class="lab-intro">
-        <h1 class="lab-title">@Html.DisplayFor(model => model.Name)</h1>
+        <h1 class="lab-title">@Html.DisplayFor(model => model.Name)</h1>    
         <p><strong>Location:</strong> @Html.DisplayFor(model => model.Location)</p>
         <p><strong>Capacity:</strong> @Html.DisplayFor(model => model.Capacity)</p>
        @*  <p><strong>Operational Status:</strong> @(Model.IsOperational ? "Operational" : "Not Operational")</p> *@

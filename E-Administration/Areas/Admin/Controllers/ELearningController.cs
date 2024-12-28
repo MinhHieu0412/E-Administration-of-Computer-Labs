@@ -2,6 +2,7 @@
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace E_Administration.Areas.Admin.Controllers
 {
@@ -39,7 +40,7 @@ namespace E_Administration.Areas.Admin.Controllers
         {
             ViewBag.DebugElearning = eLearning;
 
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim))
             {
                 ModelState.AddModelError(string.Empty, "User ID not found. Please ensure you are logged in.");
@@ -137,6 +138,7 @@ namespace E_Administration.Areas.Admin.Controllers
             return View(eLearning);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Elearnings eLearning, IFormFile? file, IFormFile? image)
@@ -146,7 +148,9 @@ namespace E_Administration.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var existingELearning = await ctx.ELearning.FindAsync(id);
+            var existingELearning = await ctx.ELearning
+                                             .Include(e => e.User) 
+                                             .FirstOrDefaultAsync(e => e.ID == id);
             if (existingELearning == null)
             {
                 return NotFound();
@@ -154,24 +158,21 @@ namespace E_Administration.Areas.Admin.Controllers
 
             try
             {
-                // Xử lý file PDF
-                if (file == null || file.Length == 0)
+                // Check PDF file format
+                if (file != null && file.Length > 0)
                 {
-                    // Không thay đổi file PDF
-                    eLearning.FilePath = existingELearning.FilePath;
-                }
-                else
-                {
-                    // Xóa file PDF cũ
-                    string oldPdfPath = Path.Combine(env.WebRootPath, existingELearning.FilePath.TrimStart('/'));
-                    if (System.IO.File.Exists(oldPdfPath))
+                    string[] allowedPdfExtensions = { ".pdf" };
+                    string fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+                    if (!allowedPdfExtensions.Contains(fileExtension))
                     {
-                        System.IO.File.Delete(oldPdfPath);
+                        ModelState.AddModelError("FilePath", $"Invalid PDF format. Only PDF files are allowed.");
+                        return View(existingELearning); 
                     }
 
-                    // Tải file PDF mới
+                    // PDF file processing
                     string pdfFolder = Path.Combine(env.WebRootPath, "uploads/pdf");
-                    string pdfFileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                    string pdfFileName = Guid.NewGuid() + fileExtension;
                     string pdfFilePath = Path.Combine(pdfFolder, pdfFileName);
 
                     if (!Directory.Exists(pdfFolder))
@@ -181,27 +182,32 @@ namespace E_Administration.Areas.Admin.Controllers
                     {
                         await file.CopyToAsync(stream);
                     }
-                    eLearning.FilePath = $"/uploads/pdf/{pdfFileName}";
-                }
 
-                // Xử lý image
-                if (image == null || image.Length == 0)
-                {
-                    // Không thay đổi image
-                    eLearning.Link = existingELearning.Link;
-                }
-                else
-                {
-                    // Xóa hình ảnh cũ
-                    string oldImagePath = Path.Combine(env.WebRootPath, existingELearning.Link.TrimStart('/'));
-                    if (System.IO.File.Exists(oldImagePath))
+                    // Delete old PDF file
+                    string oldPdfPath = Path.Combine(env.WebRootPath, existingELearning.FilePath.TrimStart('/'));
+                    if (System.IO.File.Exists(oldPdfPath))
                     {
-                        System.IO.File.Delete(oldImagePath);
+                        System.IO.File.Delete(oldPdfPath);
                     }
 
-                    // Tải hình ảnh mới
+                    existingELearning.FilePath = $"/uploads/pdf/{pdfFileName}";
+                }
+
+                // Check image format
+                if (image != null && image.Length > 0)
+                {
+                    string[] allowedImageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                    string imageExtension = Path.GetExtension(image.FileName).ToLower();
+
+                    if (!allowedImageExtensions.Contains(imageExtension))
+                    {
+                        ModelState.AddModelError("Link", $"Invalid image format. Only JPG, JPEG, PNG, or GIF files are allowed.");
+                        return View(existingELearning); 
+                    }
+
+                    // Image processing
                     string imageFolder = Path.Combine(env.WebRootPath, "uploads/images");
-                    string imageFileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                    string imageFileName = Guid.NewGuid() + imageExtension;
                     string imageFilePath = Path.Combine(imageFolder, imageFileName);
 
                     if (!Directory.Exists(imageFolder))
@@ -211,30 +217,32 @@ namespace E_Administration.Areas.Admin.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
-                    eLearning.Link = $"/uploads/images/{imageFileName}";
+
+                    // Delete old photos
+                    string oldImagePath = Path.Combine(env.WebRootPath, existingELearning.Link.TrimStart('/'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+
+                    existingELearning.Link = $"/uploads/images/{imageFileName}";
                 }
 
-                // Cập nhật các trường khác
-                eLearning.CreatedAt = existingELearning.CreatedAt;
-                eLearning.UpdatedAt = DateTime.UtcNow; // Thực hiện cập nhật thủ công
-
-                // Cập nhật giá trị của đối tượng hiện tại với đối tượng eLearning
-                ctx.Entry(existingELearning).CurrentValues.SetValues(eLearning);
-
-                // Đảm bảo rằng EF nhận ra sự thay đổi của UpdatedAt
-                ctx.Entry(existingELearning).Property(e => e.UpdatedAt).IsModified = true;
+                // Update other fields
+                existingELearning.Title = eLearning.Title;
+                existingELearning.Description = eLearning.Description;
+                existingELearning.UpdatedAt = DateTime.UtcNow;
 
                 await ctx.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
-                return View(eLearning);
+                // Add general error
+                ModelState.AddModelError("", $"An unexpected error occurred: {ex.Message}");
+                return View(existingELearning);
             }
         }
-
 
 
         public async Task<IActionResult> Delete(int? id)

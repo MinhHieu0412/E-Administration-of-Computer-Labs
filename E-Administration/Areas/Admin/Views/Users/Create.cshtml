@@ -13,19 +13,7 @@
             {
                 @Html.AntiForgeryToken()
 
-                <!-- Hiển thị thông báo lỗi server-side -->
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger">
-                        <h5><strong>Errors Detected:</strong></h5>
-                        <ul>
-                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                            {
-                                <li>@error.ErrorMessage</li>
-                            }
-                        </ul>
-                    </div>
-                }
+                
 
                 <div class="row">
                     <!-- UserName -->

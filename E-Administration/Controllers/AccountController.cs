@@ -33,16 +33,22 @@ namespace E_Administration.Controllers
                 var acc = await ctx.Users.SingleOrDefaultAsync(x => x.Email == model.Email);
                 if (acc != null)
                 {
+                    //string hashedPassword = BCrypt.Net.BCrypt.HashPassword("$12$OuYictQNaUloxwWwozyyauBn8iVw9IKMnskt0AXfQeBUiTIbzCdCm");
 
-                    if(BCrypt.Net.BCrypt.Verify(model.Password, acc.Password))
+                    if (!BCrypt.Net.BCrypt.Verify(model.Password, acc.Password))
+                    {
+                        ModelState.AddModelError("Password", "Invalid password.");
+                    }
+                    else
                     {
                         // Tạo thông tin xác thực
                         var claims = new List<Claim>
                     {
                          new Claim(ClaimTypes.NameIdentifier, acc.ID.ToString()), // Thêm User ID vào claim
-        new Claim(ClaimTypes.Email, acc.Email),
-        new Claim(ClaimTypes.Role, acc.Role),
-        new Claim("UserName", acc.UserName)
+                        new Claim(ClaimTypes.Email, acc.Email),
+                        new Claim(ClaimTypes.Role, acc.Role),
+                        new Claim("UserName", acc.UserName),
+                        new Claim("UserImage", acc.Image ?? "default-profile-pic.jpg")
                     };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -64,11 +70,7 @@ namespace E_Administration.Controllers
                             return RedirectToAction("Index", "PageUser", new { area = "User" });
                         }
                     }
-                    else
-                    {
-                        ModelState.AddModelError("Password", "Invalid password.");
-                    }
-                   
+
                 }
                 else
                 {

@@ -17,8 +17,18 @@ namespace E_Administration.Areas.Admin.Controllers
             this.ctx = ctx;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var userCount = await ctx.Users.CountAsync();
+            var labCount = await ctx.Labs.CountAsync();
+            var eLearningCount = await ctx.ELearning.CountAsync();
+            var reportCount = await ctx.IssueReports.CountAsync();
+
+            // Prepare data for the view
+            ViewBag.UserCount = userCount;
+            ViewBag.LabCount = labCount;
+            ViewBag.ELearningCount = eLearningCount;
+            ViewBag.ReportCount = reportCount;
             return View("Dashboard");
         }
 

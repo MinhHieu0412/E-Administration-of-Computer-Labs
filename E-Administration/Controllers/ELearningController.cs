@@ -24,5 +24,17 @@ namespace E_Administration.Controllers
 
             return View(elearn);
         }
+
+        // Display details of a specific e-learning resource
+        public IActionResult Details(int id)
+        {
+            var elearning = _context.ELearning.Include(e => e.User).FirstOrDefault(e => e.ID == id);
+            if (elearning == null)
+            {
+                return NotFound();
+            }
+            return View(elearning);
+        }
+
     }
 }

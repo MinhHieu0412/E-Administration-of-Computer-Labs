@@ -65,10 +65,6 @@ namespace E_Administration.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<TimeSpan>("TimeEnd")
                         .HasColumnType("time");
 
@@ -287,7 +283,6 @@ namespace E_Administration.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DepartmentID")
@@ -312,7 +307,6 @@ namespace E_Administration.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
@@ -331,7 +325,6 @@ namespace E_Administration.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("AdminResponse")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -347,6 +340,10 @@ namespace E_Administration.Migrations
 
                     b.Property<int>("RequestedByID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
@@ -372,6 +369,9 @@ namespace E_Administration.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Feedback")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
@@ -387,6 +387,8 @@ namespace E_Administration.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("LeaveRequests");
                 });
@@ -604,6 +606,17 @@ namespace E_Administration.Migrations
                     b.Navigation("RequestedBy");
                 });
 
+            modelBuilder.Entity("E_Administration.Models.LeaveRequest", b =>
+                {
+                    b.HasOne("E_Administration.Models.User", "User")
+                        .WithMany("LeaveRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("E_Administration.Models.RepairAssignments", b =>
                 {
                     b.HasOne("E_Administration.Models.IssueReports", "IssueReports")
@@ -686,6 +699,8 @@ namespace E_Administration.Migrations
                     b.Navigation("IssueReports");
 
                     b.Navigation("LabRequests");
+
+                    b.Navigation("LeaveRequests");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,7 @@
                 <nav class="my-auto" aria-label="breadcrumb">
                     <ol class="breadcrumb p-0 my-auto" style="background: none;">
                         <li class="breadcrumb-item"><a href="dashboard.html" class="orange">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Course </li>
+                        <li class="breadcrumb-item active" aria-current="page">Assignment </li>
                     </ol>
                 </nav>
                 <button class="btn bg-orange text-white" data-toggle="modal" data-target="#staticBackdrop">
@@ -26,25 +26,25 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.ID)
+                                   ID
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.UserID)
+                                    Lecturer
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.LabID)
+                                    Lab
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Date)
+                                    Date
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TimeStart)
+                                    TimeStart
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TimeEnd)
+                                    TimeEnd
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Notes)
+                                   Notes
                                 </th>
                                 <th>Status</th>
                                 <th></th>
@@ -86,11 +86,20 @@
                                         }
                                     </td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm edit-assignment" data-id="@item.ID">
-                                            Edit
-                                        </button>
-                                        @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+                                        @if (item.Date.Add(item.TimeStart) < DateTime.Now)
+                                        {
+                                            <!-- Nếu phân công đã hoàn thành -->
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-sm" })
+                                        }
+                                        else
+                                        {
+                                            <!-- Nếu phân công chưa hoàn thành -->
+                                            <button class="btn btn-warning btn-sm edit-assignment" data-id="@item.ID">
+                                                Edit
+                                            </button>
+                                        }
                                     </td>
+
                                     
 
                                 </tr>
@@ -99,7 +108,7 @@
                     </table>
                 </div>
                 <!-- !Table Content Section -->
-                <!-- Pagination -->
+                @* <!-- Pagination -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
@@ -117,7 +126,7 @@
                         </li>
                     </ul>
                 </nav>
-                <!-- !Pagination -->
+                <!-- !Pagination --> *@
             </div>
         </div>
     </div>
@@ -317,8 +326,20 @@
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.success) {
-                        alert(response.message);
-                        location.reload();
+                        Toastify({
+                            text: "Assignment created successfully!",
+                            duration: 2000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "green",
+                            stopOnFocus: true
+                        }).showToast();
+
+                        // Success: Close modal and reload table
+                        $('#staticBackdrop').modal('hide');
+                        setTimeout(function () {
+                           location.reload();
+                        }, 2000);
                     } else {
                         alert("An unexpected error occurred.");
                     }
@@ -339,26 +360,19 @@
             $.get('/Admin/Assignment/DetailsAjax/' + assignmentId, function (assignment) {
                 console.log(assignment);
 
-                console.log("Raw Date:", assignment.date);  // Ghi lại giá trị ngày thô
+    console.log("Raw Date:", assignment.date);  // Ghi lại giá trị ngày thô
 
-                // Loại bỏ phần microseconds nếu có và chuyển đổi thành định dạng mà JavaScript có thể hiểu được
-                var rawDate = assignment.date;
-                var date = new Date(rawDate.replace(/\.\d+$/, ''));  // Loại bỏ phần microseconds
+    // Chuyển đổi ngày từ server về định dạng YYYY-MM-DD mà không bị ảnh hưởng bởi timezone
+    var rawDate = assignment.date.split('T')[0]; // Lấy phần "2024-12-26" trước ký tự 'T'
 
-                if (isNaN(date.getTime())) {
-                    console.error("Invalid date value:", assignment.date);
-                    alert("Giá trị ngày không hợp lệ nhận được.");
-                    return;
-                }
-
-                // Chuyển đổi thành định dạng YYYY-MM-DD
-                var formattedDate = date.toISOString().split('T')[0];
+    // Gán giá trị này trực tiếp cho trường input
+    $('#editDate').val(rawDate);
 
                 // Populate form fields with the fetched assignment data
                 $('#editAssignmentID').val(assignment.id);  // Add this for the hidden field
                
                 
-                $('#editDate').val(formattedDate);
+               $('#editDate').val(rawDate);
                 $('#editTimeStart').val(assignment.timeStart);
                 $('#editTimeEnd').val(assignment.timeEnd);
                 $('#editNotes').val(assignment.notes);
@@ -449,8 +463,20 @@
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.success) {
-                        alert(response.message);
-                        location.reload();  // Refresh the page after successful edit
+                        Toastify({
+                            text: "Assignment created successfully!",
+                            duration: 2000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "green",
+                            stopOnFocus: true
+                        }).showToast();
+
+                        // Success: Close modal and reload table
+                        $('#editAssignmentModal').modal('hide');
+                        setTimeout(function () {
+                           location.reload();
+                        }, 2000);  // Refresh the page after successful edit
                     } else {
                         alert("An unexpected error occurred.");
                     }
@@ -461,9 +487,6 @@
             });
         });
     });
-
-
-
 
 </script>
 

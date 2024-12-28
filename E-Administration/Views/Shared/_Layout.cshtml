@@ -285,6 +285,143 @@
             margin-bottom: 5px; /* Tạo khoảng cách với input */
         }
 
+        .custom-badge {
+            font-size: 1.25rem; /* Bạn có thể điều chỉnh lại kích thước ở đây */
+            padding: 0.5rem 1rem;
+        }
+
+        /*nguyen*/
+        
+        /* Tạo một khoảng cách giữa các item trong carousel */
+        .owl-carousel .item {
+            padding: 15px;
+        }
+
+        /* eLearning Specific Styles */
+        .elearning-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100%;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border-radius: 8px;
+            padding: 15px; /* Padding tổng thể */
+            gap: 15px; /* Khoảng cách giữa các thành phần */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng nhẹ */
+        }
+
+            /* Hover effect for cards */
+            .elearning-card:hover {
+                background-color: #ffefa1;
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            }
+
+        /* Phần ảnh của card */
+        .elearning-card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        /* Tiêu đề của card */
+        .elearning-card-title {
+            font-size: 1rem;
+            text-align: center;
+            line-height: 1.4;
+            word-wrap: break-word;
+            margin-bottom: 15px;
+            color: #007bff; /* Màu xanh cho tiêu đề */
+        }
+
+        /* Footer chứa các nút */
+        .elearning-card-footer {
+            display: flex; /* Bố trí các nút trên cùng một hàng */
+            justify-content: space-around; /* Căn cách đều khoảng cách giữa các nút */
+            align-items: center; /* Căn giữa theo trục dọc */
+            gap: 20px; /* Khoảng cách giữa các nút */
+            padding: 10px 0; /* Khoảng cách trên và dưới trong footer */
+        }
+
+        /* Nút chính (Download PDF) */
+        .elearning-btn {
+            display: inline-flex; /* Để biểu tượng và văn bản căn đều */
+            align-items: center; /* Căn giữa biểu tượng với văn bản */
+            justify-content: center; /* Căn giữa nội dung nút */
+            text-align: center; /* Căn giữa văn bản */
+            font-size: 0.85rem; /* Kích thước chữ vừa phải */
+            padding: 8px 12px; /* Padding trong nút */
+            border-radius: 6px; /* Bo tròn nhẹ cho nút */
+            background-color: #007bff; /* Màu nền nút mặc định */
+            color: white; /* Màu chữ */
+            text-decoration: none; /* Loại bỏ gạch chân cho link */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            /* Hover effect for buttons */
+            .elearning-btn:hover {
+                background-color: #0056b3; /* Màu nền khi hover */
+                color: #fff;
+            }
+
+        .elearning-btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            margin-right: 5px;
+        }
+
+            .elearning-btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .elearning-btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+
+            .elearning-btn-secondary:hover {
+                background-color: #565e64;
+            }
+
+        .elearning-btn i {
+            margin-right: 5px;
+        }
+
+        /* Đảm bảo nút không tràn ra khỏi container */
+        .elearning-card-footer > .elearning-btn {
+            max-width: calc(50% - 5px); /* Chiều rộng tối đa của mỗi nút */
+        }
+
+
+
+
+
+
+        .custom-orange-button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+            .custom-orange-button:hover {
+                background-color: darkorange;
+                color: white;
+            }
+
+        .custom-orange-button {
+            margin: 20px; /* Khoảng cách phía dưới */
+        }
+
+        /*nguyen*/
+
+
     </style>
 
 </head>

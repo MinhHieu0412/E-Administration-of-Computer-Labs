@@ -20,21 +20,48 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="User" asp-controller="AboutUs" asp-action="index">AboutUs</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Index" asp-controller="ELearning" asp-area="user">E Learning</a>
-                    </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link" asp-area="User" asp-controller="Contact" asp-action="index">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="LeaveRequest" asp-action="Index">LeaveRequest</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="MakeUpRequest" asp-action="Index">MakeUpRequest</a>
-                    </li>
+                    
+                    @if (User.IsInRole("Lecturer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LeaveRequest" asp-action="Index">Leave Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="MakeUpRequest" asp-action="Index">MakeUpRequest</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="ELearning" asp-area="User">E Learning</a>
+                        </li>
+                    }
+                    else if (User.IsInRole("Technician"))
+                    {
+
+                    }
+                    else if (User.IsInRole("HOD"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LabRequests" asp-action="MyRequests" asp-area="User">Lab Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="ViewReport" asp-action="Index" asp-area="User">IssueReports</a>
+                        </li>
+                    }
+                    @* @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    } *@
                 </ul>
                 <div class="dropdown">
                     <a class="user-nav-show" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,12 +70,12 @@
                             <span>Welcome, @User.FindFirst("UserName")?.Value</span>
                         }
                        
-                        <img src="assests/img/profile-pic.jpg" class="rounded-pill">
+                        <img src="@User.FindFirst("UserImage")?.Value" class="rounded-pill">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" asp-action="Details" asp-controller="Profile" asp-area="User"><i class="fas fa-cog"></i>Edit Profile</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
                     </div>
                 </div>
             </div>
