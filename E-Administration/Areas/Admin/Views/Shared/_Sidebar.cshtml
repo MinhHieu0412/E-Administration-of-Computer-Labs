@@ -1,6 +1,6 @@
 ﻿<div class="sidebar">
     <div class="p-md-2 px-5 py-3" id="dashboard-brand">
-        <a href="dashboard.html"><img src="~/img/logo-dark.png" width="60px" alt=""></a>
+        <a asp-controller="Admin" asp-action="Index" asp-area="Admin"><img src="~/img/logo-dark.png" width="60px" alt=""></a>
         <button class="btn toggler-btn">
             <i class="fas fa-bars"></i>
         </button>
@@ -19,8 +19,8 @@
         <a class="sidebar-link" asp-controller="Assignment" asp-action="Index" asp-area="Admin">
             <i class="fas fa-briefcase"></i>Assignments
         </a>
-        <a class="sidebar-link" href="complaints.html">
-            <i class="fas fa-lightbulb"></i>Complaints
+        <a class="sidebar-link" asp-area="Admin" asp-controller="Repair" asp-action="Index">
+            <i class="fas fa-lightbulb"></i>Report
         </a>
         <a class="sidebar-link" asp-controller="Users" asp-action="Index" asp-area="Admin">
             <i class="fas fa-users"></i>Accounts
@@ -36,6 +36,13 @@
         </a>
         <a class="sidebar-link" asp-area="Admin" asp-controller="LabRequests" asp-action="Index">
             <i class="fas fa-solid fa-building"></i> LabRequest
+        </a>
+     @*    
+        <a asp-area="Admin" asp-controller="Repair" asp-action="Index">
+        <i class="fas fa-address-book"></i> Reports 
+        </a> *@
+        <a asp-area="Admin" asp-controller="RepairAssignment" asp-action="Index">
+            <i class="fas fa-address-book"></i> RepairAssignment
         </a>
     </div>
     <!-- !Sidebar Nav -->

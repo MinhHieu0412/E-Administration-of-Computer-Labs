@@ -1,0 +1,102 @@
+﻿@model E_Administration.Models.Lab
+
+@{
+    ViewData["Title"] = $"Details for Lab {Model.Name}";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main-content">
+    <section id="lab-details-section" class="py-5">
+        <div class="container">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <h3>Details for Lab: @Model.Name</h3>
+            <p><strong>Department:</strong> @Model?.DepartmentID.ToString()</p>
+            <p><strong>Location:</strong> @Model?.Location</p>
+            <p><strong>Capacity:</strong> @Model?.Capacity</p>
+
+            <!-- Danh sách máy chỉ hiển thị, không chọn -->
+            <h5>Machines in Lab</h5>
+            <ul class="list-group mb-4">
+                @foreach (var equipment in Model.Equipments)
+                {
+                    <li class="list-group-item">
+                        <strong>Machine ID:</strong> @equipment.ID <br />
+                        <strong>Name:</strong> @equipment.Name <br />
+                        <strong>Serial Number:</strong> @equipment?.SerialNumber <br />
+                    </li>
+                }
+            </ul>
+
+            <!-- Form báo cáo sự cố -->
+            <h5>Report an Issue</h5>
+            <!-- Chuyển hướng đến Admin/Report/Submit (hoặc User/Report/Submit),
+                 tùy cách bạn tổ chức area/controller -->
+            <form method="post" asp-area="User" asp-controller="Report" asp-action="Submit">
+                <!-- Giá trị ngầm truyền -->
+                <input type="hidden" name="labId" value="@Model.ID" />
+                <input type="hidden" name="departmentId" value="@Model.DepartmentID" />
+
+                <!-- Hiện tại code cũ dùng reporterId kiểu int,
+                     nhưng bạn đang gán = @User?.Identity?.Name (chuỗi).
+                     Nếu reporterId là int, bạn cần logic mapping userName -> userId.
+                     Ở đây ta tạm để int, tùy bạn điều chỉnh. -->
+                <input type="hidden" name="reporterId" value="1" />
+
+                <!-- Dropdown chọn máy -->
+                <div class="form-group">
+                    <label for="equipmentId">Select Machine:</label>
+                    <select class="form-control" id="equipmentId" name="equipmentId" required>
+                        <option value="">-- Choose a machine --</option>
+                        @foreach (var equip in Model.Equipments)
+                        {
+                            <option value="@equip.ID">(@equip.ID) @equip.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Dropdown chọn số thứ tự 1–5 -->
+                <div class="form-group">
+                    <label for="issueLevel">Issue Level (1–5):</label>
+                    <select class="form-control" id="issueLevel" name="issueLevel" required>
+                        <option value="">-- Choose Level --</option>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Mô tả sự cố -->
+                <div class="form-group">
+                    <label for="Description">Description of the Issue:</label>
+                    <textarea id="Description" name="description" class="form-control" rows="5" required></textarea>
+                </div>
+
+                <!-- Nút submit -->
+                <button  asp-controller="Report" asp-action="Submit" type="submit" class="btn btn-primary mt-3">
+                    Submit Report
+                </button>
+            </form>
+        </div>
+    </section>
+</main>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
