@@ -36,9 +36,18 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-action="Index" asp-controller="ELearning" asp-area="User">E Learning</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Report" asp-controller="Report" asp-area="User">Report</a>
+                        </li>
                     }
                     else if (User.IsInRole("Technician"))
                     {
+
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="RepairAssignment" asp-area="Admin">Repair Assignment</a>
+                        </li>
 
                     }
                     else if (User.IsInRole("HOD"))
