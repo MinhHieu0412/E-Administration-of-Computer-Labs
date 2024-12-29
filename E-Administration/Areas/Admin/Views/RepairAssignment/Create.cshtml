@@ -1,0 +1,56 @@
+﻿@model E_Administration.Models.RepairAssignments
+
+<div class="container mt-4">
+    <h2>Create Repair Assignment</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="Create" method="post">
+        <!-- Dropdown Issue Reports -->
+        <div class="form-group">
+            <label for="IssueReportID">Select Issue Report</label>
+            <select id="IssueReportID" name="IssueReportID" class="form-control" required>
+                <option value="">-- Select Issue Report --</option>
+                @if (ViewBag.IssueReports != null)
+                {
+                    foreach (var report in ViewBag.IssueReports)
+                    {
+                        <option value="@report.ID">@report.Description</option>
+                    }
+                }
+                else
+                {
+                    <option value="">No issue reports available</option>
+                }
+            </select>
+        </div>
+
+        <!-- Dropdown Users -->
+        <div class="form-group">
+            <label for="TechnicianID">Assign to User</label>
+            <select id="TechnicianID" name="TechnicianID" class="form-control" required>
+                <option value="">-- Select User --</option>
+                @if (ViewBag.Users != null)
+                {
+                    foreach (var user in ViewBag.Users)
+                    {
+                        <option value="@user.ID">@user.UserName</option>
+                    }
+                }
+                else
+                {
+                    <option value="">No users available</option>
+                }
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Assignment</button>
+        <a href="/Admin/RepairAssignment/Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
