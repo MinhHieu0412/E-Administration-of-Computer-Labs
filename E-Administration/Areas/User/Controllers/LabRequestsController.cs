@@ -22,6 +22,7 @@ namespace E_Administration.Areas.User.Controllers
         {
             // Pass available departments to the view
             ViewBag.Departments = _context.Departments.ToList();
+            
             return View();
         }
 
@@ -98,7 +99,10 @@ namespace E_Administration.Areas.User.Controllers
                 .Include(lr => lr.Department)
                 .Where(lr => lr.RequestedByID == userId)
                 .ToListAsync();
-
+            if(requests == null)
+            {
+                return NotFound();
+            }
             return View(requests);
         }
 
