@@ -21,6 +21,10 @@ namespace E_Administration.Areas.Admin.Controllers
             var labRequests = _context.LabRequests
         .Include(l => l.Department) // Eager load Department
         .ToList();
+            if(labRequests == null)
+            {
+                return NotFound();
+            }
             return View(labRequests);
         }
 

@@ -1,0 +1,34 @@
+﻿@model E_Administration.Models.IssueReports
+
+@{
+    ViewData["Title"] = "Approve Report";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main-content">
+    <section class="py-5">
+        <div class="container">
+            <h3>Approve Issue Report</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Report ID:</strong> @Model.ID</p>
+                    <p><strong>Lab:</strong> @Model.Lab?.Name (@Model.LabID)</p>
+                    <p><strong>Department:</strong> @Model.Department?.Name (@Model.DepartmentID)</p>
+                    <p><strong>Reporter:</strong> @Model.Reporter?.UserName (@Model.ReporterID)</p>
+                    <p><strong>Description:</strong> @Model.Description</p>
+                    <p><strong>Equipment ID:</strong> @Model.EquipmentID</p>
+                    <p><strong>Status:</strong> @Model.Status</p>
+                    <p><strong>Created At:</strong> @Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</p>
+                    <p><strong>Updated At:</strong> @Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm")</p>
+                </div>
+            </div>
+
+            <form asp-area="Admin" asp-controller="Repair" asp-action="ApproveConfirmed" asp-route-id="@Model.ID" method="post">
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">Approve</button>
+                    <a asp-area="Admin" asp-controller="Repair" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>

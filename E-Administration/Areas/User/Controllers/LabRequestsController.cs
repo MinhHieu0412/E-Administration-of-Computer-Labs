@@ -3,9 +3,7 @@ using E_Administration.Dto;
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace E_Administration.Areas.User.Controllers
 {
@@ -24,6 +22,7 @@ namespace E_Administration.Areas.User.Controllers
         {
             // Pass available departments to the view
             ViewBag.Departments = _context.Departments.ToList();
+            
             return View();
         }
 
@@ -32,16 +31,16 @@ namespace E_Administration.Areas.User.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LabRequestDto labRequestDto)
         {
-            // Lấy thông tin UserID từ Claims (xác nhận người dùng đã đăng nhập)
+            // Get UserID information from Claims (confirm user is logged in)
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
                 ModelState.AddModelError(string.Empty, "User ID is missing or invalid. Please log in again.");
                 PopulateDepartments();
-                return View(labRequestDto);  // Trả lại DTO nếu có lỗi
+                return View(labRequestDto); 
             }
 
-            // Kiểm tra nếu DepartmentID hoặc RequestedByID không hợp lệ
+            // Check if DepartmentID or RequestedByID is invalid
             if (labRequestDto.DepartmentID == 0)
             {
                 ModelState.AddModelError("DepartmentID", "Please select a department.");
@@ -54,19 +53,19 @@ namespace E_Administration.Areas.User.Controllers
 
             if (ModelState.IsValid)
             {
-                // Mapping dữ liệu từ DTO sang Entity
+                // Mapping data from DTO to Entity
                 var labRequest = new LabRequests
                 {
                     DepartmentID = labRequestDto.DepartmentID,
-                    RequestedByID = userId,  // Gán ID người yêu cầu từ Claims
+                    RequestedByID = userId,  
                     Purpose = labRequestDto.Purpose,
                     AdminResponse = labRequestDto.AdminResponse,
-                    Status = "Pending",  // Trạng thái mặc định
+                    Status = "Pending",  
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
 
-                // Lưu vào database
+                
                 await _context.LabRequests.AddAsync(labRequest);
                 await _context.SaveChangesAsync();
 
@@ -75,7 +74,7 @@ namespace E_Administration.Areas.User.Controllers
 
             // Reload departments if validation fails
             PopulateDepartments();
-            return View(labRequestDto);  // Trả lại DTO nếu có lỗi
+            return View(labRequestDto);  
         }
 
 
@@ -100,7 +99,10 @@ namespace E_Administration.Areas.User.Controllers
                 .Include(lr => lr.Department)
                 .Where(lr => lr.RequestedByID == userId)
                 .ToListAsync();
-
+            if(requests == null)
+            {
+                return NotFound();
+            }
             return View(requests);
         }
 

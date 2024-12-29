@@ -30,9 +30,9 @@
                         <i class="fas fa-desktop"></i>
                         <br>Labs
                     </a>
-                    <a href="complaint.html" class="bg-yellow icons-item">
+                    <a asp-controller="Report" asp-action="Report" class="bg-yellow icons-item">
                         <i class="fas fa-lightbulb"></i>
-                        <br>Complains
+                        <br>Report
                     </a>
                     <a asp-action="Index" asp-controller="ELearning" asp-area="user" class="bg-yellow icons-item">
                         <i class="fas fa-book-open"></i>
@@ -144,7 +144,7 @@
         <div class="container">
             <h3>Do you have any Complains ?</h3>
             <p>Getting involved with support to improve our standards for better experience!</p>
-            <a href="complaint.html" class="btn rounded-pill px-4">Complain Now</a>
+            <a asp-area="User" asp-controller="Report" asp-action="Report" class="btn rounded-pill px-4">Complain Now</a>
         </div>
     </section>
 <!-- !Complain Section -->

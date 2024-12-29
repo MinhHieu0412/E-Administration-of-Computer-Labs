@@ -20,7 +20,6 @@ namespace E_Administration.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Profile/Details/5
         public async Task<IActionResult> Details()
         {
             var userId = GetLoggedInUserId();   // Giả định bạn có logic xác định user đã đăng nhập
