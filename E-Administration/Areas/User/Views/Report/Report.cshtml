@@ -1,0 +1,40 @@
+﻿@using E_Administration.Models
+@{
+    ViewData["Title"] = "Report Issue";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+
+<main id="main-content">
+    <section id="report-section" class="py-5">
+        <div class="container">
+            <h3>Select a Lab to Report an Issue</h3>
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <!-- Lab Buttons -->
+            <div class="mb-4">
+                @if (ViewData["Labs"] is IEnumerable<dynamic> labs)
+                {
+                    foreach (var lab in labs)
+                    {
+                        <button class="btn btn-primary m-2"
+                                onclick="location.href='@Url.Action("ReportDetails", "Report", new { labId = lab.ID })'">
+                            @lab.Name
+                        </button>
+                    }
+                }
+                else
+                {
+                    <p>No labs available.</p>
+                }
+            </div>
+        </div>
+    </section>
+</main>
