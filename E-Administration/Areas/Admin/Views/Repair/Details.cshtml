@@ -26,10 +26,19 @@
                 </div>
             </div>
             <!-- Approve Button -->
-            <form method="post" asp-area="Admin" asp-controller="Repair" asp-action="ApproveConfirmed" asp-route-id="@Model.ID" class="d-inline">
+            <form method="post" asp-area="Admin" asp-controller="Repair" asp-action="ApprovePage" asp-route-id="@Model.ID" class="d-inline">
                 <button type="submit" class="btn btn-success">Approve</button>
             </form>
 
+
+            <div class="mt-3">
+                <a asp-area="Admin"
+                   asp-controller="RepairAssignment"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Back to Repair Assignments
+                </a>
+            </div>
 
             <div class="mt-3">
                 <a asp-area="Admin"

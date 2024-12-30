@@ -1,0 +1,17 @@
+﻿@model E_Administration.Models.IssueReports
+
+<div class="container mt-4">
+    <h2>Approve Report</h2>
+    <p>Are you sure you want to approve this report?</p>
+
+    <ul>
+        <li><strong>ID:</strong> @Model.ID</li>
+        <li><strong>Description:</strong> @Model.Description</li>
+        <li><strong>Status:</strong> @Model.Status</li>
+    </ul>
+
+    <form asp-action="Approve" asp-route-id="@Model.ID" method="post">
+        <button type="submit" class="btn btn-success">Approve</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

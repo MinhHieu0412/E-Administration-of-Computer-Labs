@@ -11,7 +11,7 @@ namespace E_Administration.Models
         public int DepartmentID { get; set; }
 
         [NotMapped]
-        public Department Department { get; set; }
+        public Department? Department { get; set; }
 
         [Required]
         [StringLength(500)]
