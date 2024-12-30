@@ -5,12 +5,19 @@
     Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
 }
 
+<nav class="my-auto" aria-label="breadcrumb">
+    <ol class="breadcrumb p-0 my-auto" style="background: none;">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Admin" asp-action="Dashboard" class="orange">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Report</li>
+    </ol>
+</nav>
+
 <main id="main-content">
     <section id="lab-details-section" class="py-5">
         <div class="container">
 
             @if (TempData["SuccessMessage"] != null)
-            {
+            {                   
                 <div class="alert alert-success" role="alert">
                     @TempData["SuccessMessage"]
                 </div>

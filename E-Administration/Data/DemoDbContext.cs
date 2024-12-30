@@ -84,6 +84,12 @@ namespace E_Administration.Data
            .WithMany(e => e.IssueReports)
            .HasForeignKey(ir => ir.EquipmentID);
 
+            modelBuilder.Entity<IssueReports>()
+      .HasOne(ir => ir.Department)
+      .WithMany(d => d.IssueReports) // Assuming Department has a collection of IssueReports
+      .HasForeignKey(ir => ir.DepartmentID) // Specify the correct foreign key
+      .HasConstraintName("FK_IssueReports_Department");
+
             // LabRequest -> Department (Many-to-One)
             modelBuilder.Entity<LabRequests>()
                 .HasOne(lr => lr.Department)

@@ -5,16 +5,26 @@
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
+    <nav class="my-auto" aria-label="breadcrumb">
+        <ol class="breadcrumb p-0 my-auto" style="background: none;">
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-controller="Admin" asp-action="Dashboard" class="orange">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Create Repair Assignment</li>
+        </ol>
+    </nav>
+
     <form asp-action="Create" method="post">
         <!-- Dropdown Issue Reports -->
-        <div class="form-group">
-            <label for="IssueReportID">Select Issue Report</label>
-            <select id="IssueReportID" name="IssueReportID" class="form-control" required>
+        <div class="form-group mb-3">
+            <label for="IssueReportID" class="form-label">Select Issue Report</label>
+            <select id="IssueReportID" name="IssueReportID" class="form-select" required>
                 <option value="">-- Select Issue Report --</option>
                 @if (ViewBag.IssueReports != null)
                 {
@@ -31,9 +41,9 @@
         </div>
 
         <!-- Dropdown Users -->
-        <div class="form-group">
-            <label for="TechnicianID">Assign to User</label>
-            <select id="TechnicianID" name="TechnicianID" class="form-control" required>
+        <div class="form-group mb-3">
+            <label for="TechnicianID" class="form-label">Assign to User</label>
+            <select id="TechnicianID" name="TechnicianID" class="form-select" required>
                 <option value="">-- Select User --</option>
                 @if (ViewBag.Users != null)
                 {
@@ -49,8 +59,10 @@
             </select>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Create Assignment</button>
-        <a href="/Admin/RepairAssignment/Index" class="btn btn-secondary">Cancel</a>
+        <!-- Submit and Cancel Buttons -->
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Create Assignment</button>
+            <a asp-area="Admin" asp-controller="RepairAssignment" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
