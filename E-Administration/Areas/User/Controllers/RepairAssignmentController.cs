@@ -1,13 +1,12 @@
 ﻿using E_Administration.Data;
-using E_Administration.Dto;
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace E_Administration.Areas.Admin.Controllers
+namespace E_Administration.Areas.User.Controllers
 {
-    [Area("Admin")]
-    [Route("Admin/[controller]")]
+    [Area("User")]
+    [Route("User/[controller]")]
     public class RepairAssignmentController : Controller
     {
         private readonly DemoDbContext _dbContext;
@@ -102,7 +101,6 @@ namespace E_Administration.Areas.Admin.Controllers
 
 
 
-        // GET: Delete (Hiển thị trang xác nhận xóa nhiệm vụ)
         [HttpGet("Confirm/{id}")] // Rõ ràng endpoint cho Confirm GET
         public IActionResult Confirm(int id)
         {
@@ -171,8 +169,26 @@ namespace E_Administration.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet("DetailsRepair/{id}")]
+        public IActionResult DetailRepair(int id)
+        {
+            var report = _dbContext.IssueReports
+                .Include(ir => ir.Lab)
+                .Include(ir => ir.Department)
+                .Include(ir => ir.Reporter)
+                .Include(ir => ir.Equipments) // Bao gồm thông tin Equipment
+                .FirstOrDefault(ir => ir.ID == id);
+
+            if (report == null)
+            {
+                TempData["ErrorMessage"] = "Report not found.";
+                return RedirectToAction("Index");
+            }
+
+            return View(report);
+        }
+
+
+
     }
-
-
-
 }
