@@ -20,20 +20,11 @@ namespace E_Administration.Areas.User.Controllers
         public IActionResult Index()
         {
             var assignments = _dbContext.RepairAssignments
-<<<<<<< HEAD
                 .Include(ra => ra.IssueReports) // Sử dụng navigation property đúng
                 .Include(ra => ra.Technician) // Sử dụng navigation property đúng
                 .ToList();
 
             return View(assignments);
-=======
-        .Include(ra => ra.IssueReports)
-        .Include(ra => ra.Technician)
-        .ToList();
-
-            return View(assignments);
-
->>>>>>> hhuy
         }
 
         [HttpGet("Create")]
@@ -89,41 +80,7 @@ namespace E_Administration.Areas.User.Controllers
             return View(assignment);
         }
 
-<<<<<<< HEAD
-        //[HttpGet("Edit/{id}")]
-        //public IActionResult Edit(int id)
-        //{
-        //    var assignment = _dbContext.RepairAssignments
-        //        .Include(ra => ra.IssueReports)
-        //        .Include(ra => ra.Technician)
-        //        .FirstOrDefault(ra => ra.ID == id);
 
-        //    if (assignment == null)
-        //        return NotFound();
-
-        //    ViewBag.IssueReports = _dbContext.IssueReports.ToList();
-        //    ViewBag.Technicians = _dbContext.Users.ToList();
-        //    return View(assignment);
-        //}
-
-        //[HttpPost("Edit/{id}")]
-        //public IActionResult Edit(RepairAssignments assignment)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        assignment.UpdatedAt = DateTime.Now;
-        //        _dbContext.RepairAssignments.Update(assignment);
-        //        _dbContext.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.IssueReports = _dbContext.IssueReports.ToList();
-        //    ViewBag.Technicians = _dbContext.Users.ToList();
-        //    return View(assignment);
-        //}
-
-=======
->>>>>>> hhuy
 
         [HttpGet("Details/{id}")]
         public IActionResult Details(int id)
@@ -143,18 +100,7 @@ namespace E_Administration.Areas.User.Controllers
         }
 
 
-<<<<<<< HEAD
-        [HttpPost("Delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            var assignment = _dbContext.RepairAssignments.Find(id);
-            if (assignment == null) return NotFound();
-
-            _dbContext.RepairAssignments.Remove(assignment);
-            _dbContext.SaveChanges();
-            return RedirectToAction("Index");
-        }
-=======
+      
 
         [HttpGet("Confirm/{id}")] // Rõ ràng endpoint cho Confirm GET
         public IActionResult Confirm(int id)
@@ -245,6 +191,5 @@ namespace E_Administration.Areas.User.Controllers
 
 
 
->>>>>>> hhuy
     }
 }
