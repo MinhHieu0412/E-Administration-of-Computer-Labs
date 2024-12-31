@@ -20,11 +20,20 @@ namespace E_Administration.Areas.User.Controllers
         public IActionResult Index()
         {
             var assignments = _dbContext.RepairAssignments
+<<<<<<< HEAD
                 .Include(ra => ra.IssueReports) // Sử dụng navigation property đúng
                 .Include(ra => ra.Technician) // Sử dụng navigation property đúng
                 .ToList();
 
             return View(assignments);
+=======
+        .Include(ra => ra.IssueReports)
+        .Include(ra => ra.Technician)
+        .ToList();
+
+            return View(assignments);
+
+>>>>>>> hhuy
         }
 
         [HttpGet("Create")]
@@ -80,6 +89,7 @@ namespace E_Administration.Areas.User.Controllers
             return View(assignment);
         }
 
+<<<<<<< HEAD
         //[HttpGet("Edit/{id}")]
         //public IActionResult Edit(int id)
         //{
@@ -112,6 +122,8 @@ namespace E_Administration.Areas.User.Controllers
         //    return View(assignment);
         //}
 
+=======
+>>>>>>> hhuy
 
         [HttpGet("Details/{id}")]
         public IActionResult Details(int id)
@@ -131,6 +143,7 @@ namespace E_Administration.Areas.User.Controllers
         }
 
 
+<<<<<<< HEAD
         [HttpPost("Delete/{id}")]
         public IActionResult Delete(int id)
         {
@@ -141,5 +154,97 @@ namespace E_Administration.Areas.User.Controllers
             _dbContext.SaveChanges();
             return RedirectToAction("Index");
         }
+=======
+
+        [HttpGet("Confirm/{id}")] // Rõ ràng endpoint cho Confirm GET
+        public IActionResult Confirm(int id)
+        {
+            var assignment = _dbContext.RepairAssignments
+                .Include(a => a.Technician)
+                .Include(a => a.IssueReports)
+                .FirstOrDefault(a => a.ID == id);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            return View("Confirm", assignment);
+        }
+
+        [HttpPost("Confirm/{id}")] // Rõ ràng endpoint cho Confirm POST
+        public IActionResult ConfirmConfirmed(int id)
+        {
+            var assignment = _dbContext.RepairAssignments.Find(id);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            assignment.IsConfirmed = true;
+            _dbContext.SaveChanges();
+
+            TempData["SuccessMessage"] = "Repair assignment has been successfully confirmed.";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("Delete/{id}")] // Rõ ràng endpoint cho Delete GET
+        public IActionResult Delete(int id)
+        {
+            var assignment = _dbContext.RepairAssignments
+                .Include(a => a.Technician)
+                .Include(a => a.IssueReports)
+                .FirstOrDefault(a => a.ID == id);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            return View("Delete", assignment);
+        }
+
+        [HttpPost("Delete/{id}")] // Rõ ràng endpoint cho Delete POST
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var assignment = _dbContext.RepairAssignments.Find(id);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.RepairAssignments.Remove(assignment);
+            _dbContext.SaveChanges();
+
+            TempData["SuccessMessage"] = "Repair assignment deleted successfully.";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("DetailsRepair/{id}")]
+        public IActionResult DetailRepair(int id)
+        {
+            var report = _dbContext.IssueReports
+                .Include(ir => ir.Lab)
+                .Include(ir => ir.Department)
+                .Include(ir => ir.Reporter)
+                .Include(ir => ir.Equipments) // Bao gồm thông tin Equipment
+                .FirstOrDefault(ir => ir.ID == id);
+
+            if (report == null)
+            {
+                TempData["ErrorMessage"] = "Report not found.";
+                return RedirectToAction("Index");
+            }
+
+            return View(report);
+        }
+
+
+
+>>>>>>> hhuy
     }
 }

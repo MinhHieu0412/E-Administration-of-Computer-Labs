@@ -82,38 +82,6 @@ namespace E_Administration.Areas.Admin.Controllers
             return View(assignment);
         }
 
-        //[HttpGet("Edit/{id}")]
-        //public IActionResult Edit(int id)
-        //{
-        //    var assignment = _dbContext.RepairAssignments
-        //        .Include(ra => ra.IssueReports)
-        //        .Include(ra => ra.Technician)
-        //        .FirstOrDefault(ra => ra.ID == id);
-
-        //    if (assignment == null)
-        //        return NotFound();
-
-        //    ViewBag.IssueReports = _dbContext.IssueReports.ToList();
-        //    ViewBag.Technicians = _dbContext.Users.ToList();
-        //    return View(assignment);
-        //}
-
-        //[HttpPost("Edit/{id}")]
-        //public IActionResult Edit(RepairAssignments assignment)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        assignment.UpdatedAt = DateTime.Now;
-        //        _dbContext.RepairAssignments.Update(assignment);
-        //        _dbContext.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.IssueReports = _dbContext.IssueReports.ToList();
-        //    ViewBag.Technicians = _dbContext.Users.ToList();
-        //    return View(assignment);
-        //}
-
 
         [HttpGet("Details/{id}")]
         public IActionResult Details(int id)

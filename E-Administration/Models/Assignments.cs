@@ -11,7 +11,7 @@ namespace E_Administration.Models
         public Lab? Lab { get; set; }
         public DateTime Date { get; set; }
         public TimeSpan TimeStart { get; set; }
-        public TimeSpan TimeEnd { get; set; }
+        public TimeSpan TimeEnd { get; set; } 
         public string? Notes { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? CreatedAt { get; set; } = DateTime.Now; // Automatically set to current timestamp
