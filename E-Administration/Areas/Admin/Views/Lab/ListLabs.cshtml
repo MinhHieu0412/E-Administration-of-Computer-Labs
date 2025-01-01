@@ -134,7 +134,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <form id="labForm" method="post">
-                                        <div id="validation-summary" class="text-danger mb-3"></div>
+                                      
                                         <div class="form-group">
                                             <label for="Lab_Name">Lab Name</label>
                                             <input type="text" class="form-control" id="Lab_Name">
@@ -276,6 +276,9 @@
             if (labName === '') {
                 isValid = false;
                 $('#error_Name').text('Lab name is required.');
+            } else if (labName.length > 100) {
+                isValid = false;
+                $('#error_Name').text('Lab name must be less than 100 characters.');
             }
 
             if (departmentID === '') {
@@ -289,11 +292,17 @@
             if (description === '') {
                 isValid = false;
                 $('#error_Description').text('Description is required.');
+            } else if (description.length > 200) {
+                isValid = false;
+                $('#error_Description').text('Description must be less than 200 characters.');
             }
 
             if (location === '') {
                 isValid = false;
                 $('#error_Location').text('Location is required.');
+            } else if (location.length > 100) {
+                isValid = false;
+                $('#error_Location').text('Location must be less than 100 characters.');
             }
 
             if (capacity === '') {
@@ -342,7 +351,7 @@
                             backgroundColor: "green",
                             stopOnFocus: true
                         }).showToast();
-                        
+
                         // Success: Close modal and reload table
                         $('#staticBackdrop').modal('hide');
                         setTimeout(function () {
@@ -360,6 +369,7 @@
             });
         });
     });
+
 
 
     //Edit function

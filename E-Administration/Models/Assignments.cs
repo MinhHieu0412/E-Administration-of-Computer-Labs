@@ -20,5 +20,6 @@ namespace E_Administration.Models
         public DateTime? UpdatedAt { get; set; } // Automatically updated on changes
         [NotMapped]
         public string? Status { get; set; }
+
     }
 }
