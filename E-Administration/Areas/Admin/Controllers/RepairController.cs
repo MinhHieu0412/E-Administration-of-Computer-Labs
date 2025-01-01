@@ -1,4 +1,4 @@
-﻿using E_Administration.Data;
+﻿ using E_Administration.Data;
 using E_Administration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,63 +21,45 @@ namespace E_Administration.Areas.Admin.Controllers
         [HttpGet("Index")]
         public IActionResult Index(string status = "All", string searchByID = "", string searchByName = "", string sortOrder = "asc")
         {
+            // Start query with necessary includes
             IQueryable<IssueReports> reportsQuery = _dbContext.IssueReports
-                .Include(ir => ir.Lab)
-                .Include(ir => ir.Department)
-                .Include(ir => ir.Reporter);
+                .Include(ir => ir.Lab)            // Include Lab navigation property
+                .Include(ir => ir.Department)     //
+                                                  // Include Department navigation property
+                .Include(ir => ir.Reporter);      // Include Reporter navigation property
 
-            // Apply filter by status
-            if (status != "All")
+            // Apply status filter
+            if (!string.IsNullOrEmpty(status) && status != "All")
             {
                 reportsQuery = reportsQuery.Where(ir => ir.Status == status);
             }
 
-            // Apply search filters
+            // Apply search filters (with null checks for navigation properties)
             if (!string.IsNullOrWhiteSpace(searchByID))
             {
                 reportsQuery = reportsQuery.Where(ir => ir.ID.ToString().Contains(searchByID));
             }
             if (!string.IsNullOrWhiteSpace(searchByName))
             {
-                reportsQuery = reportsQuery.Where(ir => ir.Reporter.UserName.Contains(searchByName));
+                reportsQuery = reportsQuery.Where(ir => ir.Reporter != null && ir.Description.Contains(searchByName));
             }
 
             // Apply sorting
-            reportsQuery = sortOrder == "asc" ? reportsQuery.OrderBy(ir => ir.ID) : reportsQuery.OrderByDescending(ir => ir.ID);
+            reportsQuery = sortOrder.ToLower() == "asc"
+                ? reportsQuery.OrderBy(ir => ir.ID)
+                : reportsQuery.OrderByDescending(ir => ir.ID);
 
+            // Execute the query
             var reports = reportsQuery.ToList();
 
-            ViewData["CurrentStatus"] = status;
+            // Pass data to the view
+            ViewBag.CurrentStatus = status;
             ViewData["SearchByID"] = searchByID;
             ViewData["SearchByName"] = searchByName;
             ViewData["SortOrder"] = sortOrder;
 
-            return View(reports);
+            return View(reports); // Pass IssueReports to the view
         }
-
-
-
-        [HttpPost("Approve/{id}")]
-        public IActionResult ApproveConfirmed(int id)
-        {
-            var report = _dbContext.IssueReports.FirstOrDefault(r => r.ID == id);
-
-            if (report == null)
-            {
-                TempData["ErrorMessage"] = "Report not found.";
-                return RedirectToAction("Index");
-            }
-
-            // Update the report status to "Approved"
-            report.Status = "Approved";
-            report.UpdatedAt = DateTime.Now;
-            _dbContext.SaveChanges();
-
-            TempData["SuccessMessage"] = $"Report {id} approved.";
-            // Redirect to Index with filter set to "Approved"
-            return RedirectToAction("Index", new { status = "Approved" });
-        }
-
 
         // GET: /Admin/Repair/Details/{id}
         [HttpGet("Details/{id}")]
@@ -98,6 +80,47 @@ namespace E_Administration.Areas.Admin.Controllers
 
             return View(report);
         }
+        [HttpPost("Approve/{id}")]
+        public IActionResult Approve(int id)
+        {
+            // Lấy báo cáo từ cơ sở dữ liệu
+            var report = _dbContext.IssueReports.FirstOrDefault(r => r.ID == id);
+
+            if (report == null)
+            {
+                TempData["ErrorMessage"] = "Report not found.";
+                return RedirectToAction("Index");
+            }
+
+            // Cập nhật trạng thái
+            report.Status = "Approved";
+            report.UpdatedAt = DateTime.Now;
+
+            // Lưu thay đổi
+            _dbContext.SaveChanges();
+
+            // Thông báo thành công
+            TempData["SuccessMessage"] = $"Report {id} has been approved.";
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("ApprovePage/{id}")]
+        public IActionResult ApprovePage(int id)
+        {
+            var report = _dbContext.IssueReports.FirstOrDefault(r => r.ID == id);
+
+            if (report == null)
+            {
+                TempData["ErrorMessage"] = "Report not found.";
+                return RedirectToAction("Index");
+            }
+
+            return View(report); // Pass the report to the ApprovePage view
+        }
+
+
+
+
 
 
 

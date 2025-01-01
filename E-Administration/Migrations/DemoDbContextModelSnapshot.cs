@@ -232,6 +232,10 @@ namespace E_Administration.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DepartmentID")
+                        .HasColumnType("int")
+                        .HasColumnName("DepartmentsID");
+
+                    b.Property<int?>("DepartmentsID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -258,13 +262,19 @@ namespace E_Administration.Migrations
 
                     b.HasIndex("DepartmentID");
 
+                    b.HasIndex("DepartmentsID");
+
                     b.HasIndex("EquipmentID");
 
                     b.HasIndex("LabID");
 
                     b.HasIndex("ReporterID");
 
-                    b.ToTable("IssueReports");
+                    b.ToTable("IssueReports", t =>
+                        {
+                            t.Property("DepartmentsID")
+                                .HasColumnName("DepartmentsID1");
+                        });
                 });
 
             modelBuilder.Entity("E_Administration.Models.Lab", b =>
@@ -401,8 +411,14 @@ namespace E_Administration.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<int>("IssueReportID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TechnicianID")
                         .HasColumnType("int");
@@ -549,6 +565,17 @@ namespace E_Administration.Migrations
                         .WithMany("IssueReports")
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_IssueReports_Department");
+
+                    b.HasOne("E_Administration.Models.Department", "Departments")
+                        .WithMany()
+                        .HasForeignKey("DepartmentsID");
+
+                    b.HasOne("E_Administration.Models.Equipments", "Equipments")
+                        .WithMany("IssueReports")
+                        .HasForeignKey("EquipmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("E_Administration.Models.Equipments", "Equipments")
@@ -570,6 +597,8 @@ namespace E_Administration.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
+
+                    b.Navigation("Departments");
 
                     b.Navigation("Equipments");
 
