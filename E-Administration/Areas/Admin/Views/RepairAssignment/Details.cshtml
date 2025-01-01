@@ -1,5 +1,17 @@
 ﻿@model E_Administration.Models.RepairAssignments
 
+<nav class="my-auto" aria-label="breadcrumb">
+    <ol class="breadcrumb p-0 my-auto" style="background: none;">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="orange">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="RepairAssignment" asp-action="Index" class="orange">Repair Assignments</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Details</li>
+    </ol>
+</nav>`
+
 <div class="container mt-4">
     <h2>Repair Assignment Details</h2>
     <table class="table table-bordered">
@@ -9,15 +21,11 @@
         </tr>
         <tr>
             <th>Issue Report</th>
-            <td>
-                @(Model.IssueReports?.Description ?? "No description available")
-            </td>
+            <td>@(Model.IssueReports?.Description ?? "No description available")</td>
         </tr>
         <tr>
             <th>Assigned Technician</th>
-            <td>
-                @(Model.Technician?.UserName ?? "No technician assigned")
-            </td>
+            <td>@(Model.Technician?.UserName ?? "No technician assigned")</td>
         </tr>
         <tr>
             <th>Created At</th>
@@ -27,7 +35,17 @@
             <th>Updated At</th>
             <td>@(Model.UpdatedAt?.ToString("g") ?? "N/A")</td>
         </tr>
+        <tr>
+            <th>Current Status</th>
+            <td>@(Model.Status ?? "No status available")</td>
+        </tr>
     </table>
 
-    <a href="/Admin/RepairAssignment/Index" class="btn btn-secondary">Back to List</a>
+    <div class="d-flex">
+        <a asp-area="Admin" asp-controller="RepairAssignment" asp-action="Index" class="btn btn-secondary mr-2">Back to List</a>
+        @* <a asp-area="Admin" asp-controller="RepairAssignment" asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary mr-2">Edit</a> *@
+        <form asp-area="Admin" asp-controller="RepairAssignment" asp-action="Delete" asp-route-id="@Model.ID" method="post" onsubmit="return confirm('Are you sure you want to delete this assignment?');" class="d-inline">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
 </div>

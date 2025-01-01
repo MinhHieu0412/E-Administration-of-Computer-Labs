@@ -64,12 +64,32 @@ namespace E_Administration.Areas.User.Controllers
                 return View(eLearning);
             }
 
+            // Validate Title inputs
+            if (eLearning.Title.Trim() == null )
+            {
+                ModelState.AddModelError("Title", "Title is required.");
+                return View(eLearning);
+            }
+
+            if (eLearning.Description.Trim() == null)
+            {
+                ModelState.AddModelError("Description", "Description is required.");
+                return View(eLearning);
+            }
             // Validate file inputs
             if (file == null || file.Length == 0)
-                ModelState.AddModelError("FilePath", "PDF file is required.");
+            {
+                    ModelState.AddModelError("FilePath", "PDF file is required.");
+                                    return View(eLearning);
+            }
+                
 
             if (image == null || image.Length == 0)
+            {
                 ModelState.AddModelError("Link", "Image is required.");
+                return View(eLearning);
+            }
+                
 
             /*if (!ModelState.IsValid)
                 return View(eLearning);*/

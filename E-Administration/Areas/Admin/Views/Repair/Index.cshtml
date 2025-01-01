@@ -4,31 +4,52 @@
     ViewData["Title"] = "Reports Management";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
-    // URLs for status filter
-    string allUrl = Url.Action("Index", new { status = "All" });
-    string pendingUrl = Url.Action("Index", new { status = "Pending" });
-    string approvedUrl = Url.Action("Index", new { status = "Approved" });
+    // Generate URLs for filtering
+    var allUrl = Url.Action("Index", new { status = "All" });
+    var pendingUrl = Url.Action("Index", new { status = "Pending" });
+    var approvedUrl = Url.Action("Index", new { status = "Approved" });
 
-    string currentStatus = ViewData["CurrentStatus"]?.ToString() ?? "All";
+
+
+    // Pass the current status to the view
+    var currentStatus = ViewBag.CurrentStatus as string ?? "All";
 }
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<nav class="my-auto" aria-label="breadcrumb">
+    <ol class="breadcrumb p-0 my-auto" style="background: none;">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="orange">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Report</li>
+    </ol>
+</nav>
 
 <main id="main-content">
     <section class="py-5">
         <div class="container">
-            <h2>Reports Management</h2>
+            <h2>Report Management</h2>
 
             <!-- Filter and Search Section -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-
                 <div>
                     <label for="statusFilter" class="form-label">Filter by Status:</label>
                     <select id="statusFilter" class="form-select" onchange="location.href=this.value;">
-                        <option value="@allUrl" selected="@((currentStatus == "All").ToString().ToLower())">All</option>
-                        <option value="@pendingUrl" selected="@((currentStatus == "Pending").ToString().ToLower())">Pending</option>
-                        <option value="@approvedUrl" selected="@((currentStatus == "Approved").ToString().ToLower())">Approved</option>
+                        <option value="@allUrl" selected="@(currentStatus == "All")">All</option>
+                        <option value="@pendingUrl" selected="@(currentStatus == "Pending")">Pending</option>
+                        <option value="@approvedUrl" selected="@(currentStatus == "Approved")">Approved</option>
+
+
+
                     </select>
                 </div>
-
                 <form class="d-flex" method="get" action="@Url.Action("Index")">
                     <div class="input-group">
                         <input type="text" name="searchByID" placeholder="Search by ID" class="form-control me-2" />
@@ -61,7 +82,7 @@
                     }
                     else
                     {
-                        @foreach (var report in Model)
+                        foreach (var report in Model)
                         {
                             <tr>
                                 <td>@report.ID</td>
@@ -79,10 +100,9 @@
                                        class="btn btn-info btn-sm">
                                         View Details
                                     </a>
-
                                     @if (report.Status == "Pending")
                                     {
-                                        <form method="post" asp-area="Admin" asp-controller="Repair" asp-action="ApproveConfirmed" asp-route-id="@report.ID" class="d-inline">
+                                        <form method="post" asp-area="Admin" asp-controller="Repair" asp-action="Approve" asp-route-id="@report.ID" class="d-inline">
                                             <button type="submit" class="btn btn-success btn-sm">Approve</button>
                                         </form>
                                     }
