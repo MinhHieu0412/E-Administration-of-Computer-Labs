@@ -1,4 +1,15 @@
 ﻿<!-- Leave Request List -->
+@{
+    ViewData["Title"] = "Manage Requests";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="search-container">
+    <form asp-action="Search" method="get">
+        <input type="text" name="keyword" value="@ViewBag.SearchKeyword" placeholder="Search by UserName..." class="form-control" />
+        <button type="submit" class="btn btn-warning mt-2">Search</button>
+    </form>
+</div>
+
 <h3>Leave Request List</h3>
 <table class="table">
     <thead>

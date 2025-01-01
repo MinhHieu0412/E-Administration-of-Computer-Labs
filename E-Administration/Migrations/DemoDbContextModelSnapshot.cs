@@ -578,6 +578,12 @@ namespace E_Administration.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("E_Administration.Models.Equipments", "Equipments")
+                        .WithMany("IssueReports")
+                        .HasForeignKey("EquipmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("E_Administration.Models.Lab", "Lab")
                         .WithMany("IssueReports")
                         .HasForeignKey("LabID")
