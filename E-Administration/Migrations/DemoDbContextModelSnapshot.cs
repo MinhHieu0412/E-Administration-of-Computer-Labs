@@ -22,42 +22,6 @@ namespace E_Administration.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("E_Administration.Dto.LabRequestDto", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("AdminResponse")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DepartmentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequestedByID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("LabRequestDto");
-                });
-
             modelBuilder.Entity("E_Administration.Models.AboutUs", b =>
                 {
                     b.Property<int>("Id")
@@ -186,12 +150,10 @@ namespace E_Administration.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FilePath")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Link")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -270,6 +232,10 @@ namespace E_Administration.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DepartmentID")
+                        .HasColumnType("int")
+                        .HasColumnName("DepartmentsID");
+
+                    b.Property<int?>("DepartmentsID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -296,11 +262,19 @@ namespace E_Administration.Migrations
 
                     b.HasIndex("DepartmentID");
 
+                    b.HasIndex("DepartmentsID");
+
+                    b.HasIndex("EquipmentID");
+
                     b.HasIndex("LabID");
 
                     b.HasIndex("ReporterID");
 
-                    b.ToTable("IssueReports");
+                    b.ToTable("IssueReports", t =>
+                        {
+                            t.Property("DepartmentsID")
+                                .HasColumnName("DepartmentsID1");
+                        });
                 });
 
             modelBuilder.Entity("E_Administration.Models.Lab", b =>
@@ -435,23 +409,26 @@ namespace E_Administration.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<int>("IssueReportID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TechnicianID")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IssueReportID")
-                        .IsUnique();
+                    b.HasIndex("IssueReportID");
 
                     b.HasIndex("TechnicianID");
 
@@ -588,6 +565,23 @@ namespace E_Administration.Migrations
                         .WithMany("IssueReports")
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_IssueReports_Department");
+
+                    b.HasOne("E_Administration.Models.Department", "Departments")
+                        .WithMany()
+                        .HasForeignKey("DepartmentsID");
+
+                    b.HasOne("E_Administration.Models.Equipments", "Equipments")
+                        .WithMany("IssueReports")
+                        .HasForeignKey("EquipmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_Administration.Models.Equipments", "Equipments")
+                        .WithMany("IssueReports")
+                        .HasForeignKey("EquipmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("E_Administration.Models.Lab", "Lab")
@@ -603,6 +597,10 @@ namespace E_Administration.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
+
+                    b.Navigation("Departments");
+
+                    b.Navigation("Equipments");
 
                     b.Navigation("Lab");
 
@@ -653,9 +651,9 @@ namespace E_Administration.Migrations
             modelBuilder.Entity("E_Administration.Models.RepairAssignments", b =>
                 {
                     b.HasOne("E_Administration.Models.IssueReports", "IssueReports")
-                        .WithOne("RepairAssignment")
-                        .HasForeignKey("E_Administration.Models.RepairAssignments", "IssueReportID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("IssueReportID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("E_Administration.Models.User", "Technician")
@@ -710,9 +708,9 @@ namespace E_Administration.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("E_Administration.Models.IssueReports", b =>
+            modelBuilder.Entity("E_Administration.Models.Equipments", b =>
                 {
-                    b.Navigation("RepairAssignment");
+                    b.Navigation("IssueReports");
                 });
 
             modelBuilder.Entity("E_Administration.Models.Lab", b =>

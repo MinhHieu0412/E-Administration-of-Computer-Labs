@@ -229,6 +229,58 @@ namespace E_Administration.Areas.Admin.Controllers
                 }
             }
         }
+        [HttpGet]
+        public IActionResult Search(string keyword)
+        {
+            // Tìm kiếm trong LeaveRequests
+            var leaveRequests = _context.LeaveRequests
+                .Join(_context.Users,
+                      lr => lr.UserId,
+                      u => u.ID,
+                      (lr, u) => new
+                      {
+                          lr.Id,
+                          UserName = u.UserName,
+                          lr.StartDate,
+                          lr.EndDate,
+                          lr.Reason,
+                          lr.IsApproved,
+                          lr.Feedback
+                      })
+                .Where(lr => lr.UserName.Contains(keyword)) // Lọc theo UserName
+                .ToList();
+
+            // Tìm kiếm trong MakeUpRequests
+            var makeUpRequests = _context.MakeUpRequests
+                .Join(_context.LeaveRequests,
+                      mr => mr.LeaveRequestId,
+                      lr => lr.Id,
+                      (mr, lr) => new { mr, lr })
+                .Join(_context.Users,
+                      combined => combined.lr.UserId,
+                      u => u.ID,
+                      (combined, u) => new
+                      {
+                          combined.mr.Id,
+                          UserName = u.UserName,
+                          LeaveRequestStartDate = combined.lr.StartDate,
+                          LeaveRequestEndDate = combined.lr.EndDate,
+                          LabName = combined.mr.Lab.Name,
+                          combined.mr.MakeUpDate,
+                          combined.mr.MakeUpTime,
+                          combined.mr.IsApproved,
+                          combined.mr.Feedback
+                      })
+                .Where(mr => mr.UserName.Contains(keyword)) // Lọc theo UserName
+                .ToList();
+
+            // Truyền kết quả vào ViewBag
+            ViewBag.LeaveRequests = leaveRequests;
+            ViewBag.MakeUpRequests = makeUpRequests;
+            ViewBag.SearchKeyword = keyword;
+
+            return View("Index");
+        }
 
     }
 }

@@ -16,6 +16,8 @@ namespace E_Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
+
+
             var ELearnings = await ctx.ELearning.ToListAsync();
             var lab = await ctx.Labs.ToListAsync();
 
