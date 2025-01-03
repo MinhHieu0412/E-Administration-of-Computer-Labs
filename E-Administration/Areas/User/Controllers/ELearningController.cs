@@ -91,9 +91,6 @@ namespace E_Administration.Areas.User.Controllers
             }
                 
 
-            /*if (!ModelState.IsValid)
-                return View(eLearning);*/
-
             try
             {
                 // Save PDF file
