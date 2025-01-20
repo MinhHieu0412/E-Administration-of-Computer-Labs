@@ -10,11 +10,13 @@ namespace E_Administration.Models
         public Lab? Lab { get; set; }
         public int ReporterID { get; set; }
         public User? Reporter { get; set; }
+        [Column("DepartmentsID")]
         public int DepartmentID { get; set; }
         public Department? Department { get; set; }
         public string? Description { get; set; }
         [Required]
         public int EquipmentID { get; set; }
+        public Department? Departments { get; set; } // Navigation property
 
         public Equipments? Equipments { get; set; } // Quan hệ 1-n hoặc n-1
 

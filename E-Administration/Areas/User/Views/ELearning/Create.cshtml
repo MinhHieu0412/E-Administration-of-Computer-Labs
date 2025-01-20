@@ -11,44 +11,30 @@
             <h3>Create New eLearning Resource</h3>
         </div>
         <div class="card-body">
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger">
-                    <strong>There are errors in your form submission:</strong>
-                    <ul>
-                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                        {
-                            <li>@error.ErrorMessage</li>
-                        }
-                    </ul>
-                </div>
-            }
-
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="createForm">
                 @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label asp-for="Title" class="form-label">Title</label>
-                    <input asp-for="Title" class="form-control" placeholder="Enter title of the eLearning" required />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <input asp-for="Title" class="form-control" placeholder="Enter title of the eLearning" id="title" />
+                    <span class="text-danger error-message" id="titleError"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="form-label">Description</label>
-                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Provide a brief description"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Provide a brief description" id="description"></textarea>
+                    <span class="text-danger error-message" id="descriptionError"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Upload PDF File</label>
-                    <input type="file" name="file" class="form-control" accept=".pdf" />
+                    <input type="file" name="file" class="form-control" accept=".pdf" id="pdfFile" />
                     <small class="form-text text-muted">Only PDF files are allowed.</small>
-                    <span asp-validation-for="FilePath" class="text-danger"></span>
+                    <span class="text-danger error-message" id="pdfError"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Upload Image</label>
-                    <input type="file" name="image" class="form-control" accept="image/*" />
-                    <small class="form-text text-muted">Supported formats: JPG, PNG. </small>
-                    <span asp-validation-for="Link" class="text-danger"></span>
+                    <input type="file" name="image" class="form-control" accept="image/*" id="imageFile" />
+                    <small class="form-text text-muted">Supported formats: JPG, PNG.</small>
+                    <span class="text-danger error-message" id="imageError"></span>
                 </div>
-
                 <div class="text-center mt-3">
                     <button type="submit" class="btn btn-success btn-lg px-4 py-2">Save & Create</button>
                     <a asp-action="Index" class="btn btn-secondary btn-lg px-4 py-2 ml-2">Cancel</a>
@@ -57,3 +43,61 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('createForm').addEventListener('submit', function (event) {
+        let isValid = true;
+
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+        // Title validation
+        const title = document.getElementById('title');
+        const titleError = document.getElementById('titleError');
+        if (!title.value.trim()) {
+            isValid = false;
+            titleError.textContent = 'Title is required.';
+            title.classList.add('is-invalid');
+        } else {
+            title.classList.remove('is-invalid');
+        }
+
+        // Description validation
+        const description = document.getElementById('description');
+        const descriptionError = document.getElementById('descriptionError');
+        if (!description.value.trim()) {
+            isValid = false;
+            descriptionError.textContent = 'Description is required.';
+            description.classList.add('is-invalid');
+        } else {
+            description.classList.remove('is-invalid');
+        }
+
+        // PDF file validation
+        const pdfFile = document.getElementById('pdfFile');
+        const pdfError = document.getElementById('pdfError');
+        if (!pdfFile.files.length) {
+            isValid = false;
+            pdfError.textContent = 'Please upload a PDF file.';
+            pdfFile.classList.add('is-invalid');
+        } else {
+            pdfFile.classList.remove('is-invalid');
+        }
+
+        // Image file validation
+        const imageFile = document.getElementById('imageFile');
+        const imageError = document.getElementById('imageError');
+        if (!imageFile.files.length) {
+            isValid = false;
+            imageError.textContent = 'Please upload an image.';
+            imageFile.classList.add('is-invalid');
+        } else {
+            imageFile.classList.remove('is-invalid');
+        }
+
+        // Prevent form submission if any field is invalid
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+</script>
