@@ -45,13 +45,13 @@ namespace E_Administration.Controllers
                     {
                         // Tạo thông tin xác thực
                         var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, acc.ID.ToString()), // Thêm User ID vào claim
-                    new Claim(ClaimTypes.Email, acc.Email),
-                    new Claim(ClaimTypes.Role, acc.Role),
-                    new Claim("UserName", acc.UserName),
-                    new Claim("UserImage", acc.Image ?? "default-profile-pic.jpg")
-                };
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, acc.ID.ToString()), // Thêm User ID vào claim
+                            new Claim(ClaimTypes.Email, acc.Email),
+                            new Claim(ClaimTypes.Role, acc.Role),
+                            new Claim("UserName", acc.UserName),
+                            new Claim("UserImage", acc.Image ?? "default-profile-pic.jpg")
+                        };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(identity);
